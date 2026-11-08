@@ -1,4 +1,6 @@
-# Homeostatic Colony — Project Summary
+# Homeostatic Colony — Project Summary (February 2026 phase)
+
+> **Archived.** Describes the 2D grid-world phase of the project (February 2026). Numbers here refer to that phase. For current results see the [README](../../README.md).
 
 ## Overview
 
@@ -44,7 +46,3 @@ Built a complete ALife/embodied-AI experiment comparing standard reward-maximizi
 - Predictive risk model demonstrates rising risk scores before actual overheating/damage events
 - Colony simulation shows signaling populations achieving ~60% larger population than non-signaling colonies
 - Fairness audit confirms identical controlled variables (18/18 checks pass) across agent types
-
-## Cold-Email Sentence
-
-I built a complete homeostatic control benchmark for embodied AI — comparing viability-driven RL agents against standard reward maximizers on zero-shot robustness to actuator damage, sensor corruption, and environmental shifts — with ablation studies, online adaptation experiments, failure-mode analysis, and a MuJoCo Ant-v5 extension — and I'd love to discuss how this approach could improve fault tolerance in your robotic systems.
