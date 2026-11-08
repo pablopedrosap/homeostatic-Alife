@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Pre-registered experiments on self-regulating agents: a MuJoCo robot that regulates its own temperature, energy and damage, and a reward-free evolutionary world.">
+</head>
+<body>
+<title>Homeostatic Autonomy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: lab notebook — a live specimen dish up top, then two measured results, each with its scope line. */
+:root {
+  --bg: #f4f6f5; --surface: #ffffff; --ink: #101a17; --ink2: #4b5752; --ink3: #75817c;
+  --rule: #dbe2df; --self: #2a78d6; --yoked: #eb6834; --oracle: #1baf7a; --danger: #e34948;
+  --dish: #eef2f0; --nutrient: #9cc7b4; --toxin: #7d6b8f; --cool: #8fc3e6;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e1312; --surface: #151c1a; --ink: #eef3f1; --ink2: #a9b6b1; --ink3: #7c8984;
+  --rule: #26302d; --self: #3987e5; --yoked: #d95926; --oracle: #199e70; --danger: #e66767;
+  --dish: #121917; --nutrient: #2f5e4c; --toxin: #4d3f5c; --cool: #25516f; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0e1312; --surface: #151c1a; --ink: #eef3f1; --ink2: #a9b6b1; --ink3: #7c8984;
+  --rule: #26302d; --self: #3987e5; --yoked: #d95926; --oracle: #199e70; --danger: #e66767;
+  --dish: #121917; --nutrient: #2f5e4c; --toxin: #4d3f5c; --cool: #25516f; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font: 400 17px/1.6 var(--body); margin: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: max(16px, 4vw); padding-block: 40px 72px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(34px, 6vw, 60px); font-weight: 800; font-stretch: 118%; line-height: 1.02; letter-spacing: -0.01em; }
+h2 { font-size: clamp(24px, 3.4vw, 34px); font-weight: 750; font-stretch: 112%; line-height: 1.1; }
+h3 { font-size: 15px; font-weight: 700; font-stretch: 105%; letter-spacing: 0.02em; }
+p { margin: 0; max-width: 66ch; }
+a { color: var(--self); text-underline-offset: 3px; }
+.eyebrow { font: 500 12px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); }
+.lede { font-size: 19px; color: var(--ink2); max-width: 60ch; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+header { display: grid; gap: 14px; margin-bottom: 28px; }
+
+/* specimen dish */
+.lab { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 860px) { .lab { grid-template-columns: 1fr; } }
+.dish { position: relative; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 10px; }
+.dish canvas { display: block; width: 100%; aspect-ratio: 1; border-radius: 3px; }
+.weatherbar { display: flex; align-items: center; gap: 10px; font: 500 12px var(--mono); color: var(--ink2); padding: 8px 2px 2px; }
+.weatherbar .track { flex: 1; height: 6px; background: var(--rule); border-radius: 3px; position: relative; overflow: hidden; }
+.weatherbar .fill { position: absolute; top: 0; bottom: 0; left: 50%; background: var(--danger); }
+.panel { display: grid; gap: 18px; min-width: 0; }
+.controls { display: grid; gap: 12px; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 16px; }
+.ctl-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+label.k { display: grid; gap: 6px; font: 500 13px var(--mono); color: var(--ink2); }
+input[type=range] { width: 100%; accent-color: var(--self); }
+button { font: 600 13px var(--display); font-stretch: 105%; padding: 8px 12px; border-radius: 4px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); cursor: pointer; }
+button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--self); outline-offset: 2px; }
+.readouts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.readouts div { background: var(--surface); padding: 10px 12px; display: grid; gap: 2px; }
+.readouts b { font: 600 clamp(15px, 1.5vw, 19px) var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.readouts span { font: 500 11px var(--mono); color: var(--ink3); text-transform: uppercase; letter-spacing: 0.06em; }
+.key { display: flex; flex-wrap: wrap; gap: 14px; font: 500 12px var(--mono); color: var(--ink2); }
+.key i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.spark { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 12px; display: grid; gap: 6px; }
+.spark canvas { width: 100%; height: 110px; display: block; }
+.note { font-size: 14px; color: var(--ink2); }
+
+section.result { margin-top: 64px; display: grid; gap: 18px; border-top: 1px solid var(--rule); padding-top: 28px; }
+.verdict { display: inline-flex; gap: 10px; align-items: center; font: 600 13px var(--mono); padding: 6px 10px; border-radius: 4px; border: 1px solid var(--rule); background: var(--surface); width: fit-content; }
+.verdict .dot { width: 9px; height: 9px; border-radius: 50%; }
+.figs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 860px) { .figs { grid-template-columns: 1fr; } }
+figure { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 12px 8px; min-width: 0; }
+figure svg { width: 100%; height: auto; display: block; overflow: visible; }
+figcaption { font: 500 12px/1.45 var(--mono); color: var(--ink2); margin-top: 6px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.stat { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 14px; display: grid; gap: 4px; }
+.stat b { font: 600 24px var(--mono); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 14px; color: var(--ink2); }
+.scope { border-left: 3px solid var(--ink3); padding-left: 14px; font-size: 15px; color: var(--ink2); }
+.tablewrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font: 13px/1.4 var(--mono); font-variant-numeric: tabular-nums; }
+th, td { padding: 7px 10px; text-align: right; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--ink3); font-weight: 500; }
+details summary { cursor: pointer; font: 600 13px var(--display); color: var(--ink2); }
+.tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--bg); font: 500 12px/1.4 var(--mono); padding: 6px 8px; border-radius: 4px; z-index: 10; }
+footer { margin-top: 64px; border-top: 1px solid var(--rule); padding-top: 20px; display: grid; gap: 8px; font-size: 14px; color: var(--ink2); }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Homeostatic autonomy · pre-registered experiments · Pablo Pedrosa</div>
+    <h1>Machines that keep themselves alive, measured honestly.</h1>
+    <p class="lede">Two experiments, each with its pass criterion written down before the data existed: a robot policy that regulates its own temperature, energy and damage, and a reward-free world where self-sensing has to evolve on its own.</p>
+  </header>
+
+  <div class="lab">
+    <div class="dish">
+      <canvas id="world" width="720" height="720" aria-label="Live simulation of evolving organisms"></canvas>
+      <div class="weatherbar"><span>cold snap</span><div class="track"><div class="fill" id="wfill"></div></div><span>heatwave</span></div>
+    </div>
+    <div class="panel">
+      <div>
+        <div class="eyebrow">Live · runs in your browser</div>
+        <h2 style="margin-top:6px">The regulator test</h2>
+      </div>
+      <p class="note">150 founders with random neural controllers. Half feel their <b>own</b> energy, temperature and damage. The other half are yoked: they feel a random partner's body instead, so they get the same kind of signal with no information about themselves. No reward and no fitness score exist anywhere. Organisms that overheat, starve or take too much damage die. Organisms that gather enough energy split in two, passing on their genome with small mutations.</p>
+      <div class="key"><span><i style="background:var(--self)"></i>self-sensing</span><span><i style="background:var(--yoked)"></i>yoked (no self-information)</span><span><i style="border:2px solid var(--danger);background:transparent"></i>overheating (T &gt; 0.7)</span></div>
+      <div class="controls">
+        <label class="k" for="kslider">Weather volatility <span id="klabel" class="mono"></span>
+          <input id="kslider" type="range" min="0" max="5" step="1" value="0">
+        </label>
+        <div class="ctl-row">
+          <button id="play" aria-pressed="true">Pause</button>
+          <button id="reseed">New world</button>
+          <button id="speed" data-s="4">Speed 4×</button>
+        </div>
+      </div>
+      <div class="readouts">
+        <div><span>step</span><b id="r-t">0</b></div>
+        <div><span>population</span><b id="r-pop">0</b></div>
+        <div><span>self-sensing</span><b id="r-ps">0%</b></div>
+        <div><span>mean T, S | Y</span><b id="r-temp">—</b></div>
+        <div><span>generations</span><b id="r-gen">0</b></div>
+        <div><span>heat deaths S | Y</span><b id="r-hd">0 | 0</b></div>
+      </div>
+      <div class="spark">
+        <h3>Self-sensing share of the population</h3>
+        <canvas id="share" width="600" height="220" aria-label="Self-sensing share over time"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <section class="result" id="hab1">
+    <div class="eyebrow">Result 1 · HAB-1 v1 · MuJoCo Ant-v5 · <span id="h-seeds"></span></div>
+    <h2 id="h-title"></h2>
+    <div class="verdict"><span class="dot" id="h-dot"></span><span id="h-verdict"></span></div>
+    <p id="h-summary"></p>
+    <div class="stats" id="h-stats"></div>
+    <div class="figs" id="h-figs"></div>
+    <p class="scope" id="h-scope"></p>
+    <details><summary>Per-level table (all seeds, no selection)</summary><div class="tablewrap" style="margin-top:10px"><table id="h-table"></table></div></details>
+  </section>
+
+  <section class="result" id="e2v">
+    <div class="eyebrow">Result 2 · HAB-E2v · reward-free evolution · <span id="e-n"></span></div>
+    <h2 id="e-title"></h2>
+    <div class="verdict"><span class="dot" id="e-dot"></span><span id="e-verdict"></span></div>
+    <p id="e-summary"></p>
+    <div class="stats" id="e-stats"></div>
+    <div class="figs" id="e-figs"></div>
+    <p class="scope" id="e-scope"></p>
+  </section>
+
+  <section class="result" id="method">
+    <div class="eyebrow">How the work is done</div>
+    <h2>Pass criteria are written before the data exists</h2>
+    <p>Each experiment has a pre-registration file committed before its first run: the frozen physics, the seeds, the exact statistical test and the threshold. Every seed is reported. Negative results stay in the record. Earlier analyses that turned out to be confounded are corrected in the open, not quietly replaced. Neither experiment claims anything about experience or sentience, because no experiment can test for that.</p>
+    <p id="m-links"></p>
+  </section>
+
+  <footer>
+    <div>Code, data and pre-registrations: <a id="repo" href="https://github.com/pablopedrosap/homeostatic-Alife">github.com/pablopedrosap/homeostatic-Alife</a></div>
+    <div>The live world above is a JavaScript port of <span class="mono">homeostatic_colony/alife/emergent_world.py</span> with the same constants and update order. It matches the Python statistically, not step for step. Results shown in the sections come from the Python runs.</div>
+  </footer>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script>
+const DATA = {"hab1": null, "e2v": {"title": "Evolution favours organisms that feel their own temperature. A volatile climate doesn't make that stronger.", "verdict_label": "Pre-registered hypothesis not supported · ρ = +0.01, p = 0.46", "summary": "The prediction was that self-sensing pays off more as the climate gets more volatile, the way estuary animals regulate their salt balance and open-ocean ones don't. That prediction failed. What the competition showed instead is that self-sensing wins almost everywhere, including a perfectly constant climate. This reverses an earlier analysis from July 2026, which compared populations in separate worlds and switched off sensing by zeroing inputs. Under a fair control, the earlier result flips.", "stats": [["70 / 82", "worlds where self-sensing organisms took over the population (binomial p = 4×10⁻¹¹)"], ["+25%", "longer lifespan for self-sensing organisms: 82 vs 66 steps, p = 5×10⁻⁷ (exploratory)"], ["T alone", "yoking only the temperature reading reproduces the whole advantage; energy and damage don't (exploratory)"]], "scope": "What this does not show: that the organisms are regulating their temperature in the physiological sense. Their body temperature tracks the weather exactly as much as the yoked organisms' does, and probing their controllers shows no 'slow down when hot' reflex. Selection clearly uses self-temperature information, but we have not yet found how. That is the next experiment.", "p1_supported": false, "charts": [{"title": "Who wins: final self-sensing share", "xlab": "weather volatility k", "ylab": "share", "yMin": 0, "yMax": 1, "yTicks": [0, 0.25, 0.5, 0.75, 1], "xTicks": [0.0, 0.25, 0.5, 0.75, 1.0, 1.5], "series": [{"name": "Self-sensing share", "colorVar": "--self", "pts": [[0.0, 0.875, 0.688, 1.0, "k = 0.0 · mean share 0.88<br>95% CI [0.69, 1.00] · 16 surviving worlds"], [0.25, 0.875, 0.688, 1.0, "k = 0.25 · mean share 0.88<br>95% CI [0.69, 1.00] · 16 surviving worlds"], [0.5, 0.75, 0.5, 0.938, "k = 0.5 · mean share 0.75<br>95% CI [0.50, 0.94] · 16 surviving worlds"], [0.75, 0.867, 0.667, 1.0, "k = 0.75 · mean share 0.87<br>95% CI [0.67, 1.00] · 15 surviving worlds"], [1.0, 0.923, 0.769, 1.0, "k = 1.0 · mean share 0.92<br>95% CI [0.77, 1.00] · 13 surviving worlds"], [1.5, 0.833, 0.5, 1.0, "k = 1.5 · mean share 0.83<br>95% CI [0.50, 1.00] · 6 surviving worlds"]]}], "caption": "Pre-registered P1. Dashed reference = no selection (0.5). Flat, not rising: the law fails, but self-sensing wins everywhere."}, {"kind": "dots", "title": "Which self-signal matters", "xlab": "worlds won by self-sensers", "ref": 0.5, "rows": [{"label": "yoke energy", "pts": [{"v": 0.5625, "lo": 0.33178195606776517, "hi": 0.7690163666481448, "open": false, "tip": "yoke energy · k = 0<br>self-sensers won 9/16 worlds"}, {"v": 0.4375, "lo": 0.2309836333518552, "hi": 0.6682180439322347, "open": true, "tip": "yoke energy · k = 1<br>self-sensers won 7/16 worlds"}]}, {"label": "yoke temperature", "pts": [{"v": 0.875, "lo": 0.6397666856325173, "hi": 0.9650232506629428, "open": false, "tip": "yoke temperature · k = 0<br>self-sensers won 14/16 worlds"}, {"v": 0.7333333333333333, "lo": 0.4804911034231324, "hi": 0.8910272389681718, "open": true, "tip": "yoke temperature · k = 1<br>self-sensers won 11/15 worlds"}]}, {"label": "yoke damage", "pts": [{"v": 0.375, "lo": 0.18480982554752806, "hi": 0.613593529020652, "open": false, "tip": "yoke damage · k = 0<br>self-sensers won 6/16 worlds"}, {"v": 0.625, "lo": 0.3864064709793481, "hi": 0.815190174452472, "open": true, "tip": "yoke damage · k = 1<br>self-sensers won 10/16 worlds"}]}, {"label": "yoke all three", "pts": [{"v": 0.875, "lo": 0.6397666856325173, "hi": 0.9650232506629428, "open": false, "tip": "yoke all three · k = 0<br>self-sensers won 14/16 worlds"}, {"v": 0.8, "lo": 0.5481406466534955, "hi": 0.9295257935638959, "open": true, "tip": "yoke all three · k = 1<br>self-sensers won 12/15 worlds"}]}], "legend": "<span><i style=\"background:var(--self)\"></i>constant climate</span><span><i style=\"border:2px solid var(--self);background:transparent\"></i>volatile (k = 1)</span>", "caption": "Exploratory. The yoked type loses one channel only. Losing temperature reproduces the whole effect."}, {"title": "Lifespan in single-type worlds", "xlab": "weather volatility k", "ylab": "steps", "yMin": 0, "yMax": 110, "yTicks": [0, 25, 50, 75, 100], "xTicks": [0.0, 0.25, 0.5, 0.75, 1.0, 1.5], "series": [{"name": "Self-sensing world", "colorVar": "--self", "pts": [[0.0, 82.1, 68.8, 95.3, "k = 0.0 · lifespan 82.1 steps<br>95% CI [68.8, 95.3] · 8 worlds"], [0.25, 85.6, 72.7, 98.5, "k = 0.25 · lifespan 85.6 steps<br>95% CI [72.7, 98.5] · 8 worlds"], [0.5, 88.0, 73.5, 102.4, "k = 0.5 · lifespan 88.0 steps<br>95% CI [73.5, 102.4] · 8 worlds"], [0.75, 80.3, 70.7, 89.9, "k = 0.75 · lifespan 80.3 steps<br>95% CI [70.7, 89.9] · 8 worlds"], [1.0, 78.7, 69.7, 87.7, "k = 1.0 · lifespan 78.7 steps<br>95% CI [69.7, 87.7] · 8 worlds"], [1.5, 78.6, 70.9, 86.2, "k = 1.5 · lifespan 78.6 steps<br>95% CI [70.9, 86.2] · 8 worlds"]]}, {"name": "Yoked world", "colorVar": "--yoked", "pts": [[0.0, 65.0, 53.7, 76.4, "k = 0.0 · lifespan 65.0 steps<br>95% CI [53.7, 76.4] · 8 worlds"], [0.25, 64.7, 58.9, 70.5, "k = 0.25 · lifespan 64.7 steps<br>95% CI [58.9, 70.5] · 8 worlds"], [0.5, 67.7, 58.1, 77.4, "k = 0.5 · lifespan 67.7 steps<br>95% CI [58.1, 77.4] · 8 worlds"], [0.75, 66.4, 57.9, 75.0, "k = 0.75 · lifespan 66.4 steps<br>95% CI [57.9, 75.0] · 8 worlds"], [1.0, 68.4, 53.8, 82.9, "k = 1.0 · lifespan 68.4 steps<br>95% CI [53.8, 82.9] · 8 worlds"], [1.5, 61.1, 37.6, 84.5, "k = 1.5 · lifespan 61.1 steps<br>95% CI [37.6, 84.5] · 8 worlds"]]}], "legend": "<span><i style=\"background:var(--self)\"></i>self-sensing</span><span><i style=\"background:var(--yoked)\"></i>yoked</span>", "caption": "Exploratory. Self-sensers live ~25% longer at every k (pooled p = 5×10⁻⁷)."}], "n_label": "96 competition + 96 single-type worlds, no reward anywhere"}, "links": "Pre-registrations: <a href=\"https://github.com/pablopedrosap/homeostatic-Alife/blob/main/docs/prereg/HAB1_v1_ant.md\">HAB-1 v1</a> · <a href=\"https://github.com/pablopedrosap/homeostatic-Alife/blob/main/docs/prereg/HAB_E2v_regulator_law.md\">HAB-E2v</a>. Full reports: <a href=\"https://github.com/pablopedrosap/homeostatic-Alife/blob/main/docs/results/HAB1_v1_results.md\">HAB-1 v1</a> · <a href=\"https://github.com/pablopedrosap/homeostatic-Alife/blob/main/docs/results/HAB_E2v_results.md\">HAB-E2v</a>."};
+</script>
+<script>
+// Faithful JS port of homeostatic_colony/alife/emergent_world.py (r-regime defaults,
+// HAB-E2v weather + yoked control). Same constants, same update order. Different RNG
+// stream, so trajectories match the Python statistically, not bit for bit.
+(function (root) {
+  const CFG = {
+    W: 30, H: 30, nN: 10, nT: 5, nC: 4, rN: 3.2, rT: 3.2, rC: 2.6,
+    basal: 0.004, moveCost: 0.010, nutGain: 0.13, heatSpeed: 0.09, heatHazard: 0.05,
+    cooling: 0.016, coolZone: 0.03, dmgToxin: 0.035, dmgOverheat: 0.05, repair: 0.010,
+    repairMinE: 0.30, tCrit: 0.7, tFatal: 1.2, dMax: 1.0, maxSpeed: 0.35,
+    eInit: 0.6, tInit: 0.3, cap: 500, nInit: 150, divE: 0.78, divCost: 0.30, minAge: 25,
+    nH: 8, wStd: 0.5, mut: 0.08, clip: 3.0, eta: 0.02, tau: 50,
+  };
+  const NI = 8, NO = 2, NH = CFG.nH;
+
+  function rngFrom(seed) {
+    let a = seed >>> 0;
+    const u = () => {
+      a = (a + 0x6D2B79F5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+    let spare = null;
+    const n = () => {
+      if (spare !== null) { const s = spare; spare = null; return s; }
+      let x, y, r;
+      do { x = 2 * u() - 1; y = 2 * u() - 1; r = x * x + y * y; } while (r >= 1 || r === 0);
+      const f = Math.sqrt(-2 * Math.log(r) / r);
+      spare = y * f; return x * f;
+    };
+    return { u, n };
+  }
+
+  class World {
+    constructor(opts = {}) {
+      this.c = Object.assign({}, CFG);
+      this.k = opts.k ?? 0;            // weather amplitude in units of cooling rate
+      this.senseFrac = opts.senseFrac ?? 0.5;
+      this.reset(opts.seed ?? 1);
+    }
+    reset(seed) {
+      const c = this.c, C = c.cap;
+      this.seed = seed;
+      this.rng = rngFrom(seed);
+      const R = this.rng;
+      const place = (n, r) => Array.from({ length: n }, () => [r + R.u() * (c.W - 2 * r), r + R.u() * (c.H - 2 * r)]);
+      this.nut = place(c.nN, c.rN); this.tox = place(c.nT, c.rT); this.cool = place(c.nC, c.rC);
+      this.x = new Float32Array(C); this.y = new Float32Array(C);
+      this.E = new Float32Array(C); this.T = new Float32Array(C); this.D = new Float32Array(C);
+      this.age = new Int32Array(C); this.gen = new Int32Array(C);
+      this.alive = new Uint8Array(C); this.senses = new Uint8Array(C); this.partner = new Int32Array(C);
+      this.gW1 = new Float32Array(C * NH * NI); this.gW2 = new Float32Array(C * NO * NH);
+      this.b1 = new Float32Array(C * NH); this.b2 = new Float32Array(C * NO);
+      this.W1 = new Float32Array(C * NH * NI); this.W2 = new Float32Array(C * NO * NH);
+      this.speed = new Float32Array(C);
+      this.t = 0; this.weather = 0; this.births = 0; this.deaths = 0;
+      this.heatDeaths = [0, 0];
+      const nS = Math.round(this.senseFrac * c.nInit);
+      const order = Array.from({ length: c.nInit }, (_, i) => i);
+      for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(R.u() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+      const sensing = new Uint8Array(c.nInit); for (let i = 0; i < nS; i++) sensing[order[i]] = 1;
+      for (let i = 0; i < c.nInit; i++) {
+        for (let j = 0; j < NH * NI; j++) this.gW1[i * NH * NI + j] = R.n() * c.wStd;
+        for (let j = 0; j < NO * NH; j++) this.gW2[i * NO * NH + j] = R.n() * c.wStd;
+        for (let j = 0; j < NH; j++) this.b1[i * NH + j] = R.n() * 0.1;
+        for (let j = 0; j < NO; j++) this.b2[i * NO + j] = R.n() * 0.1;
+        this._spawn(i, 0, sensing[i]);
+        this.x[i] = 1 + R.u() * (c.W - 2); this.y[i] = 1 + R.u() * (c.H - 2);
+      }
+    }
+    _spawn(i, gen, senses) {
+      const c = this.c;
+      this.W1.set(this.gW1.subarray(i * NH * NI, (i + 1) * NH * NI), i * NH * NI);
+      this.W2.set(this.gW2.subarray(i * NO * NH, (i + 1) * NO * NH), i * NO * NH);
+      this.E[i] = c.eInit; this.T[i] = c.tInit; this.D[i] = 0; this.age[i] = 0;
+      this.gen[i] = gen; this.alive[i] = 1; this.senses[i] = senses; this.partner[i] = i;
+    }
+    static field(px, py, src, r) {
+      let s = 0; const k = -0.5 / (r * r);
+      for (const [cx, cy] of src) { const dx = px - cx, dy = py - cy; s += Math.exp(k * (dx * dx + dy * dy)); }
+      return s;
+    }
+    sample(px, py) {
+      const c = this.c, F = World.field;
+      return [F(px, py, this.nut, c.rN), F(px, py, this.tox, c.rT), F(px, py, this.cool, c.rC)];
+    }
+    step() {
+      const c = this.c, R = this.rng, C = c.cap, F = World.field;
+      this.t++;
+      let heatLoad = 0;
+      if (this.k > 0) {
+        const rho = Math.exp(-1 / c.tau);
+        this.weather = rho * this.weather + Math.sqrt(1 - rho * rho) * R.n();
+        heatLoad = this.k * c.cooling * this.weather;
+      }
+      const living = []; for (let i = 0; i < C; i++) if (this.alive[i]) living.push(i);
+      if (!living.length) return;
+      // yoked partners
+      for (const i of living) {
+        if (!this.senses[i]) {
+          const p = this.partner[i];
+          if (p === i || !this.alive[p]) {
+            if (living.length > 1) { let q = living[Math.floor(R.u() * living.length)]; if (q === i) q = living[(living.indexOf(q) + 1) % living.length]; this.partner[i] = q; }
+          }
+        }
+      }
+      const eps = 0.3, obs = new Float32Array(NI), h = new Float32Array(NH), mv = new Float32Array(NO);
+      const Es = this.E.slice(), Ts = this.T.slice(), Ds = this.D.slice();
+      for (const i of living) {
+        const px = this.x[i], py = this.y[i];
+        obs[0] = Math.max(-1, Math.min(1, (F(px + eps, py, this.nut, c.rN) - F(px - eps, py, this.nut, c.rN)) / (2 * eps)));
+        obs[1] = Math.max(-1, Math.min(1, (F(px, py + eps, this.nut, c.rN) - F(px, py - eps, this.nut, c.rN)) / (2 * eps)));
+        obs[2] = Math.max(-1, Math.min(1, (F(px + eps, py, this.tox, c.rT) - F(px - eps, py, this.tox, c.rT)) / (2 * eps)));
+        obs[3] = Math.max(-1, Math.min(1, (F(px, py + eps, this.tox, c.rT) - F(px, py - eps, this.tox, c.rT)) / (2 * eps)));
+        obs[4] = F(px, py, this.cool, c.rC);
+        const src = this.senses[i] ? i : this.partner[i];
+        obs[5] = Es[src]; obs[6] = Ts[src]; obs[7] = Ds[src];
+        const o1 = i * NH * NI, o2 = i * NO * NH;
+        for (let a = 0; a < NH; a++) { let s = this.b1[i * NH + a]; for (let b = 0; b < NI; b++) s += this.W1[o1 + a * NI + b] * obs[b]; h[a] = Math.tanh(s); }
+        for (let a = 0; a < NO; a++) { let s = this.b2[i * NO + a]; for (let b = 0; b < NH; b++) s += this.W2[o2 + a * NH + b] * h[b]; mv[a] = Math.tanh(s); }
+        // Oja plasticity (reward-free)
+        for (let a = 0; a < NH; a++) for (let b = 0; b < NI; b++) {
+          const j = o1 + a * NI + b; let w = this.W1[j] + c.eta * (h[a] * obs[b] - h[a] * h[a] * this.W1[j]);
+          this.W1[j] = Math.max(-c.clip, Math.min(c.clip, w));
+        }
+        for (let a = 0; a < NO; a++) for (let b = 0; b < NH; b++) {
+          const j = o2 + a * NH + b; let w = this.W2[j] + c.eta * (mv[a] * h[b] - mv[a] * mv[a] * this.W2[j]);
+          this.W2[j] = Math.max(-c.clip, Math.min(c.clip, w));
+        }
+        const sp = Math.hypot(mv[0], mv[1]);
+        const sc = Math.min(1, c.maxSpeed / Math.max(sp, 1e-6));
+        const mx = mv[0] * sc, my = mv[1] * sc, mag = Math.hypot(mx, my);
+        this.speed[i] = mag;
+        this.x[i] = Math.max(0, Math.min(c.W, px + mx)); this.y[i] = Math.max(0, Math.min(c.H, py + my));
+        this.age[i]++;
+        const [nu, tx, co] = this.sample(this.x[i], this.y[i]);
+        this.E[i] = Math.max(0, Math.min(1, this.E[i] - c.basal - c.moveCost * mag + c.nutGain * nu));
+        this.T[i] = Math.max(0, Math.min(1.5, this.T[i] + c.heatSpeed * mag + c.heatHazard * tx - (c.cooling + c.coolZone * co) + heatLoad));
+        const over = Math.max(0, this.T[i] - c.tCrit);
+        const rest = mag < 0.4 * c.maxSpeed ? 1 : 0;
+        const rep = c.repair * rest * (this.E[i] > c.repairMinE ? 1 : 0.35);
+        this.D[i] = Math.max(0, Math.min(c.dMax, this.D[i] + c.dmgToxin * tx + c.dmgOverheat * over - rep));
+      }
+      for (const i of living) {
+        if (this.E[i] <= 0 || this.T[i] >= c.tFatal || this.D[i] >= c.dMax) {
+          if (this.T[i] >= c.tFatal) this.heatDeaths[this.senses[i] ? 0 : 1]++;
+          this.alive[i] = 0; this.deaths++;
+        }
+      }
+      let pop = 0; for (let i = 0; i < C; i++) pop += this.alive[i];
+      for (const p of living) {
+        if (!this.alive[p] || this.E[p] <= c.divE || this.age[p] < c.minAge) continue;
+        if (pop >= C) break;
+        let ci = -1; for (let j = 0; j < C; j++) if (!this.alive[j]) { ci = j; break; }
+        if (ci < 0) break;
+        const avail = this.E[p] - c.divCost;
+        if (avail <= 0.2) continue;
+        const cl = (v) => Math.max(-c.clip, Math.min(c.clip, v));
+        for (let j = 0; j < NH * NI; j++) this.gW1[ci * NH * NI + j] = cl(this.gW1[p * NH * NI + j] + R.n() * c.mut);
+        for (let j = 0; j < NO * NH; j++) this.gW2[ci * NO * NH + j] = cl(this.gW2[p * NO * NH + j] + R.n() * c.mut);
+        for (let j = 0; j < NH; j++) this.b1[ci * NH + j] = this.b1[p * NH + j] + R.n() * c.mut;
+        for (let j = 0; j < NO; j++) this.b2[ci * NO + j] = this.b2[p * NO + j] + R.n() * c.mut;
+        this._spawn(ci, this.gen[p] + 1, this.senses[p]);
+        this.E[p] = avail * 0.5; this.E[ci] = avail * 0.5;
+        this.x[ci] = Math.max(0, Math.min(c.W, this.x[p] + R.n() * 0.5));
+        this.y[ci] = Math.max(0, Math.min(c.H, this.y[p] + R.n() * 0.5));
+        this.births++; pop++;
+      }
+    }
+    stats() {
+      let pop = 0, nS = 0, tS = 0, tY = 0, mg = 0;
+      for (let i = 0; i < this.c.cap; i++) if (this.alive[i]) {
+        pop++; if (this.senses[i]) { nS++; tS += this.T[i]; } else tY += this.T[i];
+        if (this.gen[i] > mg) mg = this.gen[i];
+      }
+      return { t: this.t, pop, nS, pS: pop ? nS / pop : 0, TS: nS ? tS / nS : null,
+               TY: pop - nS ? tY / (pop - nS) : null, maxGen: mg, weather: this.weather };
+    }
+  }
+  root.HomeoWorld = World;
+  if (typeof module !== "undefined") module.exports = World;
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+<script>
+(function () {
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const $ = (id) => document.getElementById(id);
+  const K_STEPS = [0, 0.25, 0.5, 0.75, 1.0, 1.5];
+  const kLabel = (k) => k === 0 ? "k = 0 · constant climate" : `k = ${k} · heatwaves up to ${Math.round(k * 100)}% of passive cooling (1σ)`;
+
+  // ---------- live world ----------
+  const cv = $("world"), cx = cv.getContext("2d");
+  const sh = $("share"), sx = sh.getContext("2d");
+  let k = 0, seed = 7, world, running = true, spf = 4, shareHist = [], fieldImg = null;
+  const DPR = Math.min(2, window.devicePixelRatio || 1);
+  function sizeCanvas(c, h) { const r = c.getBoundingClientRect(); c.width = Math.round(r.width * DPR); c.height = Math.round((h || r.width) * DPR); }
+
+  function buildField() {
+    const W = world.c.W, n = 160, img = document.createElement("canvas");
+    img.width = img.height = n;
+    const g = img.getContext("2d"), id = g.createImageData(n, n);
+    const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+    const dish = hex(css("--dish")), nut = hex(css("--nutrient")), tox = hex(css("--toxin")), cool = hex(css("--cool"));
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+      const [a, b, c] = world.sample((x + 0.5) / n * W, (y + 0.5) / n * W);
+      const wa = Math.min(1, a * 0.75), wb = Math.min(1, b * 0.8), wc = Math.min(1, c * 0.9);
+      const o = (y * n + x) * 4;
+      for (let ch = 0; ch < 3; ch++) {
+        let v = dish[ch];
+        v = v + (nut[ch] - v) * wa; v = v + (cool[ch] - v) * wc; v = v + (tox[ch] - v) * wb;
+        id.data[o + ch] = v;
+      }
+      id.data[o + 3] = 255;
+    }
+    g.putImageData(id, 0, 0);
+    fieldImg = img;
+  }
+
+  function newWorld() {
+    world = new HomeoWorld({ seed, k, senseFrac: 0.5 });
+    shareHist = [];
+    buildField();
+  }
+
+  function draw() {
+    const w = cv.width, s = w / world.c.W;
+    cx.imageSmoothingEnabled = true;
+    cx.drawImage(fieldImg, 0, 0, w, w);
+    const heat = world.k > 0 ? Math.max(0, world.weather) : 0;
+    if (heat > 0) { cx.fillStyle = css("--danger"); cx.globalAlpha = Math.min(0.16, heat * 0.07); cx.fillRect(0, 0, w, w); cx.globalAlpha = 1; }
+    const self = css("--self"), yok = css("--yoked"), dang = css("--danger"), surf = css("--surface");
+    const r = Math.max(2.2, w / 190);
+    for (let i = 0; i < world.c.cap; i++) {
+      if (!world.alive[i]) continue;
+      const x = world.x[i] * s, y = world.y[i] * s;
+      cx.beginPath(); cx.arc(x, y, r, 0, 6.2832);
+      cx.fillStyle = world.senses[i] ? self : yok; cx.fill();
+      cx.lineWidth = Math.max(1, DPR * 0.8); cx.strokeStyle = surf; cx.stroke();
+      if (world.T[i] > world.c.tCrit) { cx.beginPath(); cx.arc(x, y, r + 2.4 * DPR, 0, 6.2832); cx.strokeStyle = dang; cx.lineWidth = 1.4 * DPR; cx.stroke(); }
+    }
+    const f = $("wfill"), wv = Math.max(-2.5, Math.min(2.5, world.weather)) / 2.5;
+    f.style.left = wv >= 0 ? "50%" : (50 + wv * 50) + "%"; f.style.width = Math.abs(wv * 50) + "%";
+    f.style.background = wv >= 0 ? css("--danger") : css("--cool");
+  }
+
+  function drawShare() {
+    const w = sh.width, h = sh.height, pad = 6 * DPR;
+    sx.clearRect(0, 0, w, h);
+    sx.strokeStyle = css("--rule"); sx.lineWidth = DPR;
+    sx.setLineDash([4 * DPR, 4 * DPR]); sx.beginPath(); sx.moveTo(0, h / 2); sx.lineTo(w, h / 2); sx.stroke(); sx.setLineDash([]);
+    sx.fillStyle = css("--ink3"); sx.font = `${11 * DPR}px ${css("--mono")}`;
+    sx.fillText("100%", 2, 12 * DPR); sx.fillText("50%", 2, h / 2 - 4 * DPR); sx.fillText("0%", 2, h - 4);
+    if (shareHist.length < 2) return;
+    const n = shareHist.length, maxN = Math.max(600, n);
+    sx.beginPath();
+    shareHist.forEach((p, i) => { const X = 34 * DPR + (w - 40 * DPR) * i / maxN, Y = pad + (h - 2 * pad) * (1 - p); i ? sx.lineTo(X, Y) : sx.moveTo(X, Y); });
+    sx.strokeStyle = css("--self"); sx.lineWidth = 2 * DPR; sx.stroke();
+  }
+
+  function readouts() {
+    const st = world.stats();
+    $("r-t").textContent = st.t;
+    $("r-pop").textContent = st.pop;
+    $("r-ps").textContent = st.pop ? Math.round(st.pS * 100) + "%" : "extinct";
+    $("r-temp").textContent = `${st.TS == null ? "—" : st.TS.toFixed(2)} | ${st.TY == null ? "—" : st.TY.toFixed(2)}`;
+    $("r-gen").textContent = st.maxGen;
+    $("r-hd").textContent = `${world.heatDeaths[0]} | ${world.heatDeaths[1]}`;
+    return st;
+  }
+
+  let frame = 0;
+  function loop() {
+    if (running) {
+      for (let i = 0; i < spf; i++) {
+        world.step();
+        if (world.t % 5 === 0) { const st = world.stats(); if (st.pop) shareHist.push(st.pS); }
+        if (world.t >= 3000) { seed++; newWorld(); break; }
+      }
+    }
+    draw();
+    if (frame++ % 6 === 0) { readouts(); drawShare(); }
+    requestAnimationFrame(loop);
+  }
+
+  const ks = $("kslider");
+  function setK() { k = K_STEPS[+ks.value]; $("klabel").textContent = kLabel(k); world.k = k; }
+  ks.addEventListener("input", setK);
+  $("play").addEventListener("click", (e) => { running = !running; e.currentTarget.textContent = running ? "Pause" : "Play"; e.currentTarget.setAttribute("aria-pressed", String(running)); });
+  $("reseed").addEventListener("click", () => { seed++; newWorld(); setK(); });
+  $("speed").addEventListener("click", (e) => { const opts = [1, 4, 12]; spf = opts[(opts.indexOf(spf) + 1) % opts.length]; e.currentTarget.textContent = `Speed ${spf}×`; });
+  function resize() { sizeCanvas(cv); sizeCanvas(sh, 110); }
+  window.addEventListener("resize", resize);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", buildField);
+  new MutationObserver(buildField).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  newWorld(); resize(); setK();
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { spf = 1; }
+  for (let i = 0; i < 120; i++) {   // open on a populated dish with some history drawn
+    world.step();
+    if (world.t % 5 === 0) { const st = world.stats(); if (st.pop) shareHist.push(st.pS); }
+  }
+  readouts(); drawShare();
+  requestAnimationFrame(loop);
+
+  // ---------- results ----------
+  if (!DATA) return;
+  const tip = $("tip");
+  const showTip = (e, html) => { tip.innerHTML = html; tip.hidden = false; const x = Math.min(innerWidth - tip.offsetWidth - 8, e.clientX + 12); tip.style.left = x + "px"; tip.style.top = (e.clientY + 12) + "px"; };
+  const hideTip = () => { tip.hidden = true; };
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs, parent) => { const n = document.createElementNS(NS, tag); for (const a in attrs) n.setAttribute(a, attrs[a]); if (parent) parent.appendChild(n); return n; };
+
+  // Generic small-multiple line chart: series = [{name, colorVar, dash, pts:[{x,y,lo,hi,tip}]}]
+  function lineChart(fig, { title, xlab, ylab, series, yMin, yMax, xTicks, yTicks, band, caption }) {
+    const W = 340, H = 230, L = 46, R = 10, T = 26, B = 38;
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": title }, fig);
+    const xs = series.flatMap((s) => s.pts.map((p) => p.x));
+    const x0 = Math.min(...xs), x1 = Math.max(...xs);
+    const X = (v) => L + (W - L - R) * (v - x0) / ((x1 - x0) || 1);
+    const Y = (v) => T + (H - T - B) * (1 - (v - yMin) / (yMax - yMin));
+    const txt = (x, y, s, anchor, cls) => { const t = el("text", { x, y, "text-anchor": anchor || "start", fill: "var(--ink2)", "font-family": "var(--mono)", "font-size": 10.5 }, svg); t.textContent = s; return t; };
+    const ttl = el("text", { x: 0, y: 13, fill: "var(--ink)", "font-family": "var(--display)", "font-size": 13, "font-weight": 700 }, svg); ttl.textContent = title;
+    if (band) el("rect", { x: X(band[0]), y: T, width: X(band[1]) - X(band[0]), height: H - T - B, fill: "var(--danger)", opacity: 0.07 }, svg);
+    (yTicks || []).forEach((v) => { el("line", { x1: L, x2: W - R, y1: Y(v), y2: Y(v), stroke: "var(--rule)", "stroke-width": 1 }, svg); txt(L - 6, Y(v) + 3.5, String(v), "end"); });
+    (xTicks || []).forEach((v) => txt(X(v), H - B + 15, String(v), "middle"));
+    txt((L + W - R) / 2, H - 4, xlab, "middle");
+    const yl = txt(12, (T + H - B) / 2, ylab, "middle"); yl.setAttribute("transform", `rotate(-90 12 ${(T + H - B) / 2})`);
+    series.forEach((s) => {
+      const col = `var(${s.colorVar})`;
+      if (s.pts[0].lo != null) {
+        const d = s.pts.map((p, i) => `${i ? "L" : "M"}${X(p.x)},${Y(Math.min(yMax, p.hi))}`).join("") + s.pts.slice().reverse().map((p) => `L${X(p.x)},${Y(Math.max(yMin, p.lo))}`).join("") + "Z";
+        el("path", { d, fill: col, opacity: 0.13 }, svg);
+      }
+      el("path", { d: s.pts.map((p, i) => `${i ? "L" : "M"}${X(p.x)},${Y(p.y)}`).join(""), fill: "none", stroke: col, "stroke-width": 2, "stroke-dasharray": s.dash || "none" }, svg);
+      s.pts.forEach((p) => {
+        el("circle", { cx: X(p.x), cy: Y(p.y), r: 3.4, fill: col, stroke: "var(--surface)", "stroke-width": 1.5 }, svg);
+        const hit = el("circle", { cx: X(p.x), cy: Y(p.y), r: 10, fill: "transparent" }, svg);
+        hit.addEventListener("pointermove", (e) => showTip(e, `<b>${s.name}</b><br>${p.tip}`)); hit.addEventListener("pointerleave", hideTip);
+      });
+    });
+    if (caption) { const c = document.createElement("figcaption"); c.textContent = caption; fig.appendChild(c); }
+  }
+
+  // Categorical dot plot with interval whiskers: rows = [{label, pts:[{v, lo, hi, open, tip}]}]
+  function dotChart(fig, { title, xlab, rows, ref, legend, caption }) {
+    const W = 340, rowH = 40, T = 26, B = 40, L = 104, R = 12, H = T + B + rowH * rows.length;
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": title }, fig);
+    const X = (v) => L + (W - L - R) * v;
+    const t = el("text", { x: 0, y: 13, fill: "var(--ink)", "font-family": "var(--display)", "font-size": 13, "font-weight": 700 }, svg); t.textContent = title;
+    [0, 0.25, 0.5, 0.75, 1].forEach((v) => {
+      el("line", { x1: X(v), x2: X(v), y1: T, y2: H - B, stroke: v === ref ? "var(--ink3)" : "var(--rule)", "stroke-dasharray": v === ref ? "4 3" : "none" }, svg);
+      const tx = el("text", { x: X(v), y: H - B + 15, "text-anchor": "middle", fill: "var(--ink2)", "font-family": "var(--mono)", "font-size": 10.5 }, svg); tx.textContent = `${v * 100}%`;
+    });
+    const xl = el("text", { x: (L + W - R) / 2, y: H - 4, "text-anchor": "middle", fill: "var(--ink2)", "font-family": "var(--mono)", "font-size": 10.5 }, svg); xl.textContent = xlab;
+    rows.forEach((r, i) => {
+      const yc = T + rowH * (i + 0.5);
+      const lb = el("text", { x: L - 8, y: yc + 4, "text-anchor": "end", fill: "var(--ink)", "font-family": "var(--mono)", "font-size": 11 }, svg); lb.textContent = r.label;
+      r.pts.forEach((p, j) => {
+        const y = yc + (j - (r.pts.length - 1) / 2) * 11;
+        el("line", { x1: X(p.lo), x2: X(p.hi), y1: y, y2: y, stroke: "var(--self)", "stroke-width": 1.6 }, svg);
+        el("circle", { cx: X(p.v), cy: y, r: 4.2, fill: p.open ? "var(--surface)" : "var(--self)", stroke: "var(--self)", "stroke-width": 1.8 }, svg);
+        const hit = el("rect", { x: L, y: y - 6, width: W - L - R, height: 12, fill: "transparent" }, svg);
+        hit.addEventListener("pointermove", (e) => showTip(e, p.tip)); hit.addEventListener("pointerleave", hideTip);
+      });
+    });
+    if (legend) { const c = document.createElement("div"); c.className = "key"; c.style.marginTop = "4px"; c.innerHTML = legend; fig.appendChild(c); }
+    if (caption) { const c = document.createElement("figcaption"); c.textContent = caption; fig.appendChild(c); }
+  }
+
+  const fmt = (v, d = 0) => v == null ? "—" : Number(v).toFixed(d);
+  const verdict = (dotId, txtId, pass, label) => { $(dotId).style.background = pass ? "var(--oracle)" : "var(--yoked)"; $(txtId).textContent = label; };
+  const stat = (box, big, small) => { const d = document.createElement("div"); d.className = "stat"; d.innerHTML = `<b>${big}</b><span>${small}</span>`; $(box).appendChild(d); };
+
+  // HAB-1
+  const H1 = DATA.hab1;
+  if (H1) {
+    $("h-seeds").textContent = H1.seeds_label;
+    $("h-title").textContent = H1.title;
+    verdict("h-dot", "h-verdict", H1.verdict === "PASS", H1.verdict_label);
+    $("h-summary").textContent = H1.summary;
+    H1.stats.forEach((s) => stat("h-stats", s[0], s[1]));
+    const NAMES = { hybrid: ["Hybrid (task + homeostasis)", "--self", ""], extrinsic: ["Extrinsic (task only)", "--yoked", ""], domain_rand: ["Domain-rand oracle (trained on damage)", "--oracle", "5 4"] };
+    H1.curves.forEach((cv) => {
+      const fig = document.createElement("figure"); $("h-figs").appendChild(fig);
+      lineChart(fig, { title: cv.title, xlab: cv.xlab, ylab: "survival (steps)", yMin: 0, yMax: 1000, yTicks: [0, 250, 500, 750, 1000], xTicks: cv.xticks,
+        series: Object.entries(cv.series).map(([c, pts]) => ({ name: NAMES[c][0], colorVar: NAMES[c][1], dash: NAMES[c][2], pts: pts.map((p) => ({ x: p[0], y: p[1], lo: p[2], hi: p[3], tip: `level ${p[0]} · ${fmt(p[1])} steps<br>95% CI [${fmt(p[2])}, ${fmt(p[3])}] · ${fmt(p[4] * 100)}% full episodes` })) })) });
+    });
+    const legend = document.createElement("div"); legend.className = "key"; legend.innerHTML = Object.keys(H1.curves[0].series).map((c) => `<span><i style="background:var(${NAMES[c][1]})"></i>${NAMES[c][0]}</span>`).join("");
+    $("h-figs").before(legend);
+    $("h-scope").textContent = H1.scope;
+    const tb = $("h-table");
+    tb.innerHTML = `<tr><th>sweep</th><th>level</th>${H1.table_conds.map((c) => `<th>${c} survival</th><th>${c} full eps</th><th>${c} dist (m)</th>`).join("")}</tr>` +
+      H1.table.map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td>${r[2].map((c) => `<td>${fmt(c[0])}</td><td>${fmt(c[1] * 100)}%</td><td>${fmt(c[2], 1)}</td>`).join("")}</tr>`).join("");
+  } else { $("hab1").hidden = true; }
+
+  // E2v
+  const E = DATA.e2v;
+  if (E) {
+    $("e-n").textContent = E.n_label;
+    $("e-title").textContent = E.title;
+    verdict("e-dot", "e-verdict", E.p1_supported, E.verdict_label);
+    $("e-summary").textContent = E.summary;
+    E.stats.forEach((s) => stat("e-stats", s[0], s[1]));
+    E.charts.forEach((ch) => {
+      const fig = document.createElement("figure"); $("e-figs").appendChild(fig);
+      if (ch.kind === "dots") { dotChart(fig, ch); return; }
+      lineChart(fig, { ...ch, series: ch.series.map((s) => ({ ...s, pts: s.pts.map((p) => ({ x: p[0], y: p[1], lo: p[2], hi: p[3], tip: p[4] })) })) });
+      if (ch.legend) { const c = document.createElement("div"); c.className = "key"; c.style.marginTop = "4px"; c.innerHTML = ch.legend; fig.appendChild(c); }
+    });
+    $("e-scope").textContent = E.scope;
+  } else { $("e2v").hidden = true; }
+
+  $("m-links").innerHTML = DATA.links || "";
+})();
+</script>
+
+</body>
+</html>

@@ -1,450 +1,173 @@
-# HOMEOSTATIC COLONY
+# Homeostatic Autonomy
 
-**From single-cell survival to predictive self-maintenance**
+[![tests](https://github.com/pablopedrosap/homeostatic-Alife/actions/workflows/tests.yml/badge.svg)](https://github.com/pablopedrosap/homeostatic-Alife/actions/workflows/tests.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)
 
-An ALife / embodied-AI experiment comparing standard extrinsic reward RL against homeostatic (viability-driven) RL agents in a 2D survival environment. The project measures robustness, zero-shot damage adaptation, and predictive risk anticipation.
+**Embodied agents that regulate their own energy, temperature and damage, tested with pass
+criteria that were written down before the data existed.**
 
-## Research Question
+Robots trained purely to maximise task reward are excellent until something breaks. Animals
+keep working while injured because a large part of their control is about keeping their own
+body viable. This project asks, with falsifiable experiments, how much of that can be built
+into, or evolved by, artificial agents.
 
-> Do agents driven by intrinsic homeostatic constraints (energy, temperature, damage regulation) show better robustness and zero-shot damage adaptation than standard reward-maximizing agents?
+**[▶ Live demo](https://pablopedrosap.github.io/homeostatic-Alife/site/)**: the
+evolutionary world running in your browser, plus interactive versions of both results.
 
-## Important Framing
 
-- This is a **homeostatic control and robustness** project
-- This is **NOT** a consciousness project
-- This is **NOT** a "pain" project
-- "Fear-like" behavior refers strictly to **predictive risk anticipation** (functional, not subjective)
-- All terminology follows ALife / embodied cognition conventions
-
-## Overview
-
-A bacterium-like agent navigates a 2D world containing nutrient sources, toxin zones, and cool zones. The agent must maintain three internal variables within viable ranges:
-
-| Variable | Symbol | Death condition |
-|----------|--------|----------------|
-| Energy | `E` | `E <= 0` (starvation) |
-| Temperature | `T` | `T >= T_fatal` (overheating) |
-| Damage | `D` | `D >= D_max` (damage overload) |
-
-### Key Mechanics
-
-- **Energy** decreases with movement and time; restored by nutrient sources
-- **Temperature** increases with movement effort and hazard exposure; cools passively and in cool zones
-- **Damage** increases with toxin exposure and overheating; repairs slowly when resting with sufficient energy
-- **Brain fog**: When temperature exceeds `T_crit` or damage is high, Gaussian noise is injected into the agent's observations (sensors degrade, not just reward)
-- **Two reward modes**: extrinsic (nutrient-collecting) vs homeostatic (drive-reduction from viable range)
-
-### Homeostatic Reward (Drive-Reduction)
-
-```
-deviation(E, T, D) = w_E * |E_target - E| + w_T * |T - T_target| + w_D * D
-reward = deviation_t - deviation_{t+1} - alive_cost
-```
-
-The agent is rewarded for *reducing* its distance from the homeostatic target, not for a fixed penalty/bonus.
-
-### Predictive Risk Model
-
-A small MLP learns to predict next internal state `[E, T, D]` from current observations and action. This enables:
-- **Risk score** = predicted homeostatic deviation + uncertainty estimate
-- Optional reward shaping: `reward -= lambda * predicted_risk`
-- Demonstrates that predicted risk rises *before* actual damage events
-
-## Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/your-username/homeostatic-Alife.git
-cd homeostatic-Alife
-
-# Create virtual environment and install
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-```
-
-### Requirements
-
-- Python 3.11+
-- gymnasium, numpy, torch, stable-baselines3, matplotlib, imageio, scipy
-- For MuJoCo Ant-v5 experiments: `gymnasium[mujoco]`
-
-## Quick Start
-
-### 1. Run a demo episode (random actions)
-
-```bash
-python scripts/demo_episode.py --steps 200
-```
-
-### 2. Train agents (smoke test)
-
-```bash
-python scripts/train_extrinsic.py --smoke
-python scripts/train_homeostatic.py --smoke
-```
-
-### 3. Train agents (full run)
-
-```bash
-python scripts/train_extrinsic.py --steps 500000
-python scripts/train_homeostatic.py --steps 500000
-```
-
-### 4. Multi-seed experiment (train + evaluate + plots)
-
-```bash
-# Smoke test (1 seed, 10k steps)
-python scripts/run_experiment.py --smoke
-
-# Full run (6 seeds, 500k steps each)
-python scripts/run_experiment.py --seeds 6 --train-steps 500000
-```
-
-### 5. Evaluate
-
-```bash
-python scripts/evaluate.py --model results/extrinsic/ppo_extrinsic --episodes 20
-python scripts/evaluate.py --model results/homeostatic/ppo_homeostatic --episodes 20
-```
-
-### 6. Run robustness benchmark
-
-```bash
-python scripts/run_benchmark.py \
-    --extrinsic results/extrinsic/ppo_extrinsic \
-    --homeostatic results/homeostatic/ppo_homeostatic \
-    --episodes 10
-```
-
-### 7. Train predictive risk model
-
-```bash
-python scripts/train_predictor.py --model results/homeostatic/ppo_homeostatic --episodes 50
-```
-
-### 8. Record video
-
-```bash
-python scripts/record_video.py --model results/homeostatic/ppo_homeostatic --output results/demo.gif
-python scripts/record_video.py --random --output results/random_demo.gif
-```
-
-### 9. Run colony simulation
-
-```bash
-python scripts/run_colony.py --cells 150 --steps 2000
-```
-
-### 10. Run tests
-
-```bash
-python -m pytest tests/ -v
-```
-
-## Experiments
-
-### Experiment 1 — Baseline Comparison
-
-Train extrinsic and homeostatic agents, then compare survival time, efficiency, and policy behavior in the training environment.
-
-### Experiment 2 — OOD Robustness Benchmark
-
-Evaluate both agents under perturbations not seen during training:
-
-| Perturbation | Description |
-|---|---|
-| `actuator_50pct` / `actuator_80pct` | Movement in one direction weakened |
-| `sensor_2x` / `sensor_5x` | Observation noise multiplied |
-| `field_shift_3` / `field_shift_6` | Nutrient positions shifted |
-| `energy_2x` / `energy_3x` | Movement cost multiplied |
-
-Metrics: survival time, reward, nutrient collected, distance traveled, failure mode counts. Results saved to CSV and comparison plots generated.
-
-### Experiment 3 — Predictive Risk Model
-
-- Train MLP predictor on collected transitions
-- Show predictor learning curves
-- Demonstrate that predicted risk rises before actual damage/overheating events
-- Optional reward shaping with `risk_lambda`
-
-### Experiment 4 — Colony Simulation
-
-Multi-cell simulation with local coupling and optional quorum-like signaling. Compares population survival with and without chemical communication.
-
-### Experiment 5 — Ablation Study
-
-Systematically removes individual homeostatic components to quantify their contribution:
-
-| Condition | Description |
-|---|---|
-| `full` | Complete homeostatic agent (control) |
-| `no_brain_fog` | Disable sensor degradation under stress |
-| `no_internal` | Remove internal state from observations |
-| `no_damage` | Disable damage accumulation |
-| `no_risk` | Disable predictive risk shaping |
-| `static_penalty` | Replace drive-reduction reward with static penalty |
-
-```bash
-# Smoke test
-python scripts/run_ablations.py --smoke
-
-# Full run (6 seeds)
-python scripts/run_ablations.py --seeds 6 --train-steps 500000
-```
-
-### Experiment 6 — Stress-Test Benchmark
-
-Evaluates agents on 15 harder OOD scenarios beyond the standard benchmark:
-
-| Category | Perturbations |
-|---|---|
-| Delayed hazards | `hazard_delay_5`, `hazard_delay_15` |
-| Moving nutrients | `moving_nutrients_slow`, `moving_nutrients_fast` |
-| Nonstationary toxins | `toxin_shift_200`, `toxin_shift_50` |
-| Sensor latency | `sensor_lag_3`, `sensor_lag_8` |
-| Action latency | `action_lag_3`, `action_lag_8` |
-| Compound | `sensor_2x+energy_2x`, `actuator_50+sensor_3x`, `moving+toxin_shift`, `all_moderate` |
-
-```bash
-python scripts/run_stress_test.py --smoke
-python scripts/run_stress_test.py --seeds 6 --eval-episodes 20
-```
-
-### Experiment 7 — Online Adaptation
-
-Compares frozen policies (no gradient updates at test time) against online-adapted policies (small PPO updates during OOD evaluation). Measures:
-
-- **Adaptation benefit**: reward improvement under perturbation
-- **Forgetting**: baseline performance degradation after OOD adaptation
-- **Instability**: reward variance across episodes
-
-```bash
-python scripts/run_adaptation.py --smoke
-python scripts/run_adaptation.py --seeds 6 --adapt-steps 5000
-```
-
-### Experiment 8 — Fairness Audit & Failure-Mode Analysis
-
-Programmatic verification that both agents have identical controlled variables (network architecture, training budget, observation/action spaces, episode length), plus failure-mode classification and diagnostic plots.
-
-```bash
-python scripts/run_failure_analysis.py --smoke
-python scripts/run_failure_analysis.py --seeds 6 --eval-episodes 20
-```
-
-Outputs:
-- `fairness_report.md` — 18-axis checklist with PASS/FAIL/INTENTIONAL DIFF
-- `failure_classification.csv` — per-episode failure modes
-- Diagnostic plots: failure distribution, pre-failure E/T/D trajectories, representative rollouts (best/median/worst), spatial trajectory paths
-
-### Experiment 9 — MuJoCo Ant-v5
-
-Maps homeostatic dynamics onto the MuJoCo Ant-v5 locomotion agent:
-
-| Ant signal | Homeostatic mapping |
-|---|---|
-| Forward velocity | Nutrient/energy gain |
-| Action magnitude | Energy cost + heat generation |
-| Contact forces | Additional heat |
-| Unhealthy z-position | Toxin/damage |
-
-Supports the same reward modes (extrinsic vs homeostatic), brain fog, and perturbation scenarios.
-
-```bash
-# Train (requires gymnasium[mujoco])
-python scripts/train_ant.py --smoke
-python scripts/train_ant.py --steps 500000 --seeds 3
-
-# Evaluate
-python scripts/eval_ant.py --smoke
-python scripts/eval_ant.py --seeds 3 --eval-episodes 10
-```
-
-### Paper Figures
-
-Generate publication-quality figures and tables from experiment results:
-
-```bash
-python scripts/generate_paper_figures.py --smoke
-python scripts/generate_paper_figures.py --seeds 6 --train-steps 500000
-```
-
-Generates:
-- **Figure 1**: Environment schematic + homeostatic dynamics flow diagram
-- **Figure 2**: Training curves (reward, survival, energy, damage) — mean +/- std across seeds
-- **Figure 3**: OOD robustness bar chart with 95% CI error bars
-- **Figure 4**: E/T/D trajectories under 80% actuator damage
-- **Figure 5**: Predictive risk signal rising before failure + predictor training loss
-- **Table 1**: LaTeX benchmark summary table (mean +/- std across seeds)
-
-## Internal Variables & Brain Fog
-
-### Dynamics
-
-```
-E_{t+1} = clip(E_t - basal_cost - move_cost*||a|| + nutrient_gain*contact, 0, E_max)
-T_{t+1} = clip(T_t + heat_move*||a||^2 + heat_hazard*hazard - cooling - cool_bonus*cool, T_min, T_cap)
-D_{t+1} = clip(D_t + dmg_toxin*toxin + dmg_overheat*relu(T-T_crit) - repair*rest*1[E>min], 0, D_max)
-```
-
-### Brain Fog (Sensor Degradation)
-
-When the agent is overheated or damaged, its sensors become noisy:
-
-```
-sigma = sigma_base + k_temp * relu(T - T_crit) + k_dmg * D
-```
-
-This noise is applied to external observations (gradients, field readings, wall distances) and mildly to internal state readings. This models functional impairment — the agent's perception degrades under stress, making survival harder.
+---
 
 ## Results
 
-Results are saved to `results/` with the following structure:
+### 1 · HAB-1 v1: does self-regulation buy robustness to damage? (MuJoCo Ant)
 
-```
-results/
-  extrinsic/               # Single-run extrinsic agent model + config
-  homeostatic/             # Single-run homeostatic agent model + config
-  benchmark/               # Single-run OOD benchmark CSVs + plots
-  predictor/               # Dynamics predictor + loss/risk plots
-  colony/                  # Colony simulation comparison plots
-  experiment/              # Multi-seed experiment results
-    models/                #   Trained models per condition/seed
-    csv/                   #   Benchmark CSVs
-    plots/                 #   Publication comparison plots
-    summaries.json         #   Aggregated statistics
-  ablations/               # Ablation study results
-    models/                #   Models per ablation condition/seed
-    csv/                   #   Ablation benchmark CSVs
-    plots/                 #   Ablation comparison plots
-  stress_test/             # Stress-test benchmark results
-    csv/                   #   Stress-test CSVs
-    plots/                 #   Stress-test comparison plots
-  adaptation/              # Online adaptation experiment
-    csv/                   #   Frozen vs adapted comparison CSVs
-    plots/                 #   Adaptation comparison plots
-  failure_analysis/        # Failure-mode analysis
-    fairness_report.md     #   Programmatic fairness audit
-    failure_classification.csv
-    plots/                 #   Rollout, spatial, pre-failure plots
-  ant/                     # MuJoCo Ant-v5 experiment
-    models/                #   Ant models per condition/seed
-    csv/                   #   Ant benchmark CSVs
-    plots/                 #   Ant comparison plots
-  paper/                   # Publication figures
-    figures/               #   figure1.png through figure5.png
-                           #   table1_benchmark.tex / .txt
+> **Status 2026-11-08: running.** The pre-registration
+> ([`docs/prereg/HAB1_v1_ant.md`](docs/prereg/HAB1_v1_ant.md)) was pushed to this repository
+> while the first models were still training: 6 seeds × {hybrid, extrinsic, domain-rand
+> oracle} × 2.4M steps, frozen thermal physics, AUDC primary endpoint with Holm correction.
+> This note is replaced by the verdict when the run completes.
+
+### 2 · HAB-E2v: does evolution build self-sensing on its own? (reward-free ALife)
+
+![HAB-E2v](docs/figures/regulator_law.png)
+
+A population of neural organisms with **no reward and no fitness function**. Genomes are
+inherited birth weights, controllers rewire with a local Hebbian rule, organisms die when
+they overheat, starve or take too much damage, and they split when they have gathered
+enough energy. Half the founders feel their own body. The other half are **yoked**: they
+feel a random partner's body, which is the same kind of signal with no information about
+themselves.
+
+| | Result |
+|---|---|
+| Pre-registered hypothesis: climate volatility increases selection for self-sensing | **Not supported** (ρ = +0.01, p = 0.46). Same in the K-selection regime. |
+| Does selection favour self-sensing at all? | **Yes, strongly:** self-sensers took over **70 of 82** worlds (p = 4×10⁻¹¹), including a perfectly constant climate (p = 0.003). |
+| Lifespan, self-sensing vs yoked (exploratory) | **+25%** (82 vs 66 steps, p = 5×10⁻⁷) |
+| Which signal carries it? (exploratory) | **Temperature alone.** Yoking only T reproduces the full effect; energy and damage don't. |
+| Is it thermoregulation? | **No signature found.** Self-sensers' temperature tracks the weather as much as the yoked organisms', and there is no "slow when hot" reflex. The mechanism is open. |
+
+This result **retracts** this repo's July 2026 conclusion that "selection does not build
+self-regulation". That analysis compared populations in separate worlds and blinded them by
+zeroing inputs. Both are confounds, and with a fair control the sign flips. Full report:
+[`docs/results/HAB_E2v_results.md`](docs/results/HAB_E2v_results.md).
+
+---
+
+## How the work is done
+
+- **Pre-registration.** Each experiment has a file in [`docs/prereg/`](docs/prereg) fixing
+  physics, seeds, statistical test and pass threshold *before* the first run. Analyses that
+  were added later are labelled exploratory everywhere they appear.
+- **All seeds reported.** No seed selection, no best-of-N.
+- **Corrections in the open.** When an earlier analysis turns out to be confounded it is
+  retracted in the docs, not silently replaced (see the research log below).
+- **Anti-metrics.** Every robustness claim is checked against a baseline tax, a handicapped
+  foil, and "survival by doing nothing" ([`docs/BENCHMARK.md`](docs/BENCHMARK.md)).
+- **No consciousness claims.** The long-term direction is described in
+  [`docs/THESIS.md`](docs/THESIS.md). It deliberately stops at capacities that can be
+  measured.
+
+## The system
+
+Every agent carries three internal variables that must stay in a viable range:
+
+| Variable | Update rule | Death |
+|---|---|---|
+| Energy `E` | `E -= basal + move_cost·‖a‖ − nutrient` | `E ≤ 0` |
+| Temperature `T` | `T += heat_move·‖a‖² + heat_sources + speed_heat·v − cooling` | `T ≥ T_fatal` |
+| Damage `D` | `D += toxin + overheat·relu(T − T_crit) − repair·rest` | `D ≥ D_max` |
+
+High temperature and damage also inject noise into the agent's observations ("brain fog"),
+so stress degrades perception as well as reward.
+
+| Reward mode | Formula |
+|---|---|
+| `extrinsic` | `r = r_task` (Ant-v5 forward progress) |
+| `homeostatic` | `r = Δ(deviation from setpoints) − alive_cost` |
+| **`hybrid`** | `r = r_task + 0.3 · r_homeostatic` |
+| `survival` | `r = +1 per step alive` (no setpoints, used for the emergence experiments) |
+
+In the frontier thermal configuration used by HAB-1 v1, running fast generates heat
+(`forward_vel_heat_gain = 0.10`, calibrated once against the extrinsic foil with
+[`scripts/probe_thermal.py`](scripts/probe_thermal.py) and then frozen), so "run as fast as
+possible" and "stay alive" genuinely conflict.
+
+## Reproduce
+
+```bash
+git clone https://github.com/pablopedrosap/homeostatic-Alife.git && cd homeostatic-Alife
+python3 -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+python -m pytest tests/ -q                      # ~15 s
+
+# HAB-1 v1: 18 PPO agents × 2.4M steps + 1,380 evaluation conditions.
+# ~1.7 h on an 8-core laptop (one torch thread per worker).
+python scripts/run_hab1_v1.py --workers 6
+python scripts/analyze_hab1_v1.py               # pre-registered verdict
+
+# HAB-E2v: 240 evolutionary worlds (~17 min on 2 cores) + exploratory dissection (~4 min)
+python scripts/run_regulator_law.py
+python scripts/run_channel_dissection.py
+
+python scripts/make_figures.py --hab1 results/hab1_v1/csv/progressive_damage.csv --regulator results/regulator_law
+python scripts/build_site.py                    # rebuilds the live demo page
 ```
 
-## Repository Structure
+## Repository map
 
 ```
 homeostatic_colony/
-  __init__.py              # Package metadata
-  config.py                # Dataclass configuration (all parameters)
-  fields.py                # Spatial fields (nutrient, toxin, cool zones)
-  envs/
-    single_cell_env.py     # Main Gymnasium environment
-    wrappers.py            # Perturbation and flattening wrappers
-    colony_env.py          # Multi-cell colony simulation
-    ant_homeostatic.py     # MuJoCo Ant-v5 homeostatic wrapper
-  dynamics/
-    homeostasis.py         # E/T/D update rules and viability checks
-    degradation.py         # Brain-fog noise injection
-    predictor.py           # Predictive risk MLP
-  agents/
-    sb3_utils.py           # SB3 PPO setup, callbacks, model I/O
-  eval/
-    metrics.py             # Episode metric collection and aggregation
-    benchmarks.py          # OOD perturbation benchmark suite
-    plotting.py            # Comparison, trace, and predictor plots
-    fairness.py            # Programmatic fairness audit (18-axis)
-    failure_analysis.py    # Failure-mode classification and diagnostics
-    adaptation.py          # Online adaptation vs frozen policy comparison
-  utils/
-    seeding.py             # Global seed management
-    io.py                  # Config/results serialization
-    video.py               # Episode recording (MP4/GIF)
-
+  dynamics/homeostasis.py        E/T/D update rules and viability
+  dynamics/batched_homeostasis*  vectorised E/T/D (numpy / torch) for many parallel envs
+  envs/ant_homeostatic.py        MuJoCo Ant-v5 + internal state, reward modes, damage knobs
+  envs/humanoid_homeostatic.py   Humanoid-v5 wrapper (experiment not yet run)
+  alife/emergent_world.py        reward-free evolutionary world (weather, yoked control, probes)
 scripts/
-  train_extrinsic.py       # Train extrinsic reward agent
-  train_homeostatic.py     # Train homeostatic reward agent
-  evaluate.py              # Evaluate agent on base environment
-  record_video.py          # Record episode as GIF/MP4
-  run_benchmark.py         # Run full OOD robustness benchmark
-  train_predictor.py       # Train predictive dynamics model
-  demo_episode.py          # Run demo episode with diagnostics
-  run_colony.py            # Run colony simulation
-  run_experiment.py        # Multi-seed experiment runner (train+eval+plots)
-  run_ablations.py         # Ablation study (6 conditions)
-  run_stress_test.py       # Stress-test benchmark (15 hard OOD scenarios)
-  run_adaptation.py        # Online adaptation vs frozen policy
-  run_failure_analysis.py  # Failure-mode analysis + fairness audit
-  train_ant.py             # Train MuJoCo Ant-v5 agents
-  eval_ant.py              # Evaluate Ant-v5 agents
-  generate_paper_figures.py # Generate publication figures + tables
-
-tests/
-  test_env_api.py              # Gymnasium API compliance
-  test_homeostasis_dynamics.py # Dynamics update correctness
-  test_observation_shapes.py   # Observation shape/range validation
-  test_rewards.py              # Reward mode switching
+  run_hab1_v1.py                 parallel, resumable HAB-1 runner
+  analyze_hab1_v1.py             pre-registered HAB-1 analysis
+  run_regulator_law.py           HAB-E2v protocol + analysis
+  run_channel_dissection.py      exploratory follow-up
+  make_figures.py, build_site.py figures and the live demo page
+docs/
+  prereg/                        pre-registrations (written before the runs)
+  results/                       full result reports
+  THESIS.md, BENCHMARK.md        research program and the benchmark ladder
+  site/                          live demo (JS port of the evolutionary world)
+tests/                           123 tests, incl. golden-value tests that pin the original world
 ```
 
-## Configuration
+The vectorised E/T/D module updates the internal state of 4,096 parallel bodies in about
+50 µs on a laptop CPU (`scripts/benchmark_batched.py`, NumPy; a Torch version is verified
+equal to 1e-5). That measures the homeostasis layer only, not physics simulation. The point
+is that the layer adds negligible overhead on top of a GPU simulator such as Isaac Lab.
 
-All parameters are managed via dataclasses in `config.py`:
+## Research log
 
-- `WorldConfig` — world size, field counts, radii, strengths
-- `AgentConfig` — energy/temp/damage parameters, movement, noise
-- `RewardConfig` — reward mode, weights, risk shaping
-- `EnvConfig` — top-level config combining all above + ablation flags + stress-test overrides + perturbation parameters
+| Date | What happened |
+|---|---|
+| 2026-03 | First 6-seed damage sweep. Hybrid looked far more robust (e.g. 82% vs 27% full episodes at 40% actuator damage), but the extrinsic foil also survived only **27% of episodes with no damage at all**. The gap was mostly a baseline difference, so the run is superseded. |
+| 2026-07 | HAB-1 v0 (3 seeds): strong directional signal, but temperature never reached the danger band, and under a corrected analysis it is not significant (Holm p = 0.39). The thermal coupling was then calibrated. |
+| 2026-07 | HAB-E2: "selection does not build self-regulation". **Retracted 2026-11** (confounded design). |
+| 2026-11 | HAB-1 v1 and HAB-E2v pre-registered and run. Results above. |
 
-### Ablation Flags
+## Roadmap
 
-```python
-EnvConfig(
-    ablate_brain_fog=True,    # Disable sensor degradation
-    ablate_internal_obs=True, # Remove internal state from obs
-    ablate_damage=True,       # Disable damage accumulation
-    ablate_risk=True,         # Disable risk shaping
-)
-```
-
-### Stress-Test Parameters
-
-```python
-EnvConfig(
-    hazard_delay_steps=5,        # Delayed hazard effects
-    sensor_latency_steps=3,      # Stale sensor readings
-    action_latency_steps=3,      # Delayed action execution
-    moving_nutrients=True,        # Nutrients drift over time
-    nutrient_drift_speed=0.01,   # Drift speed
-    nonstationary_toxins=True,   # Toxin zones shift periodically
-    toxin_change_interval=200,   # Shift interval (steps)
-)
-```
-
-## Future Work
-
-- **Real robot sensors**: Battery level as Energy, CPU temperature as Temperature, collision count as Damage
-- **Colony multicellularity**: Evolved signaling protocols, differentiation, collective robustness
-- **Hierarchical control**: Meta-controller that switches strategies based on internal state regime
-- **Transfer learning**: Train on simple env, deploy on complex morphology
+1. **HAB-1 on Humanoid-v5.** A claim about graceful degradation has to hold on more than one body.
+2. **HAB-2: predictive self-maintenance.** Does a learned risk signal rise *before* failure?
+3. **HAB-E2v follow-up:** find the mechanism by which self-temperature helps (efference-copy
+   hypothesis vs context-dependent use vs plasticity).
+4. **Hardware:** one commodity quadruped that keeps walking with a disabled motor.
 
 ## Citation
 
-If you use this work, please cite:
-
-```
-@software{homeostatic_colony,
-  title={Homeostatic Colony: From Single-Cell Survival to Predictive Self-Maintenance},
-  year={2025},
-  url={https://github.com/your-username/homeostatic-Alife}
+```bibtex
+@software{pedrosa_homeostatic_autonomy_2026,
+  title  = {Homeostatic Autonomy: pre-registered experiments on self-regulating agents},
+  author = {Pedrosa, Pablo},
+  year   = {2026},
+  url    = {https://github.com/pablopedrosap/homeostatic-Alife}
 }
 ```
 
-## License
-
-MIT
+MIT License.

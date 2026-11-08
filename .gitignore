@@ -11,7 +11,7 @@ build/
 .venv
 venv/
 ENV/
-results/
+/results/
 outputs/
 *.mp4
 *.gif
@@ -26,3 +26,5 @@ wandb/
 *.swo
 .DS_Store
 Thumbs.db
+outreach/
+docs/site/artifact.html

@@ -1,0 +1,14 @@
+{
+  "e2v": {
+    "title": "Evolution favours organisms that feel their own temperature. A volatile climate doesn't make that stronger.",
+    "verdict_label": "Pre-registered hypothesis not supported · ρ = +0.01, p = 0.46",
+    "summary": "The prediction was that self-sensing pays off more as the climate gets more volatile, the way estuary animals regulate their salt balance and open-ocean ones don't. That prediction failed. What the competition showed instead is that self-sensing wins almost everywhere, including a perfectly constant climate. This reverses an earlier analysis from July 2026, which compared populations in separate worlds and switched off sensing by zeroing inputs. Under a fair control, the earlier result flips.",
+    "stats": [
+      ["70 / 82", "worlds where self-sensing organisms took over the population (binomial p = 4×10⁻¹¹)"],
+      ["+25%", "longer lifespan for self-sensing organisms: 82 vs 66 steps, p = 5×10⁻⁷ (exploratory)"],
+      ["T alone", "yoking only the temperature reading reproduces the whole advantage; energy and damage don't (exploratory)"]
+    ],
+    "scope": "What this does not show: that the organisms are regulating their temperature in the physiological sense. Their body temperature tracks the weather exactly as much as the yoked organisms' does, and probing their controllers shows no 'slow down when hot' reflex. Selection clearly uses self-temperature information, but we have not yet found how. That is the next experiment."
+  },
+  "links": "Pre-registrations: <a href=\"https://github.com/pablopedrosap/homeostatic-Alife/blob/main/docs/prereg/HAB1_v1_ant.md\">HAB-1 v1</a> · <a href=\"https://github.com/pablopedrosap/homeostatic-Alife/blob/main/docs/prereg/HAB_E2v_regulator_law.md\">HAB-E2v</a>. Full reports: <a href=\"https://github.com/pablopedrosap/homeostatic-Alife/blob/main/docs/results/HAB1_v1_results.md\">HAB-1 v1</a> · <a href=\"https://github.com/pablopedrosap/homeostatic-Alife/blob/main/docs/results/HAB_E2v_results.md\">HAB-E2v</a>."
+}

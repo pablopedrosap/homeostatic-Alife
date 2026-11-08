@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software or its results, please cite it as below."
+title: "Homeostatic Autonomy: pre-registered experiments on self-regulating agents"
+authors:
+  - family-names: Pedrosa
+    given-names: Pablo
+repository-code: "https://github.com/pablopedrosap/homeostatic-Alife"
+license: MIT
+date-released: 2026-11-08
+keywords:
+  - homeostasis
+  - reinforcement learning
+  - artificial life
+  - fault tolerance
+  - MuJoCo
+  - graceful degradation
