@@ -31,7 +31,7 @@ from pathlib import Path
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import BaseCallback
 
-from homeostatic_colony.config import RewardConfig
+from homeostatic_colony.config import AgentConfig, RewardConfig
 from homeostatic_colony.envs.ant_homeostatic import (
     AntHomeostaticConfig,
     AntHomeostaticEnv,
@@ -56,6 +56,9 @@ class AntLogCallback(BaseCallback):
         self._energies: list[float] = []
         self._temps: list[float] = []
         self._damages: list[float] = []
+        self._r_energy: list[float] = []
+        self._r_temp: list[float] = []
+        self._r_damage: list[float] = []
 
     def _on_step(self) -> bool:
         infos = self.locals.get("infos", [])
@@ -64,23 +67,27 @@ class AntLogCallback(BaseCallback):
                 self._energies.append(info["energy"])
                 self._temps.append(info["temperature"])
                 self._damages.append(info["damage"])
+            if "r_energy" in info:
+                self._r_energy.append(info["r_energy"])
+                self._r_temp.append(info["r_temp"])
+                self._r_damage.append(info["r_damage"])
 
         if self.n_calls % self.log_freq == 0 and self._energies:
-            self.logger.record(
-                "ant_homeo/mean_energy",
-                sum(self._energies) / len(self._energies),
-            )
-            self.logger.record(
-                "ant_homeo/mean_temp",
-                sum(self._temps) / len(self._temps),
-            )
-            self.logger.record(
-                "ant_homeo/mean_damage",
-                sum(self._damages) / len(self._damages),
-            )
+            n = len(self._energies)
+            self.logger.record("ant_homeo/mean_energy", sum(self._energies) / n)
+            self.logger.record("ant_homeo/mean_temp", sum(self._temps) / n)
+            self.logger.record("ant_homeo/mean_damage", sum(self._damages) / n)
             self._energies.clear()
             self._temps.clear()
             self._damages.clear()
+            if self._r_energy:
+                nr = len(self._r_energy)
+                self.logger.record("ant_homeo/r_energy", sum(self._r_energy) / nr)
+                self.logger.record("ant_homeo/r_temp", sum(self._r_temp) / nr)
+                self.logger.record("ant_homeo/r_damage", sum(self._r_damage) / nr)
+                self._r_energy.clear()
+                self._r_temp.clear()
+                self._r_damage.clear()
         return True
 
 
@@ -100,9 +107,13 @@ def train_ant(
 
     set_global_seed(seed)
 
+    # Use tuned thermal config (matching curriculum training physics)
+    agent_cfg = AgentConfig(heat_move=0.003, cooling_rate=0.015, t_fatal=1.2)
     reward_cfg = RewardConfig(mode=condition)
     cfg = AntHomeostaticConfig(
         reward=reward_cfg,
+        agent=agent_cfg,
+        action_heat_gain=0.004,
         max_steps=max_ep_steps,
         seed=seed,
     )
@@ -145,8 +156,8 @@ def train_ant(
 def main() -> None:
     parser = argparse.ArgumentParser(description="Train Ant-v5 homeostatic agents")
     parser.add_argument("--condition", type=str, default=None,
-                        choices=["extrinsic", "homeostatic"],
-                        help="Train only this condition (default: both)")
+                        choices=["extrinsic", "homeostatic", "hybrid"],
+                        help="Train only this condition (default: all three)")
     parser.add_argument("--steps", type=int, default=500_000)
     parser.add_argument("--seeds", type=int, default=3)
     parser.add_argument("--base-seed", type=int, default=0)
@@ -164,7 +175,7 @@ def main() -> None:
 
     conditions = (
         [args.condition] if args.condition
-        else ["extrinsic", "homeostatic"]
+        else ["extrinsic", "homeostatic", "hybrid"]
     )
     seeds = list(range(args.base_seed, args.base_seed + args.seeds))
 

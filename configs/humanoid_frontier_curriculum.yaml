@@ -1,0 +1,26 @@
+# Frontier Humanoid Homeostatic Curriculum
+#
+# Calibrated for Humanoid-v5 (17 actuators, bipedal).
+# Slower progression than Ant since Humanoid is harder to train.
+
+stages:
+  - name: easy
+    steps: 400000
+    cooling_rate: 0.06
+    t_fatal: 3.0
+    action_heat_gain: 0.001
+    heat_move: 0.001
+
+  - name: medium
+    steps: 400000
+    cooling_rate: 0.02
+    t_fatal: 1.8
+    action_heat_gain: 0.003
+    heat_move: 0.003
+
+  - name: full
+    steps: 3000000
+    cooling_rate: 0.008
+    t_fatal: 1.2
+    action_heat_gain: 0.004
+    heat_move: 0.004

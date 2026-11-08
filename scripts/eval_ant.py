@@ -28,7 +28,7 @@ from pathlib import Path
 import numpy as np
 from stable_baselines3 import PPO
 
-from homeostatic_colony.config import RewardConfig
+from homeostatic_colony.config import AgentConfig, RewardConfig
 from homeostatic_colony.envs.ant_homeostatic import (
     AntHomeostaticConfig,
     AntHomeostaticEnv,
@@ -48,6 +48,11 @@ logger = logging.getLogger("eval_ant")
 
 RESULTS_DIR = Path("results/ant")
 MODEL_DIR = RESULTS_DIR / "models"
+CURRICULUM_DIR = RESULTS_DIR / "curriculum"
+
+# Tuned thermal config (from curriculum training)
+EVAL_AGENT_CFG = AgentConfig(heat_move=0.003, cooling_rate=0.015, t_fatal=1.2)
+EVAL_ACTION_HEAT_GAIN = 0.004
 
 
 @dataclass
@@ -134,6 +139,8 @@ def eval_ant_perturbation(
     for ep in range(n_episodes):
         cfg = AntHomeostaticConfig(
             reward=RewardConfig(mode=condition),
+            agent=EVAL_AGENT_CFG,
+            action_heat_gain=EVAL_ACTION_HEAT_GAIN,
             max_steps=max_ep_steps,
             seed=seed + ep,
             actuator_impairment=pert.actuator_impairment,
@@ -166,7 +173,7 @@ def main() -> None:
         args.max_ep_steps = 500
 
     seeds = list(range(args.base_seed, args.base_seed + args.seeds))
-    conditions = ["extrinsic", "homeostatic"]
+    conditions = ["extrinsic", "homeostatic", "hybrid"]
 
     logger.info("=" * 60)
     logger.info("ANT-V5 BENCHMARK EVALUATION")
@@ -182,10 +189,20 @@ def main() -> None:
 
     for condition in conditions:
         for seed in seeds:
-            mp = MODEL_DIR / condition / f"seed_{seed}" / "model"
+            # Check curriculum models first for homeostatic/hybrid, then fall back
+            if condition in ("homeostatic", "hybrid"):
+                mp = CURRICULUM_DIR / condition / f"seed_{seed}" / "final" / "model"
+                if not mp.with_suffix(".zip").exists():
+                    # Legacy: curriculum models without condition subfolder
+                    mp = CURRICULUM_DIR / f"seed_{seed}" / "final" / "model"
+            else:
+                mp = MODEL_DIR / condition / f"seed_{seed}" / "model"
+            if not mp.with_suffix(".zip").exists():
+                mp = MODEL_DIR / condition / f"seed_{seed}" / "model"
             if not mp.with_suffix(".zip").exists():
                 logger.warning(f"  [skip] No model for {condition} seed={seed}")
                 continue
+            logger.info(f"  Loading {condition} seed={seed} from {mp}")
 
             model = PPO.load(str(mp))
             seed_results: dict[str, list[EpisodeMetrics]] = {}

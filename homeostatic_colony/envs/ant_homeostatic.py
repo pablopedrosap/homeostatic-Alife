@@ -25,6 +25,7 @@ Requires: gymnasium[mujoco]
 from __future__ import annotations
 
 import logging
+import math
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -45,6 +46,65 @@ from ..dynamics.degradation import apply_brain_fog
 logger = logging.getLogger(__name__)
 
 
+def compute_thermal_reflex_scale(
+    temp: float,
+    action_magnitude: float,
+    contact_heat_est: float,
+    acfg: AgentConfig,
+    action_heat_gain: float,
+    start_frac: float,
+    target_frac: float,
+    min_scale: float,
+) -> tuple[float, float]:
+    """Compute an action scale that keeps predicted next temperature below target.
+
+    Returns:
+        (scale, predicted_temp_next)
+    """
+    t_fatal = max(acfg.t_fatal, 1e-8)
+    start_temp = max(0.0, min(start_frac, 1.0)) * t_fatal
+    target_temp = max(0.0, min(target_frac, 1.0)) * t_fatal
+    if target_temp <= start_temp:
+        target_temp = start_temp + 1e-6
+
+    # No need to intervene if far from thermal danger.
+    if temp <= start_temp or action_magnitude <= 1e-8:
+        pred = (
+            temp
+            + acfg.heat_move * action_magnitude ** 2
+            + acfg.heat_hazard * (action_magnitude * action_heat_gain + contact_heat_est)
+            - acfg.cooling_rate
+        )
+        return 1.0, float(np.clip(pred, acfg.t_min, acfg.t_cap))
+
+    # Predicted T_next(s) for scaled action s in [0, 1]:
+    # T_next = temp + heat_move*(s*m)^2 + heat_hazard*(s*m*action_heat_gain + contact_heat_est) - cooling_rate
+    # Find max s such that T_next <= target_temp.
+    A = acfg.heat_move * action_magnitude ** 2
+    B = acfg.heat_hazard * action_heat_gain * action_magnitude
+    C = temp + acfg.heat_hazard * contact_heat_est - acfg.cooling_rate
+    D = C - target_temp
+
+    if D >= 0:
+        safe_scale = 0.0
+    elif A <= 1e-12:
+        safe_scale = -D / B if B > 1e-12 else 1.0
+    else:
+        disc = max(B * B - 4.0 * A * D, 0.0)
+        safe_scale = (-B + math.sqrt(disc)) / (2.0 * A)
+
+    safe_scale = float(np.clip(safe_scale, 0.0, 1.0))
+    scale = float(np.clip(safe_scale, max(0.0, min_scale), 1.0))
+
+    pred = (
+        temp
+        + acfg.heat_move * (scale * action_magnitude) ** 2
+        + acfg.heat_hazard * (scale * action_magnitude * action_heat_gain + contact_heat_est)
+        - acfg.cooling_rate
+    )
+    return scale, float(np.clip(pred, acfg.t_min, acfg.t_cap))
+
+
 @dataclass
 class AntHomeostaticConfig:
     """Configuration for the Ant homeostatic wrapper."""
@@ -57,6 +117,8 @@ class AntHomeostaticConfig:
     action_energy_cost: float = 0.005         # action magnitude → energy cost
     action_heat_gain: float = 0.004           # action magnitude → temperature
     contact_heat_gain: float = 0.002          # contact force → temperature
+    forward_vel_heat_gain: float = 0.0        # forward SPEED → temperature (creates the
+                                              # speed/heat dilemma; 0 = legacy behavior)
     unhealthy_damage_rate: float = 0.08       # damage when Ant is "unhealthy"
 
     # Sensor degradation
@@ -67,14 +129,34 @@ class AntHomeostaticConfig:
     max_steps: int = 1000
     seed: int | None = None
 
+    # Rich interoception: add dT/dt, action_norm, contact_heat to internal obs
+    rich_interoception: bool = False
+
     # Perturbation overrides
     actuator_impairment: float = 0.0
     actuator_impair_dims: list[int] = field(default_factory=list)
     energy_cost_mult: float = 1.0
 
+    # Optional thermal reflex layer (inference-time safety governor)
+    thermal_reflex: bool = False
+    thermal_reflex_start_frac: float = 0.85   # engage if T > 85% of T_fatal
+    thermal_reflex_target_frac: float = 0.95  # aim to keep T_next under 95% of T_fatal
+    thermal_reflex_min_scale: float = 0.15    # never shrink below 15% action
+
 
 def default_ant_config() -> AntHomeostaticConfig:
     return AntHomeostaticConfig()
+
+
+def frontier_ant_config(mode: str = "hybrid") -> AntHomeostaticConfig:
+    """Config with meaningful thermal pressure for frontier experiments."""
+    agent_cfg = AgentConfig(heat_move=0.005, cooling_rate=0.010, t_fatal=1.2)
+    return AntHomeostaticConfig(
+        reward=RewardConfig(mode=mode),
+        agent=agent_cfg,
+        action_heat_gain=0.006,
+        contact_heat_gain=0.003,
+    )
 
 
 class AntHomeostaticEnv(gym.Wrapper):
@@ -107,6 +189,11 @@ class AntHomeostaticEnv(gym.Wrapper):
         base_obs_shape = base_env.observation_space.shape
         self._ext_dim = base_obs_shape[0]  # 105 by default
 
+        # Internal obs dimension: 3 (E,T,D) or 6 (+ dT/dt, action_norm, contact_heat)
+        self._internal_dim = 6 if self.cfg.rich_interoception else 3
+        int_lo = -np.inf if self.cfg.rich_interoception else 0.0
+        int_hi = np.inf if self.cfg.rich_interoception else 1.5
+
         # Override observation space → Dict
         self.observation_space = spaces.Dict({
             "external": spaces.Box(
@@ -114,7 +201,8 @@ class AntHomeostaticEnv(gym.Wrapper):
                 shape=(self._ext_dim,), dtype=np.float64,
             ),
             "internal": spaces.Box(
-                low=0.0, high=1.5, shape=(3,), dtype=np.float32,
+                low=int_lo, high=int_hi,
+                shape=(self._internal_dim,), dtype=np.float32,
             ),
         })
 
@@ -127,7 +215,16 @@ class AntHomeostaticEnv(gym.Wrapper):
         self._current_sigma = 0.0
         self._nutrient_collected = 0.0
         self._cause_of_death = ""
+        self._reward_components: dict[str, float] = {}
         self._rng = np.random.default_rng(self.cfg.seed)
+
+        # Rich interoception bookkeeping
+        self._prev_temp_for_dt = 0.0
+        self._last_action_norm = 0.0
+        self._last_contact_heat = 0.0
+        self._last_reflex_scale = 1.0
+        self._last_reflex_pred_temp = 0.0
+        self._last_reflex_active = False
 
     def reset(
         self,
@@ -148,6 +245,9 @@ class AntHomeostaticEnv(gym.Wrapper):
         self._step_count = 0
         self._nutrient_collected = 0.0
         self._cause_of_death = ""
+        self._last_reflex_scale = 1.0
+        self._last_reflex_pred_temp = self._temp
+        self._last_reflex_active = False
 
         self._prev_deviation = homeostatic_deviation(
             self._energy, self._temp, self._damage, acfg,
@@ -171,6 +271,29 @@ class AntHomeostaticEnv(gym.Wrapper):
                 if d < len(action):
                     action[d] *= (1.0 - self.cfg.actuator_impairment)
 
+        # Optional thermal reflex: downscale actions as temperature approaches fatal.
+        # Uses last-step contact heat as a one-step proxy for conservative control.
+        if self.cfg.thermal_reflex:
+            pre_mag = float(np.linalg.norm(action))
+            scale, pred_temp = compute_thermal_reflex_scale(
+                temp=self._temp,
+                action_magnitude=pre_mag,
+                contact_heat_est=self._last_contact_heat,
+                acfg=acfg,
+                action_heat_gain=self.cfg.action_heat_gain,
+                start_frac=self.cfg.thermal_reflex_start_frac,
+                target_frac=self.cfg.thermal_reflex_target_frac,
+                min_scale=self.cfg.thermal_reflex_min_scale,
+            )
+            action = action * scale
+            self._last_reflex_scale = scale
+            self._last_reflex_pred_temp = pred_temp
+            self._last_reflex_active = scale < 0.999
+        else:
+            self._last_reflex_scale = 1.0
+            self._last_reflex_pred_temp = self._temp
+            self._last_reflex_active = False
+
         # Step base Ant environment
         base_obs, base_reward, base_terminated, base_truncated, base_info = (
             self.env.step(action)
@@ -189,8 +312,18 @@ class AntHomeostaticEnv(gym.Wrapper):
             abs(base_info.get(f"reward_contact", 0.0)) for _ in [1]
         )
         heat_from_contact = contact_forces_mag * self.cfg.contact_heat_gain
+        # Speed-driven heat: the faster the ant runs, the more it heats up. This is what
+        # turns "go fast" (the extrinsic objective) into a thermal cost the agent must
+        # regulate against. Uses forward speed, not action magnitude, so an efficient gait
+        # cannot dodge it.
+        heat_from_velocity = forward_vel * self.cfg.forward_vel_heat_gain
 
         self._nutrient_collected += nutrient_contact
+
+        # Store for rich interoception before state update
+        self._prev_temp_for_dt = self._temp
+        self._last_action_norm = action_magnitude
+        self._last_contact_heat = heat_from_contact
 
         # Update internal state
         prev_e, prev_t, prev_d = self._energy, self._temp, self._damage
@@ -201,7 +334,7 @@ class AntHomeostaticEnv(gym.Wrapper):
         )
         self._temp = update_temperature(
             self._temp, action_magnitude,
-            heat_from_action + heat_from_contact,
+            heat_from_action + heat_from_contact + heat_from_velocity,
             0.0,  # no explicit cool zones in Ant
             acfg,
         )
@@ -259,25 +392,48 @@ class AntHomeostaticEnv(gym.Wrapper):
         rcfg = self.cfg.reward
         acfg = self.cfg.agent
 
+        components = {
+            "r_energy": 0.0,
+            "r_temp": 0.0,
+            "r_damage": 0.0,
+            "r_alive_cost": 0.0,
+            "r_fatal_proximity": 0.0,
+            "r_total": 0.0,
+        }
+
         if rcfg.mode == "extrinsic":
-            # Use the original Ant reward (forward locomotion)
+            components["r_total"] = float(base_reward)
+            self._reward_components = components
             return float(base_reward)
 
-        elif rcfg.static_penalty > 0:
-            current_dev = homeostatic_deviation(
-                self._energy, self._temp, self._damage, acfg,
-                rcfg.w_energy, rcfg.w_temp, rcfg.w_damage,
-            )
-            reward = -rcfg.static_penalty * current_dev - rcfg.alive_cost
-            self._prev_deviation = current_dev
-            return float(reward)
+        elif rcfg.mode == "survival":
+            # Emergent teleology: the ONLY signal is a constant bonus for being alive this
+            # step. No setpoint, no deviation, no task term — regulation must emerge as an
+            # instrumental discovery, because dying (E<=0, T>=t_fatal, D>=d_max) ends the
+            # reward stream. The episode-termination physics do all the shaping.
+            components["r_total"] = float(rcfg.survival_bonus)
+            self._reward_components = components
+            return float(rcfg.survival_bonus)
 
-        else:  # homeostatic drive-reduction
-            current_dev = homeostatic_deviation(
-                self._energy, self._temp, self._damage, acfg,
-                rcfg.w_energy, rcfg.w_temp, rcfg.w_damage,
-            )
-            reward = self._prev_deviation - current_dev - rcfg.alive_cost
+        elif rcfg.mode == "hybrid":
+            # Task component: base Ant-v5 reward (forward velocity + costs)
+            r_task = float(base_reward)
+            components["r_task"] = r_task
+
+            # Homeostatic regulation: drive-reduction (same math as pure homeostatic)
+            prev_e_dev = rcfg.w_energy * abs(acfg.e_target - prev_e)
+            curr_e_dev = rcfg.w_energy * abs(acfg.e_target - self._energy)
+            components["r_energy"] = prev_e_dev - curr_e_dev
+
+            prev_t_dev = rcfg.w_temp * abs(prev_t - acfg.t_target)
+            curr_t_dev = rcfg.w_temp * abs(self._temp - acfg.t_target)
+            components["r_temp"] = prev_t_dev - curr_t_dev
+
+            prev_d_dev = rcfg.w_damage * prev_d
+            curr_d_dev = rcfg.w_damage * self._damage
+            components["r_damage"] = prev_d_dev - curr_d_dev
+
+            components["r_alive_cost"] = -rcfg.alive_cost
 
             # Fatal proximity penalty
             e_margin = self._energy / acfg.e_max
@@ -285,12 +441,83 @@ class AntHomeostaticEnv(gym.Wrapper):
             d_margin = 1.0 - self._damage / acfg.d_max
             min_margin = min(e_margin, t_margin, d_margin)
             if min_margin < rcfg.fatal_proximity_threshold:
-                reward -= rcfg.fatal_proximity_penalty * (
-                    rcfg.fatal_proximity_threshold - min_margin
+                components["r_fatal_proximity"] = -(
+                    rcfg.fatal_proximity_penalty
+                    * (rcfg.fatal_proximity_threshold - min_margin)
                 )
 
+            r_homeo = (
+                components["r_energy"]
+                + components["r_temp"]
+                + components["r_damage"]
+                + components["r_alive_cost"]
+                + components["r_fatal_proximity"]
+            )
+
+            # Blend: task + α * homeostatic regulation
+            components["r_total"] = r_task + rcfg.homeo_weight * r_homeo
+
+            current_dev = homeostatic_deviation(
+                self._energy, self._temp, self._damage, acfg,
+                rcfg.w_energy, rcfg.w_temp, rcfg.w_damage,
+            )
             self._prev_deviation = current_dev
-            return float(reward)
+            self._reward_components = components
+            return components["r_total"]
+
+        elif rcfg.static_penalty > 0:
+            current_dev = homeostatic_deviation(
+                self._energy, self._temp, self._damage, acfg,
+                rcfg.w_energy, rcfg.w_temp, rcfg.w_damage,
+            )
+            components["r_total"] = float(-rcfg.static_penalty * current_dev - rcfg.alive_cost)
+            components["r_alive_cost"] = -rcfg.alive_cost
+            self._reward_components = components
+            self._prev_deviation = current_dev
+            return components["r_total"]
+
+        else:  # homeostatic drive-reduction
+            # Per-component deviation changes
+            prev_e_dev = rcfg.w_energy * abs(acfg.e_target - prev_e)
+            curr_e_dev = rcfg.w_energy * abs(acfg.e_target - self._energy)
+            components["r_energy"] = prev_e_dev - curr_e_dev
+
+            prev_t_dev = rcfg.w_temp * abs(prev_t - acfg.t_target)
+            curr_t_dev = rcfg.w_temp * abs(self._temp - acfg.t_target)
+            components["r_temp"] = prev_t_dev - curr_t_dev
+
+            prev_d_dev = rcfg.w_damage * prev_d
+            curr_d_dev = rcfg.w_damage * self._damage
+            components["r_damage"] = prev_d_dev - curr_d_dev
+
+            components["r_alive_cost"] = -rcfg.alive_cost
+
+            # Fatal proximity penalty
+            e_margin = self._energy / acfg.e_max
+            t_margin = (acfg.t_fatal - self._temp) / (acfg.t_fatal - acfg.t_min)
+            d_margin = 1.0 - self._damage / acfg.d_max
+            min_margin = min(e_margin, t_margin, d_margin)
+            if min_margin < rcfg.fatal_proximity_threshold:
+                components["r_fatal_proximity"] = -(
+                    rcfg.fatal_proximity_penalty
+                    * (rcfg.fatal_proximity_threshold - min_margin)
+                )
+
+            components["r_total"] = (
+                components["r_energy"]
+                + components["r_temp"]
+                + components["r_damage"]
+                + components["r_alive_cost"]
+                + components["r_fatal_proximity"]
+            )
+
+            current_dev = homeostatic_deviation(
+                self._energy, self._temp, self._damage, acfg,
+                rcfg.w_energy, rcfg.w_temp, rcfg.w_damage,
+            )
+            self._prev_deviation = current_dev
+            self._reward_components = components
+            return components["r_total"]
 
     def _build_obs(
         self, base_obs: np.ndarray,
@@ -317,6 +544,13 @@ class AntHomeostaticEnv(gym.Wrapper):
             self._damage / acfg.d_max,
         ], dtype=np.float32)
 
+        if self.cfg.rich_interoception:
+            dt_dt = (self._temp - self._prev_temp_for_dt) / acfg.t_cap
+            action_norm = self._last_action_norm / 8.0  # normalize by ~max for 8-D
+            contact_heat = self._last_contact_heat / 0.1  # normalize to ~[0,1]
+            extra = np.array([dt_dt, action_norm, contact_heat], dtype=np.float32)
+            internal = np.concatenate([internal, extra])
+
         # Interoceptive noise when degraded
         if sigma > acfg.sigma_base * 2:
             int_noise = self._rng.normal(
@@ -333,7 +567,7 @@ class AntHomeostaticEnv(gym.Wrapper):
         return {"external": external, "internal": internal}
 
     def _build_info(self, base_info: dict) -> dict[str, Any]:
-        return {
+        info = {
             **base_info,
             "energy": self._energy,
             "temperature": self._temp,
@@ -344,7 +578,13 @@ class AntHomeostaticEnv(gym.Wrapper):
             "alive": check_viability(
                 self._energy, self._temp, self._damage, self.cfg.agent
             )[0],
+            "thermal_reflex_scale": self._last_reflex_scale,
+            "thermal_reflex_active": self._last_reflex_active,
+            "thermal_reflex_pred_temp_next": self._last_reflex_pred_temp,
         }
+        if self._reward_components:
+            info.update(self._reward_components)
+        return info
 
     def get_raw_internal_state(self) -> np.ndarray:
         """Return raw (non-noisy) internal state for predictor training."""

@@ -73,7 +73,16 @@ class AgentConfig:
 @dataclass
 class RewardConfig:
     """Reward shaping parameters."""
-    mode: Literal["extrinsic", "homeostatic"] = "homeostatic"
+    mode: Literal["extrinsic", "homeostatic", "hybrid", "survival"] = "homeostatic"
+
+    # Hybrid mode: r = r_task + homeo_weight * r_homeostatic
+    homeo_weight: float = 0.3
+
+    # Survival mode: r = survival_bonus per step alive, and NOTHING else. No setpoint,
+    # no deviation term, no task reward. The agent is told only "continuing to exist is
+    # good"; it must DISCOVER that regulating E/T/D is instrumentally necessary to persist.
+    # This is the minimal, emergent teleology — homeostasis is not specified, it must arise.
+    survival_bonus: float = 1.0
 
     # Extrinsic reward weights
     ext_nutrient: float = 1.0

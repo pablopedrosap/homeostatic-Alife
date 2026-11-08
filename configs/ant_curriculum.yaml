@@ -1,0 +1,32 @@
+# Ant Homeostatic Curriculum Training Stages
+#
+# Three-stage thermal curriculum that progressively increases difficulty.
+# Stage 1: easy regime (high cooling, high t_fatal) so the agent can learn
+#           locomotion without dying from heat.
+# Stage 2: medium regime (intermediate values) to begin thermal management.
+# Stage 3: full default parameters (the target regime).
+#
+# These values should be updated after running ant_param_sweep.py to
+# identify which parameter ranges produce viable dynamics.
+
+stages:
+  - name: easy
+    steps: 200000
+    cooling_rate: 0.10      # 6.7x default (0.015)
+    t_fatal: 3.0            # 2.5x default (1.2)
+    action_heat_gain: 0.001 # 4x lower than default (0.004)
+    heat_move: 0.001        # 8x lower than default (0.008)
+
+  - name: medium
+    steps: 200000
+    cooling_rate: 0.05      # 3.3x default
+    t_fatal: 2.0            # 1.7x default
+    action_heat_gain: 0.002 # 2x lower
+    heat_move: 0.004        # 2x lower
+
+  - name: full
+    steps: 2000000
+    cooling_rate: 0.015     # default
+    t_fatal: 1.2            # default
+    action_heat_gain: 0.004 # default
+    heat_move: 0.003        # reduced from default (0.008)

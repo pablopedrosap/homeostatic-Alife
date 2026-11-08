@@ -108,6 +108,11 @@ class OfficialConfig:
     # Ant-v5
     ant_train_steps: int = 500_000
     ant_max_ep_steps: int = 1000
+    # Curriculum thermal config (stage 3 = full dynamics)
+    ant_heat_move: float = 0.003
+    ant_cooling_rate: float = 0.015
+    ant_t_fatal: float = 1.2
+    ant_action_heat_gain: float = 0.004
 
     # Adaptation
     adapt_steps: int = 10_000
@@ -524,8 +529,20 @@ def phase_4_failure_analysis(cfg: OfficialConfig, seeds: list[int]) -> None:
             logger.info(f"  Failure analysis: {cond} / {pert.name}")
             reward_cfg = RewardConfig(mode=cond)
             base_cfg = EnvConfig(reward=reward_cfg, max_steps=cfg.max_ep_steps)
+            # Convert PerturbationSpec to dict for the wrapper
+            pert_kwargs = {
+                "actuator_impairment": pert.actuator_impairment,
+                "actuator_impair_dim": pert.actuator_impair_dim,
+                "sensor_noise_mult": pert.sensor_noise_mult,
+                "energy_cost_mult": pert.energy_cost_mult,
+                "field_shift": pert.field_shift,
+            }
+            # Only pass non-default kwargs
+            pert_kwargs = {k: v for k, v in pert_kwargs.items()
+                          if v != 0.0 and v != 1.0 and v != (0.0, 0.0)}
             episodes = collect_episodes_for_perturbation(
-                model, base_cfg, pert, n_episodes=min(cfg.eval_episodes, 10),
+                model, base_cfg, pert_kwargs or None,
+                n_episodes=min(cfg.eval_episodes, 10),
                 seed=cfg.eval_seed,
             )
             reps = select_representative_episodes(episodes)
@@ -538,9 +555,14 @@ def phase_4_failure_analysis(cfg: OfficialConfig, seeds: list[int]) -> None:
 
 
 def phase_5_ant(cfg: OfficialConfig, seeds: list[int]) -> None:
-    """MuJoCo Ant-v5 training + evaluation."""
+    """MuJoCo Ant-v5 training + evaluation.
+
+    Homeostatic agents use 3-stage curriculum training (easy → medium → full)
+    with tuned thermal dynamics (heat_move=0.003). Extrinsic agents train with
+    the same thermal config for fair comparison.
+    """
     logger.info("=" * 70)
-    logger.info("PHASE 5 — MUJOCO ANT-V5")
+    logger.info("PHASE 5 — MUJOCO ANT-V5 (CURRICULUM)")
     logger.info("=" * 70)
 
     try:
@@ -549,12 +571,33 @@ def phase_5_ant(cfg: OfficialConfig, seeds: list[int]) -> None:
         logger.warning("  MuJoCo not available — skipping Ant-v5 phase")
         return
 
+    from homeostatic_colony.config import AgentConfig
     from homeostatic_colony.envs.ant_homeostatic import (
         AntHomeostaticConfig,
         AntHomeostaticEnv,
     )
 
     phase_dir = RESULTS_DIR / "ant"
+
+    # Thermal config for the target (full) regime
+    target_agent_cfg = AgentConfig(
+        heat_move=cfg.ant_heat_move,
+        cooling_rate=cfg.ant_cooling_rate,
+        t_fatal=cfg.ant_t_fatal,
+    )
+
+    # Curriculum stages for homeostatic training
+    curriculum_stages = [
+        {"name": "easy", "steps": 200_000,
+         "cooling_rate": 0.10, "t_fatal": 3.0,
+         "action_heat_gain": 0.001, "heat_move": 0.001},
+        {"name": "medium", "steps": 200_000,
+         "cooling_rate": 0.05, "t_fatal": 2.0,
+         "action_heat_gain": 0.002, "heat_move": 0.004},
+        {"name": "full", "steps": 2_000_000,
+         "cooling_rate": cfg.ant_cooling_rate, "t_fatal": cfg.ant_t_fatal,
+         "action_heat_gain": cfg.ant_action_heat_gain, "heat_move": cfg.ant_heat_move},
+    ]
 
     # Train
     t0 = time.time()
@@ -566,26 +609,73 @@ def phase_5_ant(cfg: OfficialConfig, seeds: list[int]) -> None:
                 continue
 
             set_global_seed(seed)
-            reward_cfg = RewardConfig(mode=cond)
-            ant_cfg = AntHomeostaticConfig(
-                reward=reward_cfg,
-                max_steps=cfg.ant_max_ep_steps,
-                seed=seed,
-            )
-            env = AntHomeostaticEnv(cfg=ant_cfg)
 
-            model = PPO(
-                "MultiInputPolicy", env,
-                learning_rate=cfg.lr, n_steps=cfg.n_steps,
-                batch_size=cfg.batch_size, n_epochs=cfg.n_epochs,
-                gamma=cfg.gamma, verbose=0, seed=seed,
-                device=cfg.device,
-            )
-            logger.info(f"  Training Ant {cond} seed={seed} ({cfg.ant_train_steps:,} steps)")
-            model.learn(total_timesteps=cfg.ant_train_steps, progress_bar=False)
-            mp.parent.mkdir(parents=True, exist_ok=True)
-            model.save(str(mp))
-            env.close()
+            if cond == "homeostatic":
+                # Curriculum training: staged thermal difficulty
+                model = None
+                for stage in curriculum_stages:
+                    agent_cfg = AgentConfig(
+                        heat_move=stage["heat_move"],
+                        cooling_rate=stage["cooling_rate"],
+                        t_fatal=stage["t_fatal"],
+                    )
+                    ant_cfg = AntHomeostaticConfig(
+                        reward=RewardConfig(mode=cond),
+                        agent=agent_cfg,
+                        action_heat_gain=stage["action_heat_gain"],
+                        max_steps=cfg.ant_max_ep_steps,
+                        seed=seed,
+                    )
+                    env = AntHomeostaticEnv(cfg=ant_cfg)
+
+                    if model is None:
+                        model = PPO(
+                            "MultiInputPolicy", env,
+                            learning_rate=cfg.lr, n_steps=cfg.n_steps,
+                            batch_size=cfg.batch_size, n_epochs=cfg.n_epochs,
+                            gamma=cfg.gamma, verbose=0, seed=seed,
+                            device=cfg.device,
+                        )
+                    else:
+                        model.set_env(env)
+
+                    logger.info(
+                        f"  Training Ant {cond} seed={seed} "
+                        f"stage={stage['name']} ({stage['steps']:,} steps)"
+                    )
+                    model.learn(
+                        total_timesteps=stage["steps"],
+                        reset_num_timesteps=False,
+                        progress_bar=False,
+                    )
+                    env.close()
+
+                mp.parent.mkdir(parents=True, exist_ok=True)
+                model.save(str(mp))
+
+            else:
+                # Extrinsic: flat training with target thermal config
+                ant_cfg = AntHomeostaticConfig(
+                    reward=RewardConfig(mode=cond),
+                    agent=target_agent_cfg,
+                    action_heat_gain=cfg.ant_action_heat_gain,
+                    max_steps=cfg.ant_max_ep_steps,
+                    seed=seed,
+                )
+                env = AntHomeostaticEnv(cfg=ant_cfg)
+
+                model = PPO(
+                    "MultiInputPolicy", env,
+                    learning_rate=cfg.lr, n_steps=cfg.n_steps,
+                    batch_size=cfg.batch_size, n_epochs=cfg.n_epochs,
+                    gamma=cfg.gamma, verbose=0, seed=seed,
+                    device=cfg.device,
+                )
+                logger.info(f"  Training Ant {cond} seed={seed} ({cfg.ant_train_steps:,} steps)")
+                model.learn(total_timesteps=cfg.ant_train_steps, progress_bar=False)
+                mp.parent.mkdir(parents=True, exist_ok=True)
+                model.save(str(mp))
+                env.close()
 
     logger.info(f"  Ant training done in {time.time()-t0:.0f}s")
 
@@ -628,8 +718,15 @@ def phase_5_ant(cfg: OfficialConfig, seeds: list[int]) -> None:
                 logger.info(f"  Eval Ant: {cond} seed={seed} / {pert.name}")
                 ep_rewards, ep_survivals = [], []
                 for ep in range(min(cfg.eval_episodes, 10)):
+                    eval_agent_cfg = AgentConfig(
+                        heat_move=cfg.ant_heat_move,
+                        cooling_rate=cfg.ant_cooling_rate,
+                        t_fatal=cfg.ant_t_fatal,
+                    )
                     ant_cfg = AntHomeostaticConfig(
                         reward=RewardConfig(mode=cond),
+                        agent=eval_agent_cfg,
+                        action_heat_gain=cfg.ant_action_heat_gain,
                         max_steps=cfg.ant_max_ep_steps,
                         seed=cfg.eval_seed + ep,
                         actuator_impairment=pert.actuator_impairment,

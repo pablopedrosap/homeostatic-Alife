@@ -2,8 +2,9 @@
 """
 Train the predictive dynamics model (Phase 4).
 
-Collects transitions from a trained agent, then trains an MLP to predict
-next internal state [E, T, D] given current state + action.
+Collects transitions from a trained agent, then trains a predictive model
+(world model by default, legacy MLP optional) to predict next internal
+state [E, T, D] given current state + action.
 
 Usage:
     python scripts/train_predictor.py --model results/homeostatic/ppo_homeostatic --episodes 50
@@ -63,6 +64,14 @@ def main():
     parser.add_argument("--model", type=str, required=True, help="Path to trained PPO model")
     parser.add_argument("--episodes", type=int, default=50, help="Episodes for data collection")
     parser.add_argument("--train-steps", type=int, default=5000, help="Predictor training steps")
+    parser.add_argument("--architecture", type=str, default="world_model",
+                        choices=["world_model", "mlp"],
+                        help="Predictor architecture")
+    parser.add_argument("--hidden", type=int, default=128)
+    parser.add_argument("--latent-dim", type=int, default=64,
+                        help="Latent size for world_model architecture")
+    parser.add_argument("--no-uncertainty", action="store_true",
+                        help="Disable predictive uncertainty head (world_model only)")
     parser.add_argument("--smoke", action="store_true", help="Quick smoke test")
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
@@ -70,6 +79,9 @@ def main():
     if args.smoke:
         args.episodes = 5
         args.train_steps = 500
+        if args.architecture == "world_model":
+            args.hidden = min(args.hidden, 64)
+            args.latent_dim = min(args.latent_dim, 32)
 
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -87,9 +99,12 @@ def main():
     trainer = PredictorTrainer(
         obs_dim=EXTERNAL_DIM,
         action_dim=action_dim,
-        hidden=64,
+        hidden=args.hidden,
         lr=1e-3,
         batch_size=128,
+        architecture=args.architecture,
+        latent_dim=args.latent_dim,
+        predict_uncertainty=not args.no_uncertainty,
     )
 
     # Fill buffer
@@ -97,14 +112,17 @@ def main():
         trainer.add_transition(t["internal"], t["external"], t["action"], t["next_internal"])
 
     # Train
-    logger.info(f"Training predictor for {args.train_steps} steps...")
+    logger.info(
+        f"Training predictor ({args.architecture}) for {args.train_steps} steps..."
+    )
     for step in range(args.train_steps):
         loss = trainer.train_step()
         if loss is not None and step % 500 == 0:
             logger.info(f"  Step {step}: loss={loss:.6f}")
 
     # Save predictor
-    trainer.save(RESULTS_DIR / "dynamics_predictor.pt")
+    model_name = f"dynamics_predictor_{args.architecture}.pt"
+    trainer.save(RESULTS_DIR / model_name)
 
     # Plot training loss
     plot_predictor_loss(
