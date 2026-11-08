@@ -1,0 +1,17 @@
+================================================================================
+HAB-P1 — Unitree Go2 with motor thermals — pre-registered analysis
+================================================================================
+seeds: [0, 1, 2, 3, 4, 5]
+
+P1  distance under damage (AUDC, m in 20 s), hybrid vs extrinsic, Welch + Holm(3):
+    fault      hybrid  12.12  extrinsic  11.69  Δ  +0.43 [-1.43,+2.24]  g=+0.22  p=0.6831  p_holm=1.0000
+    payload    hybrid  10.96  extrinsic  10.48  Δ  +0.48 [-2.05,+3.01]  g=+0.18  p=0.7459  p_holm=1.0000
+    hot_start  hybrid  17.21  extrinsic  17.86  Δ  -0.65 [-1.29,+0.17]  g=-0.84  p=0.1642  p_holm=0.4926
+
+P2  undamaged distance  hybrid 17.24 m  extrinsic 17.90 m  p=0.2244 -> ok
+M1  undamaged peak motor T (extrinsic) = 0.82 (derating at 0.7) -> heat bites
+S1  falls under damage (AUDC): fault hybrid 0% vs 1% (p=0.363), payload hybrid 1% vs 3% (p=0.596), hot_start hybrid 0% vs 0% (p=1.000)
+S3  cost of transport (undamaged): hybrid 1.83 vs extrinsic 1.77 (p=0.548)
+
+>>> HAB-P1 VERDICT: FAIL
+================================================================================

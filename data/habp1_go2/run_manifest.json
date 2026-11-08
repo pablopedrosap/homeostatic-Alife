@@ -1,0 +1,21 @@
+{
+ "seeds": "6",
+ "steps": "4000000",
+ "episodes": "10",
+ "workers": "6",
+ "out": "/Users/pablopedrosa/Desktop/github/homeostatic-Alife/results/habp1_go2",
+ "pilot": "False",
+ "eval_only": "False",
+ "ppo": {
+  "n_steps": 1024,
+  "batch_size": 256,
+  "n_epochs": 5,
+  "learning_rate": 0.0003,
+  "gamma": 0.99,
+  "gae_lambda": 0.95,
+  "clip_range": 0.2,
+  "ent_coef": 0.0,
+  "verbose": 0
+ },
+ "n_envs": 4
+}

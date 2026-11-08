@@ -16,7 +16,13 @@ keep working when something breaks.
 **[▶ Live page](https://pablopedrosap.github.io/homeostatic-Alife/site/)**: robot video,
 interactive results, and an evolution simulation running in your browser.
 
-<!-- GO2-HEADLINE -->
+> **Status, November 2026.** A testbed for robots that regulate their own bodies (a Unitree Go2
+> whose motors heat up, derate and cut out; a MuJoCo Ant; a reward-free evolutionary world) and
+> three pre-registered experiments. **None of the three main hypotheses passed.** The Ant effect
+> points the right way but is underpowered, the Go2 treatment turned out too weak to test
+> anything, and climate volatility did not drive the evolution of self-sensing. What did come out:
+> evolution strongly selects organisms that sense their **own temperature** (p = 4×10⁻¹¹), and
+> each failure has a diagnosed cause that defines the next experiment.
 
 ---
 
@@ -24,12 +30,30 @@ interactive results, and an evolution simulation running in your browser.
 
 ### 1 · HAB-P1: a Unitree Go2 that manages its own motor heat
 
-<!-- GO2-RESULT -->
-> **Status 2026-11-08: evaluating.** Pre-registration
-> ([`docs/prereg/HABP1_go2.md`](docs/prereg/HABP1_go2.md)) was pushed before any
-> self-regulating Go2 was trained: 6 seeds × {standard, self-regulating} × 4M PPO steps, then a
-> failing knee motor, payloads up to 8 kg, and hot motors. Results replace this note.
-<!-- /GO2-RESULT -->
+[![Go2 side-by-side, 75% knee fault: click to play](docs/media/go2_fault_side_by_side.png)](docs/media/go2_fault_side_by_side.mp4)
+*Click to play: standard (left) vs self-regulating (right), 75% knee-torque loss, live motor temperatures. One episode, fixed in advance. See the caveat below.*
+
+![HAB-P1](docs/figures/habp1_go2.png)
+
+The official Unitree Go2 model (DeepMind's MuJoCo Menagerie, Unitree's torque limits). Each of
+its 12 motors heats with the square of its torque. Above 70% of the thermal limit the driver
+cuts the available torque, and at 100% the motor cuts out, as on real hardware. The robot
+reads its motor temperatures, which the real Go2 also reports. A standard controller (rewarded
+for walking) and a self-regulating one (also rewarded for keeping its motors cool) were each
+trained 6 times, then tested with a failing knee motor, payloads up to 8 kg, and hot motors.
+
+**Verdict: FAIL** ([pre-registration](docs/prereg/HABP1_go2.md), pushed before any
+self-regulating robot was trained). Metres walked under damage: knee fault +0.4 m (p = 0.68),
+payload +0.5 m (p = 0.75), hot start −0.7 m (p = 0.16). No baseline cost, and falls are rare
+for both.
+
+**Why:** the self-regulation term ended up being only ~1.5% of the reward, so both controllers
+learned the same way of using their motors. No motor ever reached cut-out, so damage hurt the
+robot mechanically, not thermally, and there was nothing for self-regulation to prevent. The
+next version needs a treatment-strength check before training and damage that can cause
+thermal failure. The video above is the episode fixed in advance (75% knee fault). The gap in it
+(14.6 m vs 1.6 m) is one episode with the same motor temperatures on both sides, not evidence of
+an effect. Full report: [`docs/results/HABP1_go2_results.md`](docs/results/HABP1_go2_results.md).
 
 ### 2 · HAB-1 v1: does self-regulation buy robustness to damage? (MuJoCo Ant)
 
@@ -90,7 +114,7 @@ aware of itself:
 | Step | Capability | Status |
 |---|---|---|
 | 1 | **Feels its own body**: motor temperatures, energy and damage as inputs | built (simulation) |
-| 2 | **Acts to keep its body working**, and that pays off when something breaks | being tested: HAB-P1, HAB-1 |
+| 2 | **Acts to keep its body working**, and that pays off when something breaks | tested; not yet shown (HAB-P1, HAB-1 failed, with diagnosed causes) |
 | 3 | **Knows what it can do right now** ("my left knee is weak") and changes its plan | next |
 | 4 | **Does all of this on a real robot**: one quadruped that keeps walking with a failing motor | goal |
 
@@ -198,15 +222,17 @@ is that the layer adds negligible overhead on top of a GPU simulator such as Isa
 | 2026-03 | First 6-seed damage sweep. Hybrid looked far more robust (e.g. 82% vs 27% full episodes at 40% actuator damage), but the extrinsic foil also survived only **27% of episodes with no damage at all**. The gap was mostly a baseline difference, so the run is superseded. |
 | 2026-07 | HAB-1 v0 (3 seeds): strong directional signal, but temperature never reached the danger band, and under a corrected analysis it is not significant (Holm p = 0.39). The thermal coupling was then calibrated. |
 | 2026-07 | HAB-E2: "selection does not build self-regulation". **Retracted 2026-11** (confounded design). |
-| 2026-11 | HAB-1 v1 (FAIL: right direction, underpowered, baseline dominated by heat) and HAB-E2v (hypothesis failed; self-sensing strongly selected) pre-registered and run. |
+| 2026-11 | Three pre-registered experiments. HAB-1 v1: FAIL (right direction, underpowered, baseline dominated by heat). HAB-E2v: hypothesis failed, but self-sensing is strongly selected. HAB-P1 (Go2): FAIL (treatment too weak, no thermal failures). |
 
 ## Roadmap
 
-1. **HAB-1 on Humanoid-v5.** A claim about graceful degradation has to hold on more than one body.
-2. **HAB-2: predictive self-maintenance.** Does a learned risk signal rise *before* failure?
-3. **HAB-E2v follow-up:** find the mechanism by which self-temperature helps (efference-copy
+1. **HAB-P1 v2 (Go2):** a treatment-strength gate, a per-step thermal cost that actually changes
+   motor usage, and missions long enough for heat to cause failures.
+2. **HAB-1 v2 (Ant):** 16–21 seeds per condition, with physics that leave a healthy undamaged baseline.
+3. **HAB-2: predictive self-maintenance.** Does a learned risk signal rise *before* failure?
+4. **HAB-E2v follow-up:** find the mechanism by which self-temperature helps (efference-copy
    hypothesis vs context-dependent use vs plasticity).
-4. **Hardware:** one commodity quadruped that keeps walking with a disabled motor.
+5. **Hardware:** one commodity quadruped that keeps walking with a disabled motor.
 
 ## Citation
 

@@ -39,5 +39,25 @@
       ]
     ],
     "scope": "What this does not show: graceful degradation. Under sensor and metabolic damage the gap is the same as with no damage at all, and moderate leg damage actually helped both agents by slowing them down and cooling them. A conclusive replication needs about 16 to 21 seeds per condition and physics that leave a healthy undamaged baseline. That lesson shaped the Go2 experiment."
+  },
+  "go2": {
+    "verdict_label": "Pre-registered test failed · no damage type shows a difference (p = 0.16 to 0.75)",
+    "summary": "Both robots learned to walk about 17 to 18 m in 20 seconds, and both kept walking about equally well when damaged. The reason is a flaw in my design: the self-regulation reward was only about 1.5% of the total, so the two controllers learned the same way of using their motors. Heat also never caused a failure. No motor ever reached cut-out, and the damage hurt the robot mechanically, not thermally. So this run could not answer the question. It did show exactly what the next version needs.",
+    "stats": [
+      [
+        "1.5%",
+        "share of the reward that came from self-regulation: too small to change behaviour (the main design error)"
+      ],
+      [
+        "0 of 168",
+        "test conditions in which any motor reached cut-out, so heat never caused a failure to prevent"
+      ],
+      [
+        "~17 m",
+        "walked in 20 s by both controllers when undamaged, learned in about 2M steps on a laptop CPU"
+      ]
+    ],
+    "scope": "Next version, to be pre-registered before it runs: a check that the self-regulation reward is strong enough to change behaviour before any test is run, a per-step cost for hot motors, and missions long enough for heat to cause real failures. The robot model, motor physics and pipeline built here carry over unchanged.",
+    "video_caption": "One episode, chosen before any results existed: 75% of the front-left knee's torque removed. Here the self-regulating robot walks 14.6 m and the standard one 1.6 m, but both run their motors equally hot, and across all 6 trained robots of each kind the averages at this damage level are 7.1 vs 4.5 m (not a reliable difference). Treat it as an illustration of the testbed, not as evidence."
   }
 }

@@ -1,0 +1,25 @@
+================================================================================
+HAB-1 v1 — GRACEFUL DEGRADATION (Ant-v5) — pre-registered analysis
+================================================================================
+seeds: [0, 1, 2, 3, 4, 5]
+
+P1  survival under damage (AUDC, steps), hybrid vs extrinsic, Welch + Holm(3):
+    actuator  hybrid  751.7  extrinsic  738.5  Δ  +13.1 [-50,+88]  g=+0.18  p=0.7429  p_holm=0.7429
+    sensor    hybrid  582.2  extrinsic  413.3  Δ +169.0 [+15,+313]  g=+1.07  p=0.0767  p_holm=0.2300
+    energy    hybrid  568.6  extrinsic  412.5  Δ +156.1 [+2,+305]  g=+0.96  p=0.1088  p_holm=0.2300
+
+P2  baseline distance  hybrid 26.23 m  extrinsic 22.37 m  p=0.5134  -> ok
+    baseline survival  hybrid 573  extrinsic 422  p=0.1530
+
+M1  heat bites the foil? mean max T = 0.95 (t_crit 0.7), overheat deaths = 3%  -> YES
+
+S2  sign test: hybrid ahead at 16/20 damaged levels, p=0.012
+S3  distance under damage (AUDC, m):
+    actuator  hybrid  29.18  extrinsic  29.98  Δ -0.80  p=0.8593
+    sensor    hybrid  25.61  extrinsic  20.02  Δ +5.60  p=0.2244
+    energy    hybrid  27.21  extrinsic  22.51  Δ +4.70  p=0.3207
+S1  legacy crossover verdicts: actuator=FAIL(τ*=None), sensor=PASS(τ*=8.0), energy=FAIL(τ*=None)
+D1  hybrid vs domain-rand oracle (survival AUDC): actuator Δ+50 (p=0.272), sensor Δ+349 (p=0.004), energy Δ+313 (p=0.009)
+
+>>> HAB-1 v1 (Ant) VERDICT: FAIL
+================================================================================

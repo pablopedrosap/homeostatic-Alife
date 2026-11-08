@@ -1,0 +1,968 @@
+{
+  "preregistration": "docs/prereg/HAB1_v1_ant.md",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "P1_survival_audc": {
+    "actuator": {
+      "test_mean": 751.6578125,
+      "foil_mean": 738.540625,
+      "diff": 13.1171875,
+      "diff_ci95": [
+        -49.87096354166652,
+        87.80007812500017
+      ],
+      "p": 0.7428633617940815,
+      "hedges_g": 0.18186317679983882,
+      "n_test": 6,
+      "n_foil": 6,
+      "test_values": [
+        778.39,
+        912.08,
+        677.66,
+        707.12,
+        706.43,
+        728.27
+      ],
+      "foil_values": [
+        814.73,
+        748.83,
+        719.5,
+        720.94,
+        713.11,
+        714.13
+      ],
+      "p_holm": 0.7428633617940815,
+      "significant": false,
+      "hybrid_better": false
+    },
+    "sensor": {
+      "test_mean": 582.2411458333335,
+      "foil_mean": 413.28177083333327,
+      "diff": 168.9593750000002,
+      "diff_ci95": [
+        14.930104166666737,
+        313.3255208333333
+      ],
+      "p": 0.07667861650152086,
+      "hedges_g": 1.0696478709685846,
+      "n_test": 6,
+      "n_foil": 6,
+      "test_values": [
+        843.73,
+        609.95,
+        666.42,
+        570.28,
+        350.35,
+        452.71
+      ],
+      "foil_values": [
+        643.6,
+        352.78,
+        368.69,
+        368.22,
+        343.73,
+        402.67
+      ],
+      "p_holm": 0.23003584950456257,
+      "significant": false,
+      "hybrid_better": false
+    },
+    "energy": {
+      "test_mean": 568.5744047619048,
+      "foil_mean": 412.5053571428571,
+      "diff": 156.0690476190477,
+      "diff_ci95": [
+        1.545312499999923,
+        305.1708184523809
+      ],
+      "p": 0.10876144950753124,
+      "hedges_g": 0.9643142754500409,
+      "n_test": 6,
+      "n_foil": 6,
+      "test_values": [
+        859.22,
+        526.21,
+        656.05,
+        601.22,
+        323.68,
+        445.06
+      ],
+      "foil_values": [
+        620.55,
+        373.32,
+        383.31,
+        364.79,
+        346.58,
+        386.47
+      ],
+      "p_holm": 0.23003584950456257,
+      "significant": false,
+      "hybrid_better": false
+    }
+  },
+  "P2_no_free_lunch": {
+    "test_mean": 26.225339110600913,
+    "foil_mean": 22.36646194153757,
+    "diff": 3.8588771690633443,
+    "diff_ci95": [
+      -6.607557704238297,
+      13.708905582162656
+    ],
+    "p": 0.5134215058971459,
+    "hedges_g": 0.36120991116931234,
+    "n_test": 6,
+    "n_foil": 6,
+    "test_values": [
+      43.56,
+      28.26,
+      22.54,
+      26.22,
+      18.06,
+      18.71
+    ],
+    "foil_values": [
+      43.07,
+      18.67,
+      20.18,
+      18.45,
+      19.09,
+      14.74
+    ],
+    "violated": false,
+    "baseline_survival": {
+      "test_mean": 572.6666666666666,
+      "foil_mean": 421.7833333333333,
+      "diff": 150.88333333333333,
+      "diff_ci95": [
+        -16.64999999999998,
+        324.84270833333335
+      ],
+      "p": 0.15301850682305787,
+      "hedges_g": 0.8348914149441896,
+      "n_test": 6,
+      "n_foil": 6,
+      "test_values": [
+        921.85,
+        480.1,
+        616.2,
+        612.3,
+        367.8,
+        437.75
+      ],
+      "foil_values": [
+        663.45,
+        335.35,
+        384.3,
+        310.3,
+        371.6,
+        465.7
+      ]
+    }
+  },
+  "verdict": "FAIL",
+  "passing_sweeps": [],
+  "M1_heat_bites": {
+    "foil_mean_max_temp": 0.950823402231948,
+    "foil_overheat_frac": 0.03333333333333333,
+    "passed": true
+  },
+  "S1_legacy": {
+    "actuator": {
+      "sweep": "actuator",
+      "metric": "survival_mean",
+      "baseline_level": 0.0,
+      "n_seeds": 6,
+      "no_free_lunch": true,
+      "crossover_tau": null,
+      "robustness_margin": 0.0,
+      "verdict": "FAIL"
+    },
+    "sensor": {
+      "sweep": "sensor",
+      "metric": "survival_mean",
+      "baseline_level": 1.0,
+      "n_seeds": 6,
+      "no_free_lunch": true,
+      "crossover_tau": 8.0,
+      "robustness_margin": 367.7166666666666,
+      "verdict": "PASS"
+    },
+    "energy": {
+      "sweep": "energy",
+      "metric": "survival_mean",
+      "baseline_level": 1.0,
+      "n_seeds": 6,
+      "no_free_lunch": true,
+      "crossover_tau": null,
+      "robustness_margin": 0.0,
+      "verdict": "FAIL"
+    }
+  },
+  "S2_sign_test": {
+    "hybrid_wins": 16,
+    "levels": 20,
+    "p_two_sided": 0.01181793212890625
+  },
+  "S3_distance_audc": {
+    "actuator": {
+      "test_mean": 29.180608457061933,
+      "foil_mean": 29.9846191664881,
+      "diff": -0.8040107094261657,
+      "diff_ci95": [
+        -7.927298495897933,
+        7.94572705513055
+      ],
+      "p": 0.8592692739873619,
+      "hedges_g": -0.09776674764585984,
+      "n_test": 6,
+      "n_foil": 6,
+      "test_values": [
+        26.83,
+        47.83,
+        21.83,
+        22.82,
+        27.35,
+        28.42
+      ],
+      "foil_values": [
+        39.07,
+        30.23,
+        30.96,
+        28.32,
+        24.98,
+        26.36
+      ],
+      "hybrid_sig_worse": false
+    },
+    "sensor": {
+      "test_mean": 25.612026168600654,
+      "foil_mean": 20.015752864502684,
+      "diff": 5.59627330409797,
+      "diff_ci95": [
+        -2.646825485860804,
+        12.684012989653901
+      ],
+      "p": 0.22438402683111247,
+      "hedges_g": 0.6910699433202571,
+      "n_test": 6,
+      "n_foil": 6,
+      "test_values": [
+        35.89,
+        29.75,
+        28.16,
+        23.04,
+        17.56,
+        19.27
+      ],
+      "foil_values": [
+        36.21,
+        18.02,
+        17.22,
+        16.78,
+        15.91,
+        15.96
+      ],
+      "hybrid_sig_worse": false
+    },
+    "energy": {
+      "test_mean": 27.20849467768069,
+      "foil_mean": 22.509664571632715,
+      "diff": 4.698830106047975,
+      "diff_ci95": [
+        -3.9482600144794664,
+        12.017522599574733
+      ],
+      "p": 0.3207304187603601,
+      "hedges_g": 0.5581546894304497,
+      "n_test": 6,
+      "n_foil": 6,
+      "test_values": [
+        38.0,
+        31.12,
+        27.61,
+        26.21,
+        18.68,
+        21.63
+      ],
+      "foil_values": [
+        39.84,
+        21.32,
+        18.81,
+        18.58,
+        17.99,
+        18.51
+      ],
+      "hybrid_sig_worse": false
+    }
+  },
+  "label": null,
+  "S4_thermal": {
+    "domain_rand": {
+      "actuator_baseline": {
+        "avg_temp_mean": 0.6523053236329887,
+        "max_temp_mean": 1.0168366369059585,
+        "overheat_frac": 0.08333333333333333,
+        "starvation_frac": 0.125,
+        "survived_frac": 0.0,
+        "distance_mean": 6.385798019598499
+      },
+      "actuator_max": {
+        "avg_temp_mean": 0.04874445234129948,
+        "max_temp_mean": 0.30359851096950624,
+        "overheat_frac": 0.0,
+        "starvation_frac": 0.625,
+        "survived_frac": 0.375,
+        "distance_mean": 27.210296230415082
+      },
+      "sensor_baseline": {
+        "avg_temp_mean": 0.6507998086112924,
+        "max_temp_mean": 1.0132338998501043,
+        "overheat_frac": 0.03333333333333333,
+        "starvation_frac": 0.14166666666666666,
+        "survived_frac": 0.0,
+        "distance_mean": 6.264387414262145
+      },
+      "sensor_max": {
+        "avg_temp_mean": 0.6482049441582421,
+        "max_temp_mean": 1.1430254963328854,
+        "overheat_frac": 0.5583333333333333,
+        "starvation_frac": 0.075,
+        "survived_frac": 0.0,
+        "distance_mean": 4.76660192941295
+      },
+      "energy_baseline": {
+        "avg_temp_mean": 0.6585399314152667,
+        "max_temp_mean": 1.016127336700029,
+        "overheat_frac": 0.06666666666666667,
+        "starvation_frac": 0.125,
+        "survived_frac": 0.0,
+        "distance_mean": 6.608990353754447
+      },
+      "energy_max": {
+        "avg_temp_mean": 0.6590321087256114,
+        "max_temp_mean": 1.0175836219199326,
+        "overheat_frac": 0.05833333333333333,
+        "starvation_frac": 0.09999999999999999,
+        "survived_frac": 0.0,
+        "distance_mean": 6.2580523798996355
+      }
+    },
+    "extrinsic": {
+      "actuator_baseline": {
+        "avg_temp_mean": 0.5403952347168092,
+        "max_temp_mean": 0.950823402231948,
+        "overheat_frac": 0.03333333333333333,
+        "starvation_frac": 0.15833333333333333,
+        "survived_frac": 0.016666666666666666,
+        "distance_mean": 22.36646194153757
+      },
+      "actuator_max": {
+        "avg_temp_mean": 0.022430262783371107,
+        "max_temp_mean": 0.2946836796205591,
+        "overheat_frac": 0.0,
+        "starvation_frac": 1.0,
+        "survived_frac": 0.0,
+        "distance_mean": 4.055398740270243
+      },
+      "sensor_baseline": {
+        "avg_temp_mean": 0.5553509171984006,
+        "max_temp_mean": 0.9915668615802785,
+        "overheat_frac": 0.025000000000000005,
+        "starvation_frac": 0.10833333333333334,
+        "survived_frac": 0.008333333333333333,
+        "distance_mean": 22.710292973164428
+      },
+      "sensor_max": {
+        "avg_temp_mean": 0.5630608454573732,
+        "max_temp_mean": 0.98573955490411,
+        "overheat_frac": 0.05833333333333334,
+        "starvation_frac": 0.10000000000000002,
+        "survived_frac": 0.049999999999999996,
+        "distance_mean": 18.310430866783435
+      },
+      "energy_baseline": {
+        "avg_temp_mean": 0.5422415361078581,
+        "max_temp_mean": 0.9521000712590917,
+        "overheat_frac": 0.025000000000000005,
+        "starvation_frac": 0.15833333333333333,
+        "survived_frac": 0.008333333333333333,
+        "distance_mean": 21.76190637405482
+      },
+      "energy_max": {
+        "avg_temp_mean": 0.5542152901416117,
+        "max_temp_mean": 0.9507150041730879,
+        "overheat_frac": 0.025000000000000005,
+        "starvation_frac": 0.125,
+        "survived_frac": 0.016666666666666666,
+        "distance_mean": 21.591752538392083
+      }
+    },
+    "hybrid": {
+      "actuator_baseline": {
+        "avg_temp_mean": 0.4353065355771899,
+        "max_temp_mean": 0.8236793446466524,
+        "overheat_frac": 0.03333333333333333,
+        "starvation_frac": 0.25,
+        "survived_frac": 0.20000000000000004,
+        "distance_mean": 26.225339110600913
+      },
+      "actuator_max": {
+        "avg_temp_mean": 0.022192219017934774,
+        "max_temp_mean": 0.29290441049961896,
+        "overheat_frac": 0.0,
+        "starvation_frac": 1.0,
+        "survived_frac": 0.0,
+        "distance_mean": 5.885219946873947
+      },
+      "sensor_baseline": {
+        "avg_temp_mean": 0.4442741674610436,
+        "max_temp_mean": 0.8475469248649515,
+        "overheat_frac": 0.016666666666666666,
+        "starvation_frac": 0.225,
+        "survived_frac": 0.17500000000000002,
+        "distance_mean": 27.529011801523875
+      },
+      "sensor_max": {
+        "avg_temp_mean": 0.46181659727371,
+        "max_temp_mean": 0.8101930305247743,
+        "overheat_frac": 0.0,
+        "starvation_frac": 0.225,
+        "survived_frac": 0.15833333333333335,
+        "distance_mean": 22.66743658387927
+      },
+      "energy_baseline": {
+        "avg_temp_mean": 0.4436193641881303,
+        "max_temp_mean": 0.8385674070747964,
+        "overheat_frac": 0.016666666666666666,
+        "starvation_frac": 0.2416666666666667,
+        "survived_frac": 0.16666666666666666,
+        "distance_mean": 26.32167914602597
+      },
+      "energy_max": {
+        "avg_temp_mean": 0.455480926704823,
+        "max_temp_mean": 0.8574721826986217,
+        "overheat_frac": 0.041666666666666664,
+        "starvation_frac": 0.225,
+        "survived_frac": 0.16666666666666666,
+        "distance_mean": 26.25560972495617
+      }
+    }
+  },
+  "D1_oracle": {
+    "actuator": {
+      "test_mean": 751.6578125,
+      "foil_mean": 701.7463541666666,
+      "diff": 49.91145833333337,
+      "diff_ci95": [
+        -18.656106770833453,
+        132.73515625
+      ],
+      "p": 0.2715455173074108,
+      "hedges_g": 0.6244312486576677,
+      "n_test": 6,
+      "n_foil": 6,
+      "test_values": [
+        778.39,
+        912.08,
+        677.66,
+        707.12,
+        706.43,
+        728.27
+      ],
+      "foil_values": [
+        737.73,
+        592.32,
+        726.73,
+        683.59,
+        762.4,
+        707.7
+      ]
+    },
+    "sensor": {
+      "test_mean": 582.2411458333335,
+      "foil_mean": 233.74114583333332,
+      "diff": 348.5000000000001,
+      "diff_ci95": [
+        224.73138020833338,
+        474.25399739583327
+      ],
+      "p": 0.004000543136444568,
+      "hedges_g": 2.6367800089323326,
+      "n_test": 6,
+      "n_foil": 6,
+      "test_values": [
+        843.73,
+        609.95,
+        666.42,
+        570.28,
+        350.35,
+        452.71
+      ],
+      "foil_values": [
+        224.08,
+        252.8,
+        202.14,
+        243.2,
+        227.96,
+        252.26
+      ]
+    },
+    "energy": {
+      "test_mean": 568.5744047619048,
+      "foil_mean": 255.71726190476193,
+      "diff": 312.8571428571429,
+      "diff_ci95": [
+        182.5475297619048,
+        450.55394345238096
+      ],
+      "p": 0.008622912667602615,
+      "hedges_g": 2.1987656331953547,
+      "n_test": 6,
+      "n_foil": 6,
+      "test_values": [
+        859.22,
+        526.21,
+        656.05,
+        601.22,
+        323.68,
+        445.06
+      ],
+      "foil_values": [
+        231.95,
+        270.37,
+        231.71,
+        247.64,
+        273.3,
+        279.34
+      ]
+    }
+  },
+  "per_level": {
+    "actuator": [
+      {
+        "level": 0.0,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 256.6666666666667,
+          "distance": 6.385798019598499
+        },
+        "extrinsic": {
+          "survived_frac": 0.016666666666666666,
+          "survival": 421.7833333333333,
+          "distance": 22.36646194153757
+        },
+        "hybrid": {
+          "survived_frac": 0.20000000000000004,
+          "survival": 572.6666666666666,
+          "distance": 26.225339110600913
+        }
+      },
+      {
+        "level": 0.1,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 327.6666666666667,
+          "distance": 8.707185908829663
+        },
+        "extrinsic": {
+          "survived_frac": 0.13333333333333333,
+          "survival": 531.3000000000001,
+          "distance": 29.310758108014312
+        },
+        "hybrid": {
+          "survived_frac": 0.39999999999999997,
+          "survival": 712.5833333333334,
+          "distance": 35.28716116371019
+        }
+      },
+      {
+        "level": 0.2,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 433.04999999999995,
+          "distance": 12.269543781897662
+        },
+        "extrinsic": {
+          "survived_frac": 0.36666666666666664,
+          "survival": 722.9916666666668,
+          "distance": 38.91674675403038
+        },
+        "hybrid": {
+          "survived_frac": 0.575,
+          "survival": 827.2916666666666,
+          "distance": 41.13852670269466
+        }
+      },
+      {
+        "level": 0.3,
+        "domain_rand": {
+          "survived_frac": 0.041666666666666664,
+          "survival": 526.625,
+          "distance": 17.01425965567299
+        },
+        "extrinsic": {
+          "survived_frac": 0.7666666666666666,
+          "survival": 924.3000000000001,
+          "distance": 48.58639172290115
+        },
+        "hybrid": {
+          "survived_frac": 0.725,
+          "survival": 883.5333333333333,
+          "distance": 43.58516133820041
+        }
+      },
+      {
+        "level": 0.4,
+        "domain_rand": {
+          "survived_frac": 0.26666666666666666,
+          "survival": 721.7166666666667,
+          "distance": 25.84117203075149
+        },
+        "extrinsic": {
+          "survived_frac": 0.9416666666666668,
+          "survival": 983.7583333333333,
+          "distance": 49.445635494014965
+        },
+        "hybrid": {
+          "survived_frac": 0.75,
+          "survival": 944.5750000000002,
+          "distance": 42.383583967614435
+        }
+      },
+      {
+        "level": 0.5,
+        "domain_rand": {
+          "survived_frac": 0.47500000000000003,
+          "survival": 824.8249999999999,
+          "distance": 32.991876260755724
+        },
+        "extrinsic": {
+          "survived_frac": 0.8250000000000001,
+          "survival": 960.1833333333334,
+          "distance": 40.931363439974255
+        },
+        "hybrid": {
+          "survived_frac": 0.5666666666666668,
+          "survival": 887.1750000000001,
+          "distance": 34.85364910748613
+        }
+      },
+      {
+        "level": 0.6,
+        "domain_rand": {
+          "survived_frac": 0.5583333333333333,
+          "survival": 823.5166666666665,
+          "distance": 32.92532563988097
+        },
+        "extrinsic": {
+          "survived_frac": 0.3666666666666667,
+          "survival": 836.0083333333333,
+          "distance": 27.121452176973907
+        },
+        "hybrid": {
+          "survived_frac": 0.25833333333333336,
+          "survival": 747.7333333333332,
+          "distance": 24.273291279585703
+        }
+      },
+      {
+        "level": 0.7,
+        "domain_rand": {
+          "survived_frac": 0.6333333333333333,
+          "survival": 890.2583333333333,
+          "distance": 36.1682565553239
+        },
+        "extrinsic": {
+          "survived_frac": 0.0,
+          "survival": 569.9333333333333,
+          "distance": 12.2578885190326
+        },
+        "hybrid": {
+          "survived_frac": 0.18333333333333335,
+          "survival": 629.2416666666667,
+          "distance": 16.339195596450264
+        }
+      },
+      {
+        "level": 0.8,
+        "domain_rand": {
+          "survived_frac": 0.5166666666666666,
+          "survival": 841.5999999999999,
+          "distance": 31.54418930301352
+        },
+        "extrinsic": {
+          "survived_frac": 0.0,
+          "survival": 442.50833333333327,
+          "distance": 5.934396800835249
+        },
+        "hybrid": {
+          "survived_frac": 0.0,
+          "survival": 521.4583333333334,
+          "distance": 10.28526910917176
+        }
+      },
+      {
+        "level": 0.9,
+        "domain_rand": {
+          "survived_frac": 0.375,
+          "survival": 777.0916666666667,
+          "distance": 27.210296230415082
+        },
+        "extrinsic": {
+          "survived_frac": 0.0,
+          "survival": 405.9833333333333,
+          "distance": 4.055398740270243
+        },
+        "hybrid": {
+          "survived_frac": 0.0,
+          "survival": 431.925,
+          "distance": 5.885219946873947
+        }
+      }
+    ],
+    "sensor": [
+      {
+        "level": 1.0,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 266.16666666666663,
+          "distance": 6.264387414262145
+        },
+        "extrinsic": {
+          "survived_frac": 0.008333333333333333,
+          "survival": 414.5,
+          "distance": 22.710292973164428
+        },
+        "hybrid": {
+          "survived_frac": 0.17500000000000002,
+          "survival": 589.3249999999999,
+          "distance": 27.529011801523875
+        }
+      },
+      {
+        "level": 2.0,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 255.48333333333335,
+          "distance": 6.261710707842009
+        },
+        "extrinsic": {
+          "survived_frac": 0.03333333333333333,
+          "survival": 408.575,
+          "distance": 21.779168184729055
+        },
+        "hybrid": {
+          "survived_frac": 0.16666666666666666,
+          "survival": 551.3749999999999,
+          "distance": 26.71463610782646
+        }
+      },
+      {
+        "level": 3.0,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 245.64166666666665,
+          "distance": 5.8666025583236925
+        },
+        "extrinsic": {
+          "survived_frac": 0.03333333333333333,
+          "survival": 409.44166666666666,
+          "distance": 20.312017283042636
+        },
+        "hybrid": {
+          "survived_frac": 0.18333333333333335,
+          "survival": 578.2750000000001,
+          "distance": 25.96746544631675
+        }
+      },
+      {
+        "level": 5.0,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 223.35833333333335,
+          "distance": 6.057712485122125
+        },
+        "extrinsic": {
+          "survived_frac": 0.025000000000000005,
+          "survival": 432.4166666666667,
+          "distance": 21.47859412476311
+        },
+        "hybrid": {
+          "survived_frac": 0.17500000000000002,
+          "survival": 566.7,
+          "distance": 26.30090666347341
+        }
+      },
+      {
+        "level": 8.0,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 237.60833333333335,
+          "distance": 5.134390978272299
+        },
+        "extrinsic": {
+          "survived_frac": 0.049999999999999996,
+          "survival": 402.7916666666667,
+          "distance": 18.70459868816071
+        },
+        "hybrid": {
+          "survived_frac": 0.21666666666666667,
+          "survival": 618.525,
+          "distance": 25.667195953141643
+        }
+      },
+      {
+        "level": 10.0,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 221.3083333333333,
+          "distance": 4.76660192941295
+        },
+        "extrinsic": {
+          "survived_frac": 0.049999999999999996,
+          "survival": 399.78333333333336,
+          "distance": 18.310430866783435
+        },
+        "hybrid": {
+          "survived_frac": 0.15833333333333335,
+          "survival": 551.7666666666667,
+          "distance": 22.66743658387927
+        }
+      }
+    ],
+    "energy": [
+      {
+        "level": 1.0,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 252.21666666666667,
+          "distance": 6.608990353754447
+        },
+        "extrinsic": {
+          "survived_frac": 0.008333333333333333,
+          "survival": 413.69166666666666,
+          "distance": 21.76190637405482
+        },
+        "hybrid": {
+          "survived_frac": 0.16666666666666666,
+          "survival": 574.7833333333333,
+          "distance": 26.32167914602597
+        }
+      },
+      {
+        "level": 1.5,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 268.4166666666667,
+          "distance": 5.657965877713134
+        },
+        "extrinsic": {
+          "survived_frac": 0.03333333333333333,
+          "survival": 416.62500000000006,
+          "distance": 23.380154970385238
+        },
+        "hybrid": {
+          "survived_frac": 0.20000000000000004,
+          "survival": 587.5166666666668,
+          "distance": 27.78486822410743
+        }
+      },
+      {
+        "level": 2.0,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 256.55833333333334,
+          "distance": 5.981607926044384
+        },
+        "extrinsic": {
+          "survived_frac": 0.03333333333333333,
+          "survival": 394.10833333333335,
+          "distance": 22.526775137236385
+        },
+        "hybrid": {
+          "survived_frac": 0.19999999999999998,
+          "survival": 560.4583333333334,
+          "distance": 25.516689892047836
+        }
+      },
+      {
+        "level": 2.5,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 258.7083333333333,
+          "distance": 6.727184963696206
+        },
+        "extrinsic": {
+          "survived_frac": 0.025000000000000005,
+          "survival": 410.9166666666667,
+          "distance": 20.869118981958678
+        },
+        "hybrid": {
+          "survived_frac": 0.17500000000000002,
+          "survival": 582.7833333333334,
+          "distance": 27.64253941411602
+        }
+      },
+      {
+        "level": 3.0,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 247.4083333333333,
+          "distance": 6.626282505908489
+        },
+        "extrinsic": {
+          "survived_frac": 0.03333333333333333,
+          "survival": 436.88333333333327,
+          "distance": 24.474939227671467
+        },
+        "hybrid": {
+          "survived_frac": 0.21666666666666667,
+          "survival": 574.2416666666667,
+          "distance": 27.65072522640015
+        }
+      },
+      {
+        "level": 4.0,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 262.4916666666666,
+          "distance": 6.278836513055256
+        },
+        "extrinsic": {
+          "survived_frac": 0.016666666666666666,
+          "survival": 409.1499999999999,
+          "distance": 22.088759508571005
+        },
+        "hybrid": {
+          "survived_frac": 0.18333333333333335,
+          "survival": 567.625,
+          "distance": 27.83805088049542
+        }
+      },
+      {
+        "level": 5.0,
+        "domain_rand": {
+          "survived_frac": 0.0,
+          "survival": 244.45000000000002,
+          "distance": 6.2580523798996355
+        },
+        "extrinsic": {
+          "survived_frac": 0.016666666666666666,
+          "survival": 400.575,
+          "distance": 21.591752538392083
+        },
+        "hybrid": {
+          "survived_frac": 0.16666666666666666,
+          "survival": 546.4083333333334,
+          "distance": 26.25560972495617
+        }
+      }
+    ]
+  }
+}

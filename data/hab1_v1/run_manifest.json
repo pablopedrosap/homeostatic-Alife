@@ -1,0 +1,17 @@
+{
+  "seeds": 6,
+  "conditions": [
+    "extrinsic",
+    "hybrid",
+    "domain_rand"
+  ],
+  "steps": 2400000,
+  "curriculum_full_steps": 2000000,
+  "eval_episodes": 20,
+  "eval_seed": 9999,
+  "max_ep_steps": 1000,
+  "workers": 6,
+  "results_dir": "/Users/pablopedrosa/Desktop/github/homeostatic-Alife/results/hab1_v1",
+  "eval_only": false,
+  "smoke": false
+}

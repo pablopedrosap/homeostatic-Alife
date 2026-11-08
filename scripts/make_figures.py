@@ -185,10 +185,50 @@ def fig_regulator(run_dir: Path, out: Path) -> Path:
     return p
 
 
+def fig_go2(csv_path: Path, out: Path) -> Path:
+    _style()
+    rows = load_hab1(csv_path)
+    meta = {"fault": ("Failing front-left knee", "fraction of knee torque lost"),
+            "payload": ("Carrying a payload", "kg on the back"),
+            "hot_start": ("Starting with hot motors", "initial motor temperature (0 = default)")}
+    style = {"hybrid": (BLUE, "Self-regulating (task + motor homeostasis)"),
+             "extrinsic": (ORANGE, "Standard (task only)")}
+    fig, axes = plt.subplots(1, 3, figsize=(13, 4.0), sharey=True)
+    for ax, (sw, (title, xl)) in zip(axes, meta.items()):
+        for c, (col, lab) in style.items():
+            lv = sorted({r["level"] for r in rows if r["sweep"] == sw and r["condition"] == c})
+            agg = [_ci([r["displacement_mean"] for r in rows if r["sweep"] == sw and r["condition"] == c
+                        and r["level"] == l]) for l in lv]
+            m, lo, hi = map(np.array, zip(*agg))
+            ax.fill_between(lv, np.clip(lo, 0, None), hi, color=col, alpha=0.14, lw=0)
+            ax.plot(lv, m, color=col, marker="o", ms=4.5, mec=SURFACE, mew=1.2, label=lab, zorder=3)
+            falls = [np.mean([r["fell_mean"] for r in rows if r["sweep"] == sw and r["condition"] == c
+                              and r["level"] == l]) for l in lv]
+            for x, y, f in zip(lv, m, falls):
+                if f >= 0.05:
+                    ax.annotate(f"{f:.0%} fall", (x, y), textcoords="offset points",
+                                xytext=(0, -13 if c == "extrinsic" else 8), ha="center", fontsize=7.5, color=col)
+        ax.set_title(title, loc="left")
+        ax.set_xlabel(xl)
+        ax.set_ylim(0, None)
+    axes[0].set_ylabel("metres walked in 20 s")
+    axes[1].legend(loc="lower center", fontsize=9)
+    n = len({r["seed"] for r in rows})
+    fig.text(0.01, -0.04, f"Unitree Go2 (MuJoCo Menagerie) with motor heating, driver derating and cut-out. "
+             f"Mean ± 95% CI over {n} training seeds per controller, 10 evaluation episodes each.",
+             color=INK2, fontsize=8.5)
+    fig.tight_layout()
+    p = out / "habp1_go2.png"
+    fig.savefig(p, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+    return p
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--hab1", type=Path)
     ap.add_argument("--regulator", type=Path)
+    ap.add_argument("--go2", type=Path)
     ap.add_argument("--out", type=Path, default=FIG)
     a = ap.parse_args()
     a.out.mkdir(parents=True, exist_ok=True)
@@ -199,6 +239,8 @@ def main():
             print(fig_hab1(rows, a.out, "distance_mean", "Forward distance (m)", "distance"))
     if a.regulator:
         print(fig_regulator(a.regulator, a.out))
+    if a.go2:
+        print(fig_go2(a.go2, a.out))
 
 
 if __name__ == "__main__":
