@@ -4,31 +4,58 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)
 
-**Embodied agents that regulate their own energy, temperature and damage, tested with pass
-criteria that were written down before the data existed.**
+**Robots that look after their own bodies, tested with pass criteria written down before the
+data existed.**
 
-Robots trained purely to maximise task reward are excellent until something breaks. Animals
-keep working while injured because a large part of their control is about keeping their own
-body viable. This project asks, with falsifiable experiments, how much of that can be built
-into, or evolved by, artificial agents.
+A robot that only chases its task can run itself into the ground: motors overheat, a weak leg
+gets overloaded, and it falls. Animals work differently. Much of what a body does is keeping
+itself working. This project builds controllers that **feel their own body** (motor
+temperatures, energy, damage) and **act to protect it**, then checks whether that makes them
+keep working when something breaks.
 
-**[▶ Live demo](https://pablopedrosap.github.io/homeostatic-Alife/site/)**: the
-evolutionary world running in your browser, plus interactive versions of both results.
+**[▶ Live page](https://pablopedrosap.github.io/homeostatic-Alife/site/)**: robot video,
+interactive results, and an evolution simulation running in your browser.
 
+<!-- GO2-HEADLINE -->
 
 ---
 
 ## Results
 
-### 1 · HAB-1 v1: does self-regulation buy robustness to damage? (MuJoCo Ant)
+### 1 · HAB-P1: a Unitree Go2 that manages its own motor heat
 
-> **Status 2026-11-08: running.** The pre-registration
-> ([`docs/prereg/HAB1_v1_ant.md`](docs/prereg/HAB1_v1_ant.md)) was pushed to this repository
-> while the first models were still training: 6 seeds × {hybrid, extrinsic, domain-rand
-> oracle} × 2.4M steps, frozen thermal physics, AUDC primary endpoint with Holm correction.
-> This note is replaced by the verdict when the run completes.
+<!-- GO2-RESULT -->
+> **Status 2026-11-08: evaluating.** Pre-registration
+> ([`docs/prereg/HABP1_go2.md`](docs/prereg/HABP1_go2.md)) was pushed before any
+> self-regulating Go2 was trained: 6 seeds × {standard, self-regulating} × 4M PPO steps, then a
+> failing knee motor, payloads up to 8 kg, and hot motors. Results replace this note.
+<!-- /GO2-RESULT -->
 
-### 2 · HAB-E2v: does evolution build self-sensing on its own? (reward-free ALife)
+### 2 · HAB-1 v1: does self-regulation buy robustness to damage? (MuJoCo Ant)
+
+![HAB-1 v1](docs/figures/hab1_v1_survival.png)
+
+**Verdict: FAIL** (pre-registered: [`docs/prereg/HAB1_v1_ant.md`](docs/prereg/HAB1_v1_ant.md),
+pushed while the models were still training). 6 seeds × {hybrid, extrinsic} × 2.4M PPO steps,
+speed→heat physics, 20 episodes per damage level.
+
+| | Result |
+|---|---|
+| Survival under damage, hybrid vs extrinsic (primary, Holm-corrected) | sensor noise +169 steps (g = 1.07, p_holm = 0.23); metabolic cost +156 (g = 0.96, p_holm = 0.23); actuator +13 (p = 0.74) → **no sweep significant** |
+| Baseline tax? | none: hybrid walks as far undamaged (26.2 vs 22.4 m) |
+| Does heat actually bite? | yes: undamaged peak temperature 0.95 against a 0.7 danger threshold |
+| Direction | hybrid ahead at 16 of 20 damaged levels (sign test p = 0.012, secondary) |
+
+**Why it failed, and what it taught:** the thermal physics turned out to be the main killer
+even *without* damage. Undamaged, standard agents finish only 2% of episodes, dying of damage
+built up while running hot; hybrid agents finish 20%. Under sensor and metabolic damage the
+hybrid's lead is just that same baseline offset, and moderate leg damage *helps* both agents
+because it slows them down and cools them. The effect points the right way (g ≈ 1), but 6 seeds
+can't separate it from noise. A powered replication needs ~16–21 seeds per condition, and the
+thermal calibration should leave a competent undamaged baseline. Full report:
+[`docs/results/HAB1_v1_results.md`](docs/results/HAB1_v1_results.md).
+
+### 3 · Side experiment, HAB-E2v: does evolution build self-sensing on its own?
 
 ![HAB-E2v](docs/figures/regulator_law.png)
 
@@ -53,6 +80,19 @@ zeroing inputs. Both are confounds, and with a fair control the sign flips. Full
 [`docs/results/HAB_E2v_results.md`](docs/results/HAB_E2v_results.md).
 
 ---
+
+## Where this is going
+
+Nobody can measure whether a machine has experiences, so this project makes no such claim.
+What can be built and tested are the working parts people usually mean by a robot that is
+aware of itself:
+
+| Step | Capability | Status |
+|---|---|---|
+| 1 | **Feels its own body**: motor temperatures, energy and damage as inputs | built (simulation) |
+| 2 | **Acts to keep its body working**, and that pays off when something breaks | being tested: HAB-P1, HAB-1 |
+| 3 | **Knows what it can do right now** ("my left knee is weak") and changes its plan | next |
+| 4 | **Does all of this on a real robot**: one quadruped that keeps walking with a failing motor | goal |
 
 ## How the work is done
 
@@ -99,7 +139,13 @@ possible" and "stay alive" genuinely conflict.
 git clone https://github.com/pablopedrosap/homeostatic-Alife.git && cd homeostatic-Alife
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
+python scripts/fetch_go2.py                     # Unitree Go2 model (MuJoCo Menagerie, pinned)
 python -m pytest tests/ -q                      # ~15 s
+
+# HAB-P1: 12 Go2 agents × 4M PPO steps + damage evaluation (~2 h on an 8-core laptop)
+python scripts/run_go2.py --workers 6
+python scripts/analyze_go2.py                   # pre-registered verdict
+python scripts/record_go2.py                    # side-by-side video (scenario fixed in advance)
 
 # HAB-1 v1: 18 PPO agents × 2.4M steps + 1,380 evaluation conditions.
 # ~1.7 h on an 8-core laptop (one torch thread per worker).
@@ -121,9 +167,12 @@ homeostatic_colony/
   dynamics/homeostasis.py        E/T/D update rules and viability
   dynamics/batched_homeostasis*  vectorised E/T/D (numpy / torch) for many parallel envs
   envs/ant_homeostatic.py        MuJoCo Ant-v5 + internal state, reward modes, damage knobs
+  envs/go2_homeostatic.py        Unitree Go2 with motor thermals, driver derating, faults, payload
   envs/humanoid_homeostatic.py   Humanoid-v5 wrapper (experiment not yet run)
   alife/emergent_world.py        reward-free evolutionary world (weather, yoked control, probes)
 scripts/
+  run_go2.py, analyze_go2.py     HAB-P1 training/evaluation and pre-registered analysis
+  record_go2.py                  side-by-side robot video with live motor temperatures
   run_hab1_v1.py                 parallel, resumable HAB-1 runner
   analyze_hab1_v1.py             pre-registered HAB-1 analysis
   run_regulator_law.py           HAB-E2v protocol + analysis
@@ -134,7 +183,7 @@ docs/
   results/                       full result reports
   THESIS.md, BENCHMARK.md        research program and the benchmark ladder
   site/                          live demo (JS port of the evolutionary world)
-tests/                           123 tests, incl. golden-value tests that pin the original world
+tests/                           131 tests, incl. golden-value tests that pin the original world
 ```
 
 The vectorised E/T/D module updates the internal state of 4,096 parallel bodies in about
@@ -149,7 +198,7 @@ is that the layer adds negligible overhead on top of a GPU simulator such as Isa
 | 2026-03 | First 6-seed damage sweep. Hybrid looked far more robust (e.g. 82% vs 27% full episodes at 40% actuator damage), but the extrinsic foil also survived only **27% of episodes with no damage at all**. The gap was mostly a baseline difference, so the run is superseded. |
 | 2026-07 | HAB-1 v0 (3 seeds): strong directional signal, but temperature never reached the danger band, and under a corrected analysis it is not significant (Holm p = 0.39). The thermal coupling was then calibrated. |
 | 2026-07 | HAB-E2: "selection does not build self-regulation". **Retracted 2026-11** (confounded design). |
-| 2026-11 | HAB-1 v1 and HAB-E2v pre-registered and run. Results above. |
+| 2026-11 | HAB-1 v1 (FAIL: right direction, underpowered, baseline dominated by heat) and HAB-E2v (hypothesis failed; self-sensing strongly selected) pre-registered and run. |
 
 ## Roadmap
 

@@ -82,16 +82,63 @@ th { color: var(--ink3); font-weight: 500; }
 details summary { cursor: pointer; font: 600 13px var(--display); color: var(--ink2); }
 .tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--bg); font: 500 12px/1.4 var(--mono); padding: 6px 8px; border-radius: 4px; z-index: 10; }
 footer { margin-top: 64px; border-top: 1px solid var(--rule); padding-top: 20px; display: grid; gap: 8px; font-size: 14px; color: var(--ink2); }
+
+section.result.first { margin-top: 36px; }
+ol.ladder { margin: 0; padding-left: 22px; display: grid; gap: 10px; max-width: 72ch; }
+ol.ladder li { padding-left: 4px; }
+.tag { display: inline-block; font: 500 11px var(--mono); padding: 2px 7px; border-radius: 3px; border: 1px solid var(--rule); color: var(--ink2); margin-left: 6px; white-space: nowrap; }
+.tag.done { border-color: var(--oracle); color: var(--oracle); }
+.tag.now { border-color: var(--self); color: var(--self); }
+#e2v .lab { margin-top: 4px; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
 </style>
 
 <div class="wrap">
   <header>
-    <div class="eyebrow">Homeostatic autonomy · pre-registered experiments · Pablo Pedrosa</div>
-    <h1>Machines that keep themselves alive, measured honestly.</h1>
-    <p class="lede">Two experiments, each with its pass criterion written down before the data existed: a robot policy that regulates its own temperature, energy and damage, and a reward-free world where self-sensing has to evolve on its own.</p>
+    <div class="eyebrow">Pablo Pedrosa · independent research · homeostatic robotics</div>
+    <h1>Robots that look after their own bodies.</h1>
+    <p class="lede">A robot that only chases its task can run itself into the ground: motors overheat, a weak leg gets overloaded, and it falls. Animals work differently. Much of what a body does is keeping itself working. This project builds robot controllers that feel their own body and act to protect it, and tests them with pass criteria written down before the data existed.</p>
   </header>
 
+  <section class="result first" id="go2">
+    <div class="eyebrow">Experiment 1 · Unitree Go2 quadruped · real motor-heat physics · <span id="g-seeds"></span></div>
+    <h2 id="g-title">Does a robot that manages its own motor heat keep walking when it gets damaged?</h2>
+    <p class="note" style="font-size:16px">Simulated Unitree Go2 (official model from DeepMind's MuJoCo Menagerie, with Unitree's real torque limits). Every motor heats up with the torque it produces. When a motor gets too hot, its driver cuts the torque it can deliver, and at the limit the leg goes limp, as on the real robot. Two kinds of controller are trained the same way. The <b>standard</b> one is rewarded only for walking. The <b>self-regulating</b> one is also rewarded for keeping its motors in a healthy temperature range. Then both are damaged.</p>
+    <figure id="g-videofig" hidden><video id="g-video" controls muted playsinline loop preload="metadata" style="width:100%;display:block;border-radius:3px"></video><figcaption id="g-videocap"></figcaption></figure>
+    <div class="verdict"><span class="dot" id="g-dot"></span><span id="g-verdict"></span></div>
+    <p id="g-summary"></p>
+    <div class="stats" id="g-stats"></div>
+    <div class="figs" id="g-figs"></div>
+    <p class="scope" id="g-scope"></p>
+  </section>
+
+  <section class="result" id="ladder">
+    <div class="eyebrow">Where this is going</div>
+    <h2>From "feels its own body" to "protects itself on real hardware"</h2>
+    <p>Nobody can measure whether a machine has experiences, so this project doesn't claim that. What can be built and tested are the working parts people usually mean when they talk about a robot being aware of itself:</p>
+    <ol class="ladder">
+      <li><b>It feels its own body.</b> Motor temperatures, energy, damage as inputs. <span class="tag done">built, in simulation</span></li>
+      <li><b>It acts to keep its body working.</b> Self-regulation that pays off when something breaks. <span class="tag now">being tested (experiments 1 and 2)</span></li>
+      <li><b>It knows what it can do right now</b> ("my left knee is weak") and changes its plan. <span class="tag next">next</span></li>
+      <li><b>It does all of this on a real robot.</b> One quadruped that keeps walking with a failing motor. <span class="tag next">goal</span></li>
+    </ol>
+  </section>
+
+  <section class="result" id="hab1">
+    <div class="eyebrow">Experiment 2 · abstract body (MuJoCo Ant) · <span id="h-seeds"></span></div>
+    <h2 id="h-title"></h2>
+    <div class="verdict"><span class="dot" id="h-dot"></span><span id="h-verdict"></span></div>
+    <p id="h-summary"></p>
+    <div class="stats" id="h-stats"></div>
+    <div class="figs" id="h-figs"></div>
+    <p class="scope" id="h-scope"></p>
+    <details><summary>Per-level table (all seeds, no selection)</summary><div class="tablewrap" style="margin-top:10px"><table id="h-table"></table></div></details>
+  </section>
+
+  <section class="result" id="e2v">
+    <div class="eyebrow">Side experiment · does evolution discover self-sensing on its own? · <span id="e-n"></span></div>
+    <h2 id="e-title"></h2>
+    <p class="note" style="font-size:16px">No robot here. Tiny simulated creatures evolve with no reward and no goal. Those that overheat or starve die, and those that eat enough split in two. Blue ones can feel their own temperature, energy and damage. Orange ones feel a random other creature's body instead.</p>
   <div class="lab">
     <div class="dish">
       <canvas id="world" width="720" height="720" aria-label="Live simulation of evolving organisms"></canvas>
@@ -100,7 +147,7 @@ footer { margin-top: 64px; border-top: 1px solid var(--rule); padding-top: 20px;
     <div class="panel">
       <div>
         <div class="eyebrow">Live · runs in your browser</div>
-        <h2 style="margin-top:6px">The regulator test</h2>
+        <h3 style="margin-top:6px;font-size:18px">Try it: who wins?</h3>
       </div>
       <p class="note">150 founders with random neural controllers. Half feel their <b>own</b> energy, temperature and damage. The other half are yoked: they feel a random partner's body instead, so they get the same kind of signal with no information about themselves. No reward and no fitness score exist anywhere. Organisms that overheat, starve or take too much damage die. Organisms that gather enough energy split in two, passing on their genome with small mutations.</p>
       <div class="key"><span><i style="background:var(--self)"></i>self-sensing</span><span><i style="background:var(--yoked)"></i>yoked (no self-information)</span><span><i style="border:2px solid var(--danger);background:transparent"></i>overheating (T &gt; 0.7)</span></div>
@@ -128,21 +175,6 @@ footer { margin-top: 64px; border-top: 1px solid var(--rule); padding-top: 20px;
       </div>
     </div>
   </div>
-
-  <section class="result" id="hab1">
-    <div class="eyebrow">Result 1 · HAB-1 v1 · MuJoCo Ant-v5 · <span id="h-seeds"></span></div>
-    <h2 id="h-title"></h2>
-    <div class="verdict"><span class="dot" id="h-dot"></span><span id="h-verdict"></span></div>
-    <p id="h-summary"></p>
-    <div class="stats" id="h-stats"></div>
-    <div class="figs" id="h-figs"></div>
-    <p class="scope" id="h-scope"></p>
-    <details><summary>Per-level table (all seeds, no selection)</summary><div class="tablewrap" style="margin-top:10px"><table id="h-table"></table></div></details>
-  </section>
-
-  <section class="result" id="e2v">
-    <div class="eyebrow">Result 2 · HAB-E2v · reward-free evolution · <span id="e-n"></span></div>
-    <h2 id="e-title"></h2>
     <div class="verdict"><span class="dot" id="e-dot"></span><span id="e-verdict"></span></div>
     <p id="e-summary"></p>
     <div class="stats" id="e-stats"></div>
@@ -153,13 +185,13 @@ footer { margin-top: 64px; border-top: 1px solid var(--rule); padding-top: 20px;
   <section class="result" id="method">
     <div class="eyebrow">How the work is done</div>
     <h2>Pass criteria are written before the data exists</h2>
-    <p>Each experiment has a pre-registration file committed before its first run: the frozen physics, the seeds, the exact statistical test and the threshold. Every seed is reported. Negative results stay in the record. Earlier analyses that turned out to be confounded are corrected in the open, not quietly replaced. Neither experiment claims anything about experience or sentience, because no experiment can test for that.</p>
+    <p>Each experiment has a pre-registration file pushed to GitHub before its results existed: the frozen physics, the seeds, the exact statistical test and the threshold. Every seed is reported. Failed hypotheses stay in the record, and earlier analyses that turned out to be confounded are corrected in the open.</p>
     <p id="m-links"></p>
   </section>
 
   <footer>
     <div>Code, data and pre-registrations: <a id="repo" href="https://github.com/pablopedrosap/homeostatic-Alife">github.com/pablopedrosap/homeostatic-Alife</a></div>
-    <div>The live world above is a JavaScript port of <span class="mono">homeostatic_colony/alife/emergent_world.py</span> with the same constants and update order. It matches the Python statistically, not step for step. Results shown in the sections come from the Python runs.</div>
+    <div>The live world is a JavaScript port of <span class="mono">homeostatic_colony/alife/emergent_world.py</span> with the same constants and update order. It matches the Python statistically, not step for step. All reported results come from the Python runs.</div>
   </footer>
 </div>
 <div class="tip" id="tip" hidden></div>
@@ -358,6 +390,30 @@ const DATA = /*__DATA__*/null;
   const fmt = (v, d = 0) => v == null ? "—" : Number(v).toFixed(d);
   const verdict = (dotId, txtId, pass, label) => { $(dotId).style.background = pass ? "var(--oracle)" : "var(--yoked)"; $(txtId).textContent = label; };
   const stat = (box, big, small) => { const d = document.createElement("div"); d.className = "stat"; d.innerHTML = `<b>${big}</b><span>${small}</span>`; $(box).appendChild(d); };
+
+  // Go2 (HAB-P1)
+  const G = DATA.go2;
+  if (G) {
+    $("g-seeds").textContent = G.seeds_label;
+    if (G.title) $("g-title").textContent = G.title;
+    verdict("g-dot", "g-verdict", G.verdict === "PASS", G.verdict_label);
+    $("g-summary").textContent = G.summary;
+    G.stats.forEach((s) => stat("g-stats", s[0], s[1]));
+    if (G.video) {
+      $("g-video").src = G.video.src; $("g-video").poster = G.video.poster || "";
+      $("g-videocap").textContent = G.video.caption; $("g-videofig").hidden = false;
+    }
+    const GN = { hybrid: ["Self-regulating (task + motor homeostasis)", "--self", ""], extrinsic: ["Standard (task only)", "--yoked", ""] };
+    const legend = document.createElement("div"); legend.className = "key";
+    legend.innerHTML = Object.keys(GN).map((c) => `<span><i style="background:var(${GN[c][1]})"></i>${GN[c][0]}</span>`).join("");
+    $("g-figs").before(legend);
+    G.curves.forEach((cv) => {
+      const fig = document.createElement("figure"); $("g-figs").appendChild(fig);
+      lineChart(fig, { title: cv.title, xlab: cv.xlab, ylab: "metres walked in 20 s", yMin: 0, yMax: cv.yMax, yTicks: cv.yTicks, xTicks: cv.xticks,
+        series: Object.entries(cv.series).map(([c, pts]) => ({ name: GN[c][0], colorVar: GN[c][1], dash: GN[c][2], pts: pts.map((p) => ({ x: p[0], y: p[1], lo: p[2], hi: p[3], tip: `${cv.levelName} ${p[0]} · ${fmt(p[1], 1)} m<br>95% CI [${fmt(p[2], 1)}, ${fmt(p[3], 1)}] · falls ${fmt(p[4] * 100)}%` })) })) });
+    });
+    $("g-scope").textContent = G.scope;
+  } else { ["g-dot", "g-verdict", "g-summary", "g-stats", "g-figs", "g-scope"].forEach((id) => { const n = $(id); if (n) n.closest(".verdict") ? n.closest(".verdict").hidden = true : n.hidden = true; }); $("g-seeds").textContent = "running"; }
 
   // HAB-1
   const H1 = DATA.hab1;

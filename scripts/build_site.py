@@ -83,6 +83,44 @@ def hab1_data(narr: dict) -> dict | None:
             "table_conds": conds, "seeds_label": f"{n} training seeds per condition, all reported"}
 
 
+def go2_data(narr: dict, video_prefix: str) -> dict | None:
+    d = ROOT / "results/habp1_go2"
+    if not (d / "verdict.json").exists() or "go2" not in narr:
+        return None
+    v = json.loads((d / "verdict.json").read_text())
+    rows = list(csv.DictReader(open(d / "go2_damage.csv")))
+    for r in rows:
+        for k in r:
+            if k not in ("condition", "sweep"):
+                r[k] = float(r[k])
+    meta = {"fault": ("Failing front-left knee", "fraction of knee torque lost", [0, 0.25, 0.5, 0.75, 0.9], "knee torque lost"),
+            "payload": ("Carrying a payload", "kg on the back", [0, 2, 4, 6, 8], "payload kg"),
+            "hot_start": ("Starting with hot motors", "initial motor temperature (0 = default)", [0, 0.2, 0.4, 0.6], "start temperature")}
+    ymax = max(r["displacement_mean"] for r in rows)
+    ymax = float(np.ceil(ymax / 5) * 5)
+    curves = []
+    for sw, (t, xl, xt, lvname) in meta.items():
+        series = {}
+        for c in ("hybrid", "extrinsic"):
+            pts = []
+            for l in sorted({r["level"] for r in rows if r["sweep"] == sw}):
+                sel = [r for r in rows if r["sweep"] == sw and r["condition"] == c and r["level"] == l]
+                m, lo, hi = _ci([r["displacement_mean"] for r in sel])
+                pts.append([l, round(m, 2), round(max(0, lo), 2), round(hi, 2),
+                            round(float(np.mean([r["fell_mean"] for r in sel])), 3)])
+            series[c] = pts
+        curves.append({"title": t, "xlab": xl, "xticks": xt, "levelName": lvname, "series": series,
+                       "yMax": ymax, "yTicks": [x for x in range(0, int(ymax) + 1, 5)]})
+    out = {**narr["go2"], "verdict": v["verdict"], "curves": curves,
+           "seeds_label": f"{len(v['seeds'])} training seeds per controller, all reported"}
+    vid = ROOT / "docs/media/go2_fault_side_by_side.mp4"
+    if vid.exists() and "video_caption" in narr["go2"]:
+        out["video"] = {"src": video_prefix + "go2_fault_side_by_side.mp4",
+                        "poster": video_prefix + "go2_fault_side_by_side.png",
+                        "caption": narr["go2"]["video_caption"]}
+    return out
+
+
 def e2v_data(narr: dict) -> dict | None:
     d = ROOT / "results/regulator_law"
     if not (d / "verdict.json").exists() or "e2v" not in narr:
@@ -137,21 +175,29 @@ def e2v_data(narr: dict) -> dict | None:
 
 def main():
     narr = json.loads(NARRATIVE_PATH.read_text())
-    data = {"hab1": hab1_data(narr), "e2v": e2v_data(narr), "links": narr.get("links", "")}
-    html = (SITE / "template.html").read_text()
-    html = html.replace("/*__DATA__*/null", json.dumps(data, ensure_ascii=False))
-    html = html.replace("/*__SIM__*/", (SITE / "sim.js").read_text())
-    # Artifact hosts wrap the fragment in their own skeleton; GitHub Pages needs a document.
-    (SITE / "artifact.html").write_text(html)
+    template = (SITE / "template.html").read_text()
+    sim = (SITE / "sim.js").read_text()
+
+    def render(video_prefix: str) -> tuple[str, dict]:
+        data = {"go2": go2_data(narr, video_prefix), "hab1": hab1_data(narr),
+                "e2v": e2v_data(narr), "links": narr.get("links", "")}
+        html = template.replace("/*__DATA__*/null", json.dumps(data, ensure_ascii=False))
+        return html.replace("/*__SIM__*/", sim), data
+
+    # Artifact hosts wrap the fragment in their own skeleton and serve media next to it;
+    # GitHub Pages serves docs/site/index.html with media in docs/media/.
+    art, _ = render("media/")
+    (SITE / "artifact.html").write_text(art)
+    html, data = render("../media/")
     page = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
-            '<meta name="description" content="Pre-registered experiments on self-regulating agents: '
-            'a MuJoCo robot that regulates its own temperature, energy and damage, and a reward-free '
+            '<meta name="description" content="Robots that look after their own bodies: pre-registered '
+            'experiments on a Unitree Go2 that manages its own motor heat, a MuJoCo Ant, and a reward-free '
             'evolutionary world.">\n</head>\n<body>\n' + html + "\n</body>\n</html>\n")
     out = SITE / "index.html"
     out.write_text(page)
-    print(f"{out}  ({len(page)/1024:.0f} KB)  hab1={'yes' if data['hab1'] else 'pending'}  "
-          f"e2v={'yes' if data['e2v'] else 'pending'}")
+    print(f"{out}  ({len(page)/1024:.0f} KB)  " + "  ".join(
+        f"{k}={'yes' if data[k] else 'pending'}" for k in ("go2", "hab1", "e2v")))
 
 
 if __name__ == "__main__":

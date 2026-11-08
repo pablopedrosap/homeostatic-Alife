@@ -29,7 +29,7 @@ INK, INK2, GRID, SURFACE = "#0b0b0b", "#52514e", "#e6e5e1", "#fcfcfb"
 COND_STYLE = {
     "hybrid": dict(color=BLUE, label="Hybrid (task + homeostasis)", ls="-"),
     "extrinsic": dict(color=ORANGE, label="Extrinsic (task only)", ls="-"),
-    "domain_rand": dict(color=AQUA, label="Domain-rand oracle (trained on damage)", ls="--"),
+    "domain_rand": dict(color=AQUA, label="Domain randomization (did not learn a competent gait)", ls="--"),
 }
 SWEEP_LABEL = {"actuator": "Actuator impairment (legs 0–3)",
                "sensor": "Sensor noise (× baseline)",
@@ -87,7 +87,8 @@ def fig_hab1(rows: list[dict], out: Path, metric="survival_mean",
         ax.set_xlabel("damage level →")
     axes[0].set_ylabel(ylabel)
     n = len({r["seed"] for r in rows})
-    axes[0].legend(loc="lower left", fontsize=9)
+    handles, labels = axes[0].get_legend_handles_labels()
+    axes[1].legend(handles, labels, loc="upper center", fontsize=9)
     fig.text(0.01, -0.04, f"Mean ± 95% CI across {n} independent training seeds "
              f"(20 evaluation episodes each). Ant-v5, frontier thermal physics.",
              color=INK2, fontsize=8.5)

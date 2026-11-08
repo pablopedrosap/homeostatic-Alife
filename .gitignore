@@ -29,3 +29,5 @@ Thumbs.db
 outreach/
 docs/site/artifact.html
 third_party/
+!docs/media/*.mp4
+!docs/media/*.gif

@@ -62,6 +62,8 @@ def boot_diff_ci(a, b, n=10_000, seed=0) -> list[float]:
 def welch(a, b) -> float:
     if len(a) < 2 or len(b) < 2:
         return 1.0
+    if np.std(a) < 1e-12 and np.std(b) < 1e-12:   # degenerate (e.g. no falls anywhere)
+        return 1.0 if abs(np.mean(a) - np.mean(b)) < 1e-12 else 0.0
     return float(stats.ttest_ind(a, b, equal_var=False).pvalue)
 
 
