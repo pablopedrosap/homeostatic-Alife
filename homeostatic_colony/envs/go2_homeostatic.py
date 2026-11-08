@@ -81,6 +81,14 @@ class Go2HomeostaticConfig:
     w_action_rate: float = 0.01
     alive_bonus: float = 0.2
 
+    # --- HAB-P2 options. Defaults reproduce HAB-P1 exactly. ---
+    cmd_range: tuple[float, float] | None = None   # sample the speed command per episode
+    homeo_step_cost: float = 0.0                   # per-step cost on Σ excess (non-telescoping)
+    governor: bool = False                         # rule-based thermal governor (industry baseline)
+    gov_t_start: float = 0.6                       # governor: start slowing at this hottest-motor T
+    gov_t_full: float = 0.9                        # ... reach the minimum command here
+    gov_min_frac: float = 0.3
+
     seed: int | None = None
     scene_path: str = field(default_factory=lambda: str(GO2_SCENE))
 
@@ -88,8 +96,11 @@ class Go2HomeostaticConfig:
 class Go2HomeostaticEnv(gym.Env):
     metadata = {"render_modes": ["rgb_array"], "render_fps": 50}
 
-    def __init__(self, cfg: Go2HomeostaticConfig | None = None, render_mode: str | None = None):
+    def __init__(self, cfg: Go2HomeostaticConfig | None = None, render_mode: str | None = None,
+                 self_model=None, env_id: int = 0):
         self.cfg = cfg or Go2HomeostaticConfig()
+        self.self_model = self_model            # ThermalSelfModel shared across a process, or None
+        self.env_id = env_id
         c = self.cfg
         if not Path(c.scene_path).exists():
             raise FileNotFoundError(f"{c.scene_path} missing — run `python scripts/fetch_go2.py`")
@@ -118,7 +129,9 @@ class Go2HomeostaticEnv(gym.Env):
         self.fault_frac[c.fault_motor] = 1.0 - c.fault_severity
 
         self.action_space = gym.spaces.Box(-1.0, 1.0, (12,), np.float32)
-        self.observation_space = gym.spaces.Box(-np.inf, np.inf, (OBS_DIM,), np.float32)
+        dim = OBS_DIM + (12 if self_model is not None else 0)
+        self.observation_space = gym.spaces.Box(-np.inf, np.inf, (dim,), np.float32)
+        self.cmd = c.cmd_vx
         self._rng = np.random.default_rng(c.seed)
 
     # -- helpers --------------------------------------------------------------------
@@ -143,8 +156,20 @@ class Go2HomeostaticEnv(gym.Env):
         v, w, g = self._base_frame()
         q = self.data.qpos[7:19] - self.home_qpos[7:19]
         qd = self.data.qvel[6:18] * 0.05
-        return np.concatenate([v * 2.0, w * 0.25, g, [self.cfg.cmd_vx], q, qd, self.last_action,
+        base = np.concatenate([v * 2.0, w * 0.25, g, [self._effective_cmd()], q, qd, self.last_action,
                                self.temp]).astype(np.float32)
+        if self.self_model is None:
+            return base
+        self._last_base_obs = base
+        return np.concatenate([base, self.self_model.predict(base, self.temp)]).astype(np.float32)
+
+    def _effective_cmd(self) -> float:
+        """Commanded speed; the rule-based governor scales it down as the hottest motor heats."""
+        c = self.cfg
+        if not c.governor:
+            return self.cmd
+        x = (float(self.temp.max()) - c.gov_t_start) / (c.gov_t_full - c.gov_t_start)
+        return self.cmd * float(np.clip(1.0 - np.clip(x, 0.0, 1.0) * (1.0 - c.gov_min_frac), c.gov_min_frac, 1.0))
 
     def _homeo_excess(self) -> np.ndarray:
         c = self.cfg
@@ -167,6 +192,9 @@ class Go2HomeostaticEnv(gym.Env):
             self.temp = np.full(12, c.hot_start) + self._rng.uniform(0.0, 0.05, 12)
         self._apply_limits()
         mujoco.mj_forward(m, d)
+        self.cmd = (float(self._rng.uniform(*c.cmd_range)) if c.cmd_range is not None else c.cmd_vx)
+        if self.self_model is not None:
+            self.self_model.reset_stream(self.env_id)
         self.last_action = np.zeros(12)
         self.steps = 0
         self.start_xy = d.qpos[0:2].copy()
@@ -203,7 +231,7 @@ class Go2HomeostaticEnv(gym.Env):
         self.steps += 1
 
         tau_sq = float((d.actuator_force ** 2).sum())
-        r_task = (c.w_track * np.exp(-((v[0] - c.cmd_vx) ** 2) / 0.25)
+        r_task = (c.w_track * np.exp(-((v[0] - self._effective_cmd()) ** 2) / 0.25)
                   + c.w_straight * np.exp(-(v[1] ** 2 + w[2] ** 2) / 0.25)
                   - c.w_vz * v[2] ** 2
                   - c.w_tilt * (g[0] ** 2 + g[1] ** 2)
@@ -211,15 +239,19 @@ class Go2HomeostaticEnv(gym.Env):
                   - c.w_action_rate * float(((a - self.last_action) ** 2).sum())
                   + c.alive_bonus)
         excess = self._homeo_excess()
-        r_homeo = float((self._prev_excess - excess).sum() - c.homeo_quad_cost * (excess ** 2).sum())
+        r_homeo = float((self._prev_excess - excess).sum() - c.homeo_quad_cost * (excess ** 2).sum()
+                        - c.homeo_step_cost * excess.sum())
         self._prev_excess = excess
         reward = r_task + (c.homeo_weight * r_homeo if c.reward_mode == "hybrid" else 0.0)
 
         self.last_action = a
         truncated = self.steps >= c.max_steps
+        obs = self._obs()
+        if self.self_model is not None:
+            self.self_model.observe(self.env_id, self._last_base_obs, self.temp)
         info = self._info(fell=fell)
-        info.update(r_task=float(r_task), r_homeo=r_homeo)
-        return self._obs(), float(reward), bool(fell), bool(truncated), info
+        info.update(r_task=float(r_task), r_homeo=r_homeo, cmd=self._effective_cmd())
+        return obs, float(reward), bool(fell), bool(truncated), info
 
     def _info(self, fell: bool) -> dict:
         disp = float(np.linalg.norm(self.data.qpos[0:2] - self.start_xy))
