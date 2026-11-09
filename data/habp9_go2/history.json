@@ -1,0 +1,3650 @@
+[
+ {
+  "id": 0,
+  "arm": "evolved",
+  "w": 0.02,
+  "setpoint": 0.5,
+  "round": 0,
+  "fitness": 83.49570778093255,
+  "per_mission": [
+   19.11,
+   20.83,
+   20.7,
+   22.86
+  ],
+  "final_strength_min": 0.6859115160519182,
+  "final_strength_mean": 0.9151923130340242,
+  "wear": 36418.20989329432,
+  "falls": 0,
+  "frozen_frac": 0.5471666666666667
+ },
+ {
+  "id": 1,
+  "arm": "evolved",
+  "w": 0.03167639217533158,
+  "setpoint": 0.5428571428571428,
+  "round": 0,
+  "fitness": 94.14701082696413,
+  "per_mission": [
+   20.36,
+   23.52,
+   23.12,
+   27.15
+  ],
+  "final_strength_min": 0.6394310285150355,
+  "final_strength_mean": 0.9012105348182212,
+  "wear": 43623.71763969587,
+  "falls": 0,
+  "frozen_frac": 0.4974166666666667
+ },
+ {
+  "id": 2,
+  "arm": "evolved",
+  "w": 0.05016969106227038,
+  "setpoint": 0.7142857142857143,
+  "round": 0,
+  "fitness": 91.74061203719467,
+  "per_mission": [
+   20.82,
+   22.32,
+   22.3,
+   26.3
+  ],
+  "final_strength_min": 0.6628272716864466,
+  "final_strength_mean": 0.8952798947118462,
+  "wear": 46338.99108025214,
+  "falls": 0,
+  "frozen_frac": 0.5245
+ },
+ {
+  "id": 3,
+  "arm": "evolved",
+  "w": 0.07945974047018524,
+  "setpoint": 0.7571428571428571,
+  "round": 0,
+  "fitness": 92.27069129443196,
+  "per_mission": [
+   20.24,
+   22.89,
+   22.67,
+   26.47
+  ],
+  "final_strength_min": 0.6766045207131259,
+  "final_strength_mean": 0.8500230682618208,
+  "wear": 66990.12098400218,
+  "falls": 0,
+  "frozen_frac": 0.4524166666666667
+ },
+ {
+  "id": 4,
+  "arm": "evolved",
+  "w": 0.12584989506418265,
+  "setpoint": 0.6285714285714286,
+  "round": 0,
+  "fitness": 84.91150207058959,
+  "per_mission": [
+   18.86,
+   21.29,
+   20.96,
+   23.8
+  ],
+  "final_strength_min": 0.6237236615292784,
+  "final_strength_mean": 0.9219210890207857,
+  "wear": 34196.01429989849,
+  "falls": 0,
+  "frozen_frac": 0.53225
+ },
+ {
+  "id": 5,
+  "arm": "evolved",
+  "w": 0.19932353156386878,
+  "setpoint": 0.8,
+  "round": 0,
+  "fitness": 88.3860814771995,
+  "per_mission": [
+   18.5,
+   22.24,
+   22.16,
+   25.48
+  ],
+  "final_strength_min": 0.6732050698465082,
+  "final_strength_mean": 0.893797256187883,
+  "wear": 47078.40667552733,
+  "falls": 0,
+  "frozen_frac": 0.45416666666666666
+ },
+ {
+  "id": 6,
+  "arm": "evolved",
+  "w": 0.3156925177794596,
+  "setpoint": 0.6714285714285715,
+  "round": 0,
+  "fitness": 95.0175912586651,
+  "per_mission": [
+   21.74,
+   23.86,
+   23.42,
+   26.0
+  ],
+  "final_strength_min": 0.6919266187500436,
+  "final_strength_mean": 0.9228931179374902,
+  "wear": 33192.83411791974,
+  "falls": 0,
+  "frozen_frac": 0.5090833333333333
+ },
+ {
+  "id": 7,
+  "arm": "evolved",
+  "w": 0.5,
+  "setpoint": 0.5857142857142857,
+  "round": 0,
+  "fitness": 74.03641259365979,
+  "per_mission": [
+   18.11,
+   18.39,
+   18.74,
+   18.78
+  ],
+  "final_strength_min": 0.9027961610680851,
+  "final_strength_mean": 0.9686277608877946,
+  "wear": 12377.458488030541,
+  "falls": 0,
+  "frozen_frac": 0.5510833333333334
+ },
+ {
+  "id": 8,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 0,
+  "fitness": 86.02306078324465,
+  "per_mission": [
+   19.09,
+   21.7,
+   21.42,
+   23.81
+  ],
+  "final_strength_min": 0.6219775415475759,
+  "final_strength_mean": 0.8918417684767396,
+  "wear": 48468.00924521133,
+  "falls": 0,
+  "frozen_frac": 0.51075
+ },
+ {
+  "id": 9,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 0,
+  "fitness": 47.37361258875545,
+  "per_mission": [
+   2.6,
+   18.52,
+   3.58,
+   22.67
+  ],
+  "final_strength_min": 0.6726639293770315,
+  "final_strength_mean": 0.9492323884140972,
+  "wear": 22007.12579261754,
+  "falls": 1,
+  "frozen_frac": 0.6917150395778364
+ },
+ {
+  "id": 10,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 0,
+  "fitness": 87.49084141423135,
+  "per_mission": [
+   19.22,
+   22.3,
+   21.85,
+   24.11
+  ],
+  "final_strength_min": 0.6694426510060347,
+  "final_strength_mean": 0.9123770102026155,
+  "wear": 38797.32253423723,
+  "falls": 0,
+  "frozen_frac": 0.4569166666666667
+ },
+ {
+  "id": 11,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 0,
+  "fitness": 91.39623115998893,
+  "per_mission": [
+   20.31,
+   22.91,
+   22.78,
+   25.39
+  ],
+  "final_strength_min": 0.6559105691630183,
+  "final_strength_mean": 0.8908699176930835,
+  "wear": 48760.88113321496,
+  "falls": 0,
+  "frozen_frac": 0.50625
+ },
+ {
+  "id": 12,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 0,
+  "fitness": 92.15633437263664,
+  "per_mission": [
+   20.68,
+   23.03,
+   22.83,
+   25.62
+  ],
+  "final_strength_min": 0.6406400546914502,
+  "final_strength_mean": 0.9009128059640283,
+  "wear": 44105.38867319708,
+  "falls": 0,
+  "frozen_frac": 0.49166666666666664
+ },
+ {
+  "id": 13,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 0,
+  "fitness": 97.19991765967119,
+  "per_mission": [
+   21.02,
+   24.14,
+   23.83,
+   28.21
+  ],
+  "final_strength_min": 0.689016533898115,
+  "final_strength_mean": 0.8953900614913836,
+  "wear": 45687.16945612078,
+  "falls": 0,
+  "frozen_frac": 0.45858333333333334
+ },
+ {
+  "id": 14,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 0,
+  "fitness": 45.22423061847303,
+  "per_mission": [
+   3.4,
+   14.7,
+   4.68,
+   22.45
+  ],
+  "final_strength_min": 0.6506219837950419,
+  "final_strength_mean": 0.9497999407403673,
+  "wear": 22000.363213284643,
+  "falls": 1,
+  "frozen_frac": 0.7163127807268272
+ },
+ {
+  "id": 15,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 0,
+  "fitness": 73.4999960952481,
+  "per_mission": [
+   4.86,
+   21.9,
+   21.37,
+   25.36
+  ],
+  "final_strength_min": 0.6115433990836762,
+  "final_strength_mean": 0.9152764311988548,
+  "wear": 37884.28209943121,
+  "falls": 0,
+  "frozen_frac": 0.6015833333333334
+ },
+ {
+  "id": 0,
+  "arm": "evolved",
+  "w": 0.4735387766691894,
+  "setpoint": 0.7214285714285715,
+  "round": 1,
+  "fitness": 101.50943808589993,
+  "per_mission": [
+   25.93,
+   26.93,
+   24.45,
+   24.2
+  ],
+  "final_strength_min": 0.7383089134876254,
+  "final_strength_mean": 0.9207756207291421,
+  "wear": 33468.19068978458,
+  "falls": 0,
+  "frozen_frac": 0.38208333333333333
+ },
+ {
+  "id": 1,
+  "arm": "evolved",
+  "w": 0.03167639217533158,
+  "setpoint": 0.5428571428571428,
+  "round": 1,
+  "fitness": 92.72083896731998,
+  "per_mission": [
+   23.49,
+   23.44,
+   22.94,
+   22.85
+  ],
+  "final_strength_min": 0.6899185648664515,
+  "final_strength_mean": 0.9098385254963378,
+  "wear": 38666.756233911874,
+  "falls": 0,
+  "frozen_frac": 0.41425
+ },
+ {
+  "id": 2,
+  "arm": "evolved",
+  "w": 0.05016969106227038,
+  "setpoint": 0.7142857142857143,
+  "round": 1,
+  "fitness": 82.00519066576715,
+  "per_mission": [
+   23.07,
+   22.58,
+   18.41,
+   17.95
+  ],
+  "final_strength_min": 0.6591469492458039,
+  "final_strength_mean": 0.8884115883273195,
+  "wear": 50116.89781088775,
+  "falls": 0,
+  "frozen_frac": 0.4048333333333333
+ },
+ {
+  "id": 3,
+  "arm": "evolved",
+  "w": 0.07945974047018524,
+  "setpoint": 0.7571428571428571,
+  "round": 1,
+  "fitness": 102.31554092179373,
+  "per_mission": [
+   28.17,
+   28.49,
+   22.99,
+   22.66
+  ],
+  "final_strength_min": 0.6328504165346682,
+  "final_strength_mean": 0.8592128750344016,
+  "wear": 62986.31011730175,
+  "falls": 0,
+  "frozen_frac": 0.15866666666666668
+ },
+ {
+  "id": 4,
+  "arm": "evolved",
+  "w": 0.12584989506418265,
+  "setpoint": 0.6285714285714286,
+  "round": 1,
+  "fitness": 89.90354473176963,
+  "per_mission": [
+   24.54,
+   24.31,
+   20.62,
+   20.42
+  ],
+  "final_strength_min": 0.6259739496258946,
+  "final_strength_mean": 0.8979579048168013,
+  "wear": 45270.482347196055,
+  "falls": 0,
+  "frozen_frac": 0.47158333333333335
+ },
+ {
+  "id": 5,
+  "arm": "evolved",
+  "w": 0.19932353156386878,
+  "setpoint": 0.8,
+  "round": 1,
+  "fitness": 76.18283291165845,
+  "per_mission": [
+   26.98,
+   26.83,
+   10.46,
+   11.92
+  ],
+  "final_strength_min": 0.6830078199158808,
+  "final_strength_mean": 0.8994240727642016,
+  "wear": 44573.44940295432,
+  "falls": 0,
+  "frozen_frac": 0.3303333333333333
+ },
+ {
+  "id": 6,
+  "arm": "evolved",
+  "w": 0.3156925177794596,
+  "setpoint": 0.6714285714285715,
+  "round": 1,
+  "fitness": 98.52779864782316,
+  "per_mission": [
+   25.7,
+   25.65,
+   23.61,
+   23.57
+  ],
+  "final_strength_min": 0.6711973769566499,
+  "final_strength_mean": 0.9358607849369905,
+  "wear": 27496.971152675935,
+  "falls": 0,
+  "frozen_frac": 0.46166666666666667
+ },
+ {
+  "id": 7,
+  "arm": "evolved",
+  "w": 0.04751458826299737,
+  "setpoint": 0.5928571428571429,
+  "round": 1,
+  "fitness": 94.06845058399033,
+  "per_mission": [
+   25.84,
+   25.91,
+   21.38,
+   20.94
+  ],
+  "final_strength_min": 0.6753625762041288,
+  "final_strength_mean": 0.8999770875831978,
+  "wear": 43813.71011269303,
+  "falls": 0,
+  "frozen_frac": 0.45891666666666664
+ },
+ {
+  "id": 8,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 1,
+  "fitness": 82.62066386562742,
+  "per_mission": [
+   22.95,
+   22.52,
+   18.77,
+   18.38
+  ],
+  "final_strength_min": 0.6280804197619569,
+  "final_strength_mean": 0.8694566385987449,
+  "wear": 59259.68151797113,
+  "falls": 0,
+  "frozen_frac": 0.2970833333333333
+ },
+ {
+  "id": 9,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 1,
+  "fitness": 101.30550551392055,
+  "per_mission": [
+   27.48,
+   27.56,
+   23.33,
+   22.93
+  ],
+  "final_strength_min": 0.6442207062336891,
+  "final_strength_mean": 0.8604464851543515,
+  "wear": 62746.084817543815,
+  "falls": 0,
+  "frozen_frac": 0.32925
+ },
+ {
+  "id": 10,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 1,
+  "fitness": 89.95268653225897,
+  "per_mission": [
+   24.54,
+   24.23,
+   20.86,
+   20.32
+  ],
+  "final_strength_min": 0.6395510372318784,
+  "final_strength_mean": 0.8901448753107433,
+  "wear": 49835.497309591374,
+  "falls": 0,
+  "frozen_frac": 0.34158333333333335
+ },
+ {
+  "id": 11,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 1,
+  "fitness": 88.04640934635962,
+  "per_mission": [
+   24.36,
+   23.88,
+   19.88,
+   19.93
+  ],
+  "final_strength_min": 0.6512427273442685,
+  "final_strength_mean": 0.873369738660776,
+  "wear": 57409.15520654093,
+  "falls": 0,
+  "frozen_frac": 0.36425
+ },
+ {
+  "id": 12,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 1,
+  "fitness": 97.18916426070984,
+  "per_mission": [
+   25.58,
+   25.17,
+   23.48,
+   22.96
+  ],
+  "final_strength_min": 0.6279815828328587,
+  "final_strength_mean": 0.8652115881995974,
+  "wear": 61175.253546565815,
+  "falls": 0,
+  "frozen_frac": 0.18016666666666667
+ },
+ {
+  "id": 13,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 1,
+  "fitness": 101.46764457674215,
+  "per_mission": [
+   28.48,
+   28.01,
+   22.8,
+   22.18
+  ],
+  "final_strength_min": 0.6256439004185644,
+  "final_strength_mean": 0.8456896960550658,
+  "wear": 69878.45689127153,
+  "falls": 0,
+  "frozen_frac": 0.21008333333333334
+ },
+ {
+  "id": 14,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 1,
+  "fitness": 79.90125490722168,
+  "per_mission": [
+   22.19,
+   21.39,
+   18.06,
+   18.26
+  ],
+  "final_strength_min": 0.650684345762076,
+  "final_strength_mean": 0.8740599544041373,
+  "wear": 56330.11335614307,
+  "falls": 0,
+  "frozen_frac": 0.3333333333333333
+ },
+ {
+  "id": 15,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 1,
+  "fitness": 89.69560410653214,
+  "per_mission": [
+   24.21,
+   24.06,
+   20.93,
+   20.49
+  ],
+  "final_strength_min": 0.6234307516918144,
+  "final_strength_mean": 0.8804150656537333,
+  "wear": 54004.31956526878,
+  "falls": 0,
+  "frozen_frac": 0.365
+ },
+ {
+  "id": 0,
+  "arm": "evolved",
+  "w": 0.4735387766691894,
+  "setpoint": 0.7214285714285715,
+  "round": 2,
+  "fitness": 107.16078680444124,
+  "per_mission": [
+   24.19,
+   27.74,
+   27.55,
+   27.68
+  ],
+  "final_strength_min": 0.7653714847364974,
+  "final_strength_mean": 0.9341102161883682,
+  "wear": 27426.72732889048,
+  "falls": 0,
+  "frozen_frac": 0.30441666666666667
+ },
+ {
+  "id": 1,
+  "arm": "evolved",
+  "w": 0.03167639217533158,
+  "setpoint": 0.5428571428571428,
+  "round": 2,
+  "fitness": 143.11593504381798,
+  "per_mission": [
+   31.72,
+   37.27,
+   37.29,
+   36.84
+  ],
+  "final_strength_min": 0.6028529905449961,
+  "final_strength_mean": 0.8902918520583727,
+  "wear": 49065.79413129792,
+  "falls": 0,
+  "frozen_frac": 0.006333333333333333
+ },
+ {
+  "id": 2,
+  "arm": "evolved",
+  "w": 0.11918961070527787,
+  "setpoint": 0.7071428571428571,
+  "round": 2,
+  "fitness": 147.26308787955566,
+  "per_mission": [
+   18.78,
+   42.81,
+   43.27,
+   42.41
+  ],
+  "final_strength_min": 0.6622223125169376,
+  "final_strength_mean": 0.8683817733150265,
+  "wear": 57386.940374577534,
+  "falls": 0,
+  "frozen_frac": 0.12708333333333333
+ },
+ {
+  "id": 3,
+  "arm": "evolved",
+  "w": 0.07945974047018524,
+  "setpoint": 0.7571428571428571,
+  "round": 2,
+  "fitness": 170.49965000540706,
+  "per_mission": [
+   39.47,
+   43.6,
+   43.62,
+   43.81
+  ],
+  "final_strength_min": 0.6667565860377151,
+  "final_strength_mean": 0.8530425609650413,
+  "wear": 63777.23835653448,
+  "falls": 0,
+  "frozen_frac": 0.0008333333333333334
+ },
+ {
+  "id": 4,
+  "arm": "evolved",
+  "w": 0.12584989506418265,
+  "setpoint": 0.6285714285714286,
+  "round": 2,
+  "fitness": 153.26379273201889,
+  "per_mission": [
+   10.62,
+   47.45,
+   47.27,
+   47.93
+  ],
+  "final_strength_min": 0.6726725830205471,
+  "final_strength_mean": 0.9187136436934389,
+  "wear": 34521.336351276856,
+  "falls": 0,
+  "frozen_frac": 0.18833333333333332
+ },
+ {
+  "id": 5,
+  "arm": "evolved",
+  "w": 0.7103081650037841,
+  "setpoint": 0.7714285714285716,
+  "round": 2,
+  "fitness": 106.63859563137524,
+  "per_mission": [
+   24.41,
+   27.43,
+   27.49,
+   27.31
+  ],
+  "final_strength_min": 0.7142888656191249,
+  "final_strength_mean": 0.9183297754650389,
+  "wear": 34732.343252972976,
+  "falls": 0,
+  "frozen_frac": 0.28325
+ },
+ {
+  "id": 6,
+  "arm": "evolved",
+  "w": 0.3156925177794596,
+  "setpoint": 0.6714285714285715,
+  "round": 2,
+  "fitness": 100.08548059254211,
+  "per_mission": [
+   22.69,
+   26.05,
+   25.72,
+   25.63
+  ],
+  "final_strength_min": 0.7719221767991787,
+  "final_strength_mean": 0.9431560470622856,
+  "wear": 23888.940961821478,
+  "falls": 0,
+  "frozen_frac": 0.47008333333333335
+ },
+ {
+  "id": 7,
+  "arm": "evolved",
+  "w": 0.04751458826299737,
+  "setpoint": 0.5928571428571429,
+  "round": 2,
+  "fitness": 127.38418984114062,
+  "per_mission": [
+   28.0,
+   33.31,
+   33.02,
+   33.06
+  ],
+  "final_strength_min": 0.6535653263896366,
+  "final_strength_mean": 0.898998636928077,
+  "wear": 44630.61083402615,
+  "falls": 0,
+  "frozen_frac": 0.09033333333333333
+ },
+ {
+  "id": 8,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 2,
+  "fitness": 184.84721537920234,
+  "per_mission": [
+   41.4,
+   48.16,
+   47.68,
+   47.62
+  ],
+  "final_strength_min": 0.6478038947598508,
+  "final_strength_mean": 0.8584816035052795,
+  "wear": 63879.59138639168,
+  "falls": 0,
+  "frozen_frac": 0.0009166666666666666
+ },
+ {
+  "id": 9,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 2,
+  "fitness": 153.94450171906607,
+  "per_mission": [
+   34.82,
+   39.84,
+   39.63,
+   39.65
+  ],
+  "final_strength_min": 0.6596783105209071,
+  "final_strength_mean": 0.8596814838611415,
+  "wear": 62824.54809129852,
+  "falls": 0,
+  "frozen_frac": 0.0030833333333333333
+ },
+ {
+  "id": 10,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 2,
+  "fitness": 119.11685382861273,
+  "per_mission": [
+   26.97,
+   30.75,
+   31.02,
+   30.38
+  ],
+  "final_strength_min": 0.6682224028358099,
+  "final_strength_mean": 0.8855449388241975,
+  "wear": 51326.65759403109,
+  "falls": 0,
+  "frozen_frac": 0.25375
+ },
+ {
+  "id": 11,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 2,
+  "fitness": 137.08234017395768,
+  "per_mission": [
+   29.85,
+   35.63,
+   35.59,
+   36.01
+  ],
+  "final_strength_min": 0.6306407434569107,
+  "final_strength_mean": 0.8779145733207621,
+  "wear": 54790.77937064695,
+  "falls": 0,
+  "frozen_frac": 0.07966666666666666
+ },
+ {
+  "id": 12,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 2,
+  "fitness": 155.6381466202531,
+  "per_mission": [
+   37.47,
+   39.95,
+   38.78,
+   39.44
+  ],
+  "final_strength_min": 0.6234179444244413,
+  "final_strength_mean": 0.8581517253141763,
+  "wear": 61991.734114260165,
+  "falls": 0,
+  "frozen_frac": 0.006333333333333333
+ },
+ {
+  "id": 13,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 2,
+  "fitness": 183.13635264945833,
+  "per_mission": [
+   40.99,
+   47.11,
+   47.63,
+   47.41
+  ],
+  "final_strength_min": 0.6472848291544893,
+  "final_strength_mean": 0.8523208066541949,
+  "wear": 66594.60266966613,
+  "falls": 0,
+  "frozen_frac": 0.001
+ },
+ {
+  "id": 14,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 2,
+  "fitness": 170.50660985736926,
+  "per_mission": [
+   37.67,
+   44.08,
+   44.31,
+   44.46
+  ],
+  "final_strength_min": 0.6627299687120014,
+  "final_strength_mean": 0.8534107922033137,
+  "wear": 65390.82189028433,
+  "falls": 0,
+  "frozen_frac": 0.0028333333333333335
+ },
+ {
+  "id": 15,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 2,
+  "fitness": 154.27604123791548,
+  "per_mission": [
+   33.84,
+   40.15,
+   40.2,
+   40.08
+  ],
+  "final_strength_min": 0.6597644040603631,
+  "final_strength_mean": 0.889912223669579,
+  "wear": 48479.00494197421,
+  "falls": 0,
+  "frozen_frac": 0.00125
+ },
+ {
+  "id": 0,
+  "arm": "evolved",
+  "w": 0.4735387766691894,
+  "setpoint": 0.7214285714285715,
+  "round": 3,
+  "fitness": 133.55764206130527,
+  "per_mission": [
+   29.58,
+   34.63,
+   34.77,
+   34.58
+  ],
+  "final_strength_min": 0.723400352978636,
+  "final_strength_mean": 0.9042443020762841,
+  "wear": 41204.587815824394,
+  "falls": 0,
+  "frozen_frac": 0.044083333333333335
+ },
+ {
+  "id": 1,
+  "arm": "evolved",
+  "w": 0.03167639217533158,
+  "setpoint": 0.5428571428571428,
+  "round": 3,
+  "fitness": 143.57673022234044,
+  "per_mission": [
+   18.57,
+   41.56,
+   41.39,
+   42.05
+  ],
+  "final_strength_min": 0.654524601258513,
+  "final_strength_mean": 0.890345886290654,
+  "wear": 48722.97309082565,
+  "falls": 1,
+  "frozen_frac": 0.005349636988918609
+ },
+ {
+  "id": 2,
+  "arm": "evolved",
+  "w": 0.11918961070527787,
+  "setpoint": 0.7071428571428571,
+  "round": 3,
+  "fitness": 201.65197380204205,
+  "per_mission": [
+   46.74,
+   51.76,
+   51.74,
+   51.41
+  ],
+  "final_strength_min": 0.6775729466165228,
+  "final_strength_mean": 0.8767956026135179,
+  "wear": 52960.167385052046,
+  "falls": 0,
+  "frozen_frac": 0.0008333333333333334
+ },
+ {
+  "id": 3,
+  "arm": "evolved",
+  "w": 0.07945974047018524,
+  "setpoint": 0.7571428571428571,
+  "round": 3,
+  "fitness": 194.39819379938808,
+  "per_mission": [
+   43.89,
+   50.3,
+   50.06,
+   50.15
+  ],
+  "final_strength_min": 0.6391208782275399,
+  "final_strength_mean": 0.8322613711813607,
+  "wear": 74483.86717779099,
+  "falls": 0,
+  "frozen_frac": 0.00075
+ },
+ {
+  "id": 4,
+  "arm": "evolved",
+  "w": 0.12584989506418265,
+  "setpoint": 0.6285714285714286,
+  "round": 3,
+  "fitness": 193.16758556127328,
+  "per_mission": [
+   44.61,
+   49.54,
+   49.17,
+   49.84
+  ],
+  "final_strength_min": 0.6490733591896664,
+  "final_strength_mean": 0.8677308499602271,
+  "wear": 58247.05610893562,
+  "falls": 0,
+  "frozen_frac": 0.003416666666666667
+ },
+ {
+  "id": 5,
+  "arm": "evolved",
+  "w": 0.053238026115024116,
+  "setpoint": 0.7071428571428571,
+  "round": 3,
+  "fitness": 174.93381147947525,
+  "per_mission": [
+   41.75,
+   44.66,
+   44.04,
+   44.48
+  ],
+  "final_strength_min": 0.6575790334225264,
+  "final_strength_mean": 0.8506023858797311,
+  "wear": 65723.57354813101,
+  "falls": 0,
+  "frozen_frac": 0.001
+ },
+ {
+  "id": 6,
+  "arm": "evolved",
+  "w": 0.08431942969300238,
+  "setpoint": 0.6785714285714286,
+  "round": 3,
+  "fitness": 199.85039798694172,
+  "per_mission": [
+   44.75,
+   51.67,
+   51.64,
+   51.79
+  ],
+  "final_strength_min": 0.6519479880849148,
+  "final_strength_mean": 0.8825142468519399,
+  "wear": 50891.804335279994,
+  "falls": 0,
+  "frozen_frac": 0.0033333333333333335
+ },
+ {
+  "id": 7,
+  "arm": "evolved",
+  "w": 0.04751458826299737,
+  "setpoint": 0.5928571428571429,
+  "round": 3,
+  "fitness": 170.30929855787747,
+  "per_mission": [
+   36.44,
+   44.97,
+   44.74,
+   44.16
+  ],
+  "final_strength_min": 0.6253374963958752,
+  "final_strength_mean": 0.8740833312557014,
+  "wear": 56700.510370567434,
+  "falls": 0,
+  "frozen_frac": 0.00275
+ },
+ {
+  "id": 8,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 3,
+  "fitness": 181.95556284606187,
+  "per_mission": [
+   42.08,
+   46.71,
+   46.71,
+   46.46
+  ],
+  "final_strength_min": 0.6619770135728383,
+  "final_strength_mean": 0.8631822859710225,
+  "wear": 61042.01203820375,
+  "falls": 0,
+  "frozen_frac": 0.0005833333333333334
+ },
+ {
+  "id": 9,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 3,
+  "fitness": 185.48477495651903,
+  "per_mission": [
+   42.5,
+   47.79,
+   47.55,
+   47.64
+  ],
+  "final_strength_min": 0.6220710752207166,
+  "final_strength_mean": 0.857789881256415,
+  "wear": 64136.08513318554,
+  "falls": 0,
+  "frozen_frac": 0.0005833333333333334
+ },
+ {
+  "id": 10,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 3,
+  "fitness": 190.40049466928147,
+  "per_mission": [
+   43.12,
+   49.21,
+   49.07,
+   49.0
+  ],
+  "final_strength_min": 0.6342528168446996,
+  "final_strength_mean": 0.8520344809824136,
+  "wear": 66731.69961466847,
+  "falls": 0,
+  "frozen_frac": 0.0006666666666666666
+ },
+ {
+  "id": 11,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 3,
+  "fitness": 190.5244652251835,
+  "per_mission": [
+   44.39,
+   48.9,
+   48.72,
+   48.52
+  ],
+  "final_strength_min": 0.6360265158421754,
+  "final_strength_mean": 0.8528543231955735,
+  "wear": 66830.72517476983,
+  "falls": 0,
+  "frozen_frac": 0.0005833333333333334
+ },
+ {
+  "id": 12,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 3,
+  "fitness": 186.59175357209833,
+  "per_mission": [
+   42.79,
+   48.39,
+   47.35,
+   48.06
+  ],
+  "final_strength_min": 0.657663963044648,
+  "final_strength_mean": 0.8405885004617556,
+  "wear": 70403.07898132977,
+  "falls": 0,
+  "frozen_frac": 0.003416666666666667
+ },
+ {
+  "id": 13,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 3,
+  "fitness": 194.73032047386414,
+  "per_mission": [
+   43.43,
+   50.38,
+   50.46,
+   50.45
+  ],
+  "final_strength_min": 0.637711353021738,
+  "final_strength_mean": 0.8519437107594635,
+  "wear": 67384.26195895931,
+  "falls": 0,
+  "frozen_frac": 0.00075
+ },
+ {
+  "id": 14,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 3,
+  "fitness": 188.04871363258985,
+  "per_mission": [
+   43.25,
+   48.3,
+   48.22,
+   48.28
+  ],
+  "final_strength_min": 0.6512726601731008,
+  "final_strength_mean": 0.8587013910379454,
+  "wear": 62224.85456678755,
+  "falls": 0,
+  "frozen_frac": 0.0005
+ },
+ {
+  "id": 15,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 3,
+  "fitness": 172.64701489212183,
+  "per_mission": [
+   40.48,
+   43.6,
+   44.25,
+   44.31
+  ],
+  "final_strength_min": 0.649156386392536,
+  "final_strength_mean": 0.8758607137992181,
+  "wear": 55070.76095814773,
+  "falls": 0,
+  "frozen_frac": 0.00125
+ },
+ {
+  "id": 0,
+  "arm": "evolved",
+  "w": 0.0564940178943116,
+  "setpoint": 0.7285714285714286,
+  "round": 4,
+  "fitness": 193.37712086917773,
+  "per_mission": [
+   47.59,
+   47.53,
+   46.75,
+   51.51
+  ],
+  "final_strength_min": 0.6354892296093055,
+  "final_strength_mean": 0.8278982232105964,
+  "wear": 76687.40099234685,
+  "falls": 0,
+  "frozen_frac": 0.0030833333333333333
+ },
+ {
+  "id": 1,
+  "arm": "evolved",
+  "w": 0.17878441605791678,
+  "setpoint": 0.7571428571428571,
+  "round": 4,
+  "fitness": 210.32045673009594,
+  "per_mission": [
+   51.87,
+   51.46,
+   51.09,
+   55.9
+  ],
+  "final_strength_min": 0.6499177064282029,
+  "final_strength_mean": 0.834494512133917,
+  "wear": 72612.02486230235,
+  "falls": 0,
+  "frozen_frac": 0.0006666666666666666
+ },
+ {
+  "id": 2,
+  "arm": "evolved",
+  "w": 0.11918961070527787,
+  "setpoint": 0.7071428571428571,
+  "round": 4,
+  "fitness": 202.7052016703867,
+  "per_mission": [
+   50.21,
+   49.96,
+   49.82,
+   52.72
+  ],
+  "final_strength_min": 0.6706756388008557,
+  "final_strength_mean": 0.8449025553035708,
+  "wear": 67065.21100592418,
+  "falls": 0,
+  "frozen_frac": 0.0006666666666666666
+ },
+ {
+  "id": 3,
+  "arm": "evolved",
+  "w": 0.07945974047018524,
+  "setpoint": 0.7571428571428571,
+  "round": 4,
+  "fitness": 183.63519721678404,
+  "per_mission": [
+   45.49,
+   45.18,
+   44.65,
+   48.31
+  ],
+  "final_strength_min": 0.6191310073713234,
+  "final_strength_mean": 0.7653458788992435,
+  "wear": 107267.19920110202,
+  "falls": 0,
+  "frozen_frac": 0.0006666666666666666
+ },
+ {
+  "id": 4,
+  "arm": "evolved",
+  "w": 0.12584989506418265,
+  "setpoint": 0.6285714285714286,
+  "round": 4,
+  "fitness": 189.54512532680687,
+  "per_mission": [
+   46.28,
+   46.72,
+   46.14,
+   50.41
+  ],
+  "final_strength_min": 0.6725465643493292,
+  "final_strength_mean": 0.8411624971914166,
+  "wear": 70352.59098873992,
+  "falls": 0,
+  "frozen_frac": 0.003416666666666667
+ },
+ {
+  "id": 5,
+  "arm": "evolved",
+  "w": 0.053238026115024116,
+  "setpoint": 0.7071428571428571,
+  "round": 4,
+  "fitness": 174.2122594234265,
+  "per_mission": [
+   43.34,
+   42.59,
+   42.18,
+   46.1
+  ],
+  "final_strength_min": 0.620554252734398,
+  "final_strength_mean": 0.7953732873740504,
+  "wear": 93140.42868802644,
+  "falls": 0,
+  "frozen_frac": 0.0005833333333333334
+ },
+ {
+  "id": 6,
+  "arm": "evolved",
+  "w": 0.08431942969300238,
+  "setpoint": 0.6785714285714286,
+  "round": 4,
+  "fitness": 176.730557519582,
+  "per_mission": [
+   47.39,
+   31.05,
+   47.17,
+   51.11
+  ],
+  "final_strength_min": 0.6495004600487617,
+  "final_strength_mean": 0.8498851855616137,
+  "wear": 65779.98405262371,
+  "falls": 1,
+  "frozen_frac": 0.005460502366217692
+ },
+ {
+  "id": 7,
+  "arm": "evolved",
+  "w": 0.04751458826299737,
+  "setpoint": 0.5928571428571429,
+  "round": 4,
+  "fitness": 168.94233161339264,
+  "per_mission": [
+   41.38,
+   41.67,
+   40.78,
+   45.11
+  ],
+  "final_strength_min": 0.6178883206362314,
+  "final_strength_mean": 0.8398237050849456,
+  "wear": 72449.28944183409,
+  "falls": 0,
+  "frozen_frac": 0.003
+ },
+ {
+  "id": 8,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 4,
+  "fitness": 182.65174632314785,
+  "per_mission": [
+   45.37,
+   44.75,
+   44.46,
+   48.08
+  ],
+  "final_strength_min": 0.6280492736293276,
+  "final_strength_mean": 0.8281064137000379,
+  "wear": 78839.51493815152,
+  "falls": 0,
+  "frozen_frac": 0.0005833333333333334
+ },
+ {
+  "id": 9,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 4,
+  "fitness": 179.54995996052355,
+  "per_mission": [
+   44.36,
+   44.03,
+   43.65,
+   47.51
+  ],
+  "final_strength_min": 0.6216249212819417,
+  "final_strength_mean": 0.8307689053037685,
+  "wear": 77377.16565327384,
+  "falls": 0,
+  "frozen_frac": 0.0005833333333333334
+ },
+ {
+  "id": 10,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 4,
+  "fitness": 179.62954064105267,
+  "per_mission": [
+   44.44,
+   43.9,
+   43.31,
+   47.98
+  ],
+  "final_strength_min": 0.6205099850701667,
+  "final_strength_mean": 0.8371026179358535,
+  "wear": 74374.5558788693,
+  "falls": 0,
+  "frozen_frac": 0.0005833333333333334
+ },
+ {
+  "id": 11,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 4,
+  "fitness": 185.77250921245675,
+  "per_mission": [
+   45.65,
+   45.73,
+   45.37,
+   49.03
+  ],
+  "final_strength_min": 0.614166012662819,
+  "final_strength_mean": 0.8293470604835312,
+  "wear": 77872.5857590844,
+  "falls": 0,
+  "frozen_frac": 0.0006666666666666666
+ },
+ {
+  "id": 12,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 4,
+  "fitness": 184.33118065552767,
+  "per_mission": [
+   45.63,
+   45.31,
+   45.18,
+   48.21
+  ],
+  "final_strength_min": 0.6437234165759146,
+  "final_strength_mean": 0.8088376972937185,
+  "wear": 85670.72051493888,
+  "falls": 0,
+  "frozen_frac": 0.0033333333333333335
+ },
+ {
+  "id": 13,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 4,
+  "fitness": 178.8680938533057,
+  "per_mission": [
+   44.36,
+   43.91,
+   43.33,
+   47.27
+  ],
+  "final_strength_min": 0.6219718118913166,
+  "final_strength_mean": 0.8340058270537752,
+  "wear": 76171.03941632129,
+  "falls": 0,
+  "frozen_frac": 0.00075
+ },
+ {
+  "id": 14,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 4,
+  "fitness": 183.2729913382513,
+  "per_mission": [
+   44.9,
+   44.67,
+   44.45,
+   49.26
+  ],
+  "final_strength_min": 0.6220720342817952,
+  "final_strength_mean": 0.838154926622818,
+  "wear": 72489.34897827586,
+  "falls": 0,
+  "frozen_frac": 0.0004166666666666667
+ },
+ {
+  "id": 15,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 4,
+  "fitness": 192.87968215777101,
+  "per_mission": [
+   47.88,
+   47.8,
+   47.59,
+   49.6
+  ],
+  "final_strength_min": 0.6231832951060188,
+  "final_strength_mean": 0.8305354328080091,
+  "wear": 76791.2521104275,
+  "falls": 0,
+  "frozen_frac": 0.0005833333333333334
+ },
+ {
+  "id": 0,
+  "arm": "evolved",
+  "w": 0.0564940178943116,
+  "setpoint": 0.7285714285714286,
+  "round": 5,
+  "fitness": 198.32355292770612,
+  "per_mission": [
+   48.5,
+   48.54,
+   53.02,
+   48.26
+  ],
+  "final_strength_min": 0.6569068743590437,
+  "final_strength_mean": 0.8396731287649496,
+  "wear": 70438.3061262937,
+  "falls": 0,
+  "frozen_frac": 0.0033333333333333335
+ },
+ {
+  "id": 1,
+  "arm": "evolved",
+  "w": 0.17878441605791678,
+  "setpoint": 0.7571428571428571,
+  "round": 5,
+  "fitness": 222.9306333762752,
+  "per_mission": [
+   53.64,
+   54.14,
+   62.04,
+   53.11
+  ],
+  "final_strength_min": 0.660840509696256,
+  "final_strength_mean": 0.8512141508884451,
+  "wear": 65395.725429416874,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 2,
+  "arm": "evolved",
+  "w": 0.11918961070527787,
+  "setpoint": 0.7071428571428571,
+  "round": 5,
+  "fitness": 222.67324897108335,
+  "per_mission": [
+   54.47,
+   54.33,
+   59.88,
+   53.99
+  ],
+  "final_strength_min": 0.7056922276754171,
+  "final_strength_mean": 0.853411889765416,
+  "wear": 63289.629911916054,
+  "falls": 0,
+  "frozen_frac": 0.0004166666666666667
+ },
+ {
+  "id": 3,
+  "arm": "evolved",
+  "w": 0.07945974047018524,
+  "setpoint": 0.7571428571428571,
+  "round": 5,
+  "fitness": 177.88751359582056,
+  "per_mission": [
+   44.3,
+   44.15,
+   45.55,
+   43.88
+  ],
+  "final_strength_min": 0.6409759985422859,
+  "final_strength_mean": 0.8148815190951212,
+  "wear": 81956.99355743734,
+  "falls": 0,
+  "frozen_frac": 0.0004166666666666667
+ },
+ {
+  "id": 4,
+  "arm": "evolved",
+  "w": 0.12584989506418265,
+  "setpoint": 0.6285714285714286,
+  "round": 5,
+  "fitness": 199.37906528180534,
+  "per_mission": [
+   49.05,
+   49.16,
+   52.96,
+   48.21
+  ],
+  "final_strength_min": 0.6567878400276153,
+  "final_strength_mean": 0.8343018612498486,
+  "wear": 74079.07383508366,
+  "falls": 0,
+  "frozen_frac": 0.0026666666666666666
+ },
+ {
+  "id": 5,
+  "arm": "evolved",
+  "w": 0.26817662408687515,
+  "setpoint": 0.8071428571428572,
+  "round": 5,
+  "fitness": 221.77136128340464,
+  "per_mission": [
+   53.4,
+   54.14,
+   60.45,
+   53.79
+  ],
+  "final_strength_min": 0.680827290042011,
+  "final_strength_mean": 0.8369185223124109,
+  "wear": 71695.31550242775,
+  "falls": 0,
+  "frozen_frac": 0.0004166666666666667
+ },
+ {
+  "id": 6,
+  "arm": "evolved",
+  "w": 0.08431942969300238,
+  "setpoint": 0.6785714285714286,
+  "round": 5,
+  "fitness": 198.0040169433688,
+  "per_mission": [
+   48.57,
+   48.07,
+   53.42,
+   47.94
+  ],
+  "final_strength_min": 0.634463325016393,
+  "final_strength_mean": 0.8444012687086907,
+  "wear": 68967.66323733999,
+  "falls": 0,
+  "frozen_frac": 0.0028333333333333335
+ },
+ {
+  "id": 7,
+  "arm": "evolved",
+  "w": 0.07985703917253617,
+  "setpoint": 0.7571428571428571,
+  "round": 5,
+  "fitness": 224.47729122579113,
+  "per_mission": [
+   55.0,
+   55.05,
+   59.32,
+   55.11
+  ],
+  "final_strength_min": 0.6670849305081674,
+  "final_strength_mean": 0.8544043970012525,
+  "wear": 63260.42639413533,
+  "falls": 0,
+  "frozen_frac": 0.0008333333333333334
+ },
+ {
+  "id": 8,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 5,
+  "fitness": 185.86713919970185,
+  "per_mission": [
+   46.18,
+   45.5,
+   49.62,
+   44.56
+  ],
+  "final_strength_min": 0.6269114285230689,
+  "final_strength_mean": 0.8329390710009451,
+  "wear": 75775.76074609213,
+  "falls": 0,
+  "frozen_frac": 0.0005
+ },
+ {
+  "id": 9,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 5,
+  "fitness": 194.80014109423044,
+  "per_mission": [
+   48.21,
+   48.05,
+   50.56,
+   47.98
+  ],
+  "final_strength_min": 0.6260174316999806,
+  "final_strength_mean": 0.8346403989526202,
+  "wear": 74819.15534364848,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 10,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 5,
+  "fitness": 188.94642218104238,
+  "per_mission": [
+   46.25,
+   45.99,
+   51.29,
+   45.42
+  ],
+  "final_strength_min": 0.6310266908223229,
+  "final_strength_mean": 0.837175719243597,
+  "wear": 73782.00652051833,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 11,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 5,
+  "fitness": 193.07391297834312,
+  "per_mission": [
+   47.72,
+   47.3,
+   51.39,
+   46.67
+  ],
+  "final_strength_min": 0.6213765939405493,
+  "final_strength_mean": 0.8365439359094569,
+  "wear": 74122.82111757655,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 12,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 5,
+  "fitness": 188.91935963375977,
+  "per_mission": [
+   46.33,
+   45.96,
+   51.57,
+   45.05
+  ],
+  "final_strength_min": 0.6388863028348734,
+  "final_strength_mean": 0.8075206772098055,
+  "wear": 85761.75368154957,
+  "falls": 0,
+  "frozen_frac": 0.0026666666666666666
+ },
+ {
+  "id": 13,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 5,
+  "fitness": 186.43899289346697,
+  "per_mission": [
+   45.74,
+   45.09,
+   51.0,
+   44.61
+  ],
+  "final_strength_min": 0.6325448271021803,
+  "final_strength_mean": 0.8322402264762645,
+  "wear": 76257.05702744685,
+  "falls": 0,
+  "frozen_frac": 0.0004166666666666667
+ },
+ {
+  "id": 14,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 5,
+  "fitness": 196.99251514349587,
+  "per_mission": [
+   48.31,
+   48.13,
+   52.63,
+   47.93
+  ],
+  "final_strength_min": 0.6402204064740199,
+  "final_strength_mean": 0.8572783351539669,
+  "wear": 62870.89729526827,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 15,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 5,
+  "fitness": 195.80267687372952,
+  "per_mission": [
+   48.58,
+   48.13,
+   51.16,
+   47.94
+  ],
+  "final_strength_min": 0.6216292504756441,
+  "final_strength_mean": 0.8321407653272653,
+  "wear": 76085.11906833528,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 0,
+  "arm": "evolved",
+  "w": 0.0564940178943116,
+  "setpoint": 0.7285714285714286,
+  "round": 6,
+  "fitness": 207.6488323388558,
+  "per_mission": [
+   51.71,
+   52.05,
+   51.81,
+   52.08
+  ],
+  "final_strength_min": 0.6724831243753927,
+  "final_strength_mean": 0.8634484081538368,
+  "wear": 59462.21711096705,
+  "falls": 0,
+  "frozen_frac": 0.0031666666666666666
+ },
+ {
+  "id": 1,
+  "arm": "evolved",
+  "w": 0.17878441605791678,
+  "setpoint": 0.7571428571428571,
+  "round": 6,
+  "fitness": 231.53750498541723,
+  "per_mission": [
+   57.74,
+   58.03,
+   58.18,
+   57.59
+  ],
+  "final_strength_min": 0.7015255151321531,
+  "final_strength_mean": 0.8669287926427934,
+  "wear": 58081.4874265039,
+  "falls": 0,
+  "frozen_frac": 0.0005
+ },
+ {
+  "id": 2,
+  "arm": "evolved",
+  "w": 0.11918961070527787,
+  "setpoint": 0.7071428571428571,
+  "round": 6,
+  "fitness": 231.98347377107046,
+  "per_mission": [
+   57.99,
+   57.92,
+   58.05,
+   58.03
+  ],
+  "final_strength_min": 0.7095212657685165,
+  "final_strength_mean": 0.8712740428453706,
+  "wear": 55673.0380008056,
+  "falls": 0,
+  "frozen_frac": 0.0005833333333333334
+ },
+ {
+  "id": 3,
+  "arm": "evolved",
+  "w": 0.26817662408687515,
+  "setpoint": 0.7071428571428571,
+  "round": 6,
+  "fitness": 228.74885202891733,
+  "per_mission": [
+   57.16,
+   57.11,
+   57.19,
+   57.29
+  ],
+  "final_strength_min": 0.7134248511932949,
+  "final_strength_mean": 0.8767877065475159,
+  "wear": 52628.11395434746,
+  "falls": 0,
+  "frozen_frac": 0.0005
+ },
+ {
+  "id": 4,
+  "arm": "evolved",
+  "w": 0.12584989506418265,
+  "setpoint": 0.6285714285714286,
+  "round": 6,
+  "fitness": 198.79960888140238,
+  "per_mission": [
+   49.58,
+   49.86,
+   49.93,
+   49.43
+  ],
+  "final_strength_min": 0.7008013836778876,
+  "final_strength_mean": 0.8766136809646747,
+  "wear": 53604.5402855913,
+  "falls": 0,
+  "frozen_frac": 0.0026666666666666666
+ },
+ {
+  "id": 5,
+  "arm": "evolved",
+  "w": 0.26817662408687515,
+  "setpoint": 0.8071428571428572,
+  "round": 6,
+  "fitness": 238.12835661408093,
+  "per_mission": [
+   59.4,
+   59.72,
+   59.49,
+   59.52
+  ],
+  "final_strength_min": 0.6683011285775871,
+  "final_strength_mean": 0.8232450348068426,
+  "wear": 78056.05554071476,
+  "falls": 0,
+  "frozen_frac": 0.0005833333333333334
+ },
+ {
+  "id": 6,
+  "arm": "evolved",
+  "w": 0.11978555875880426,
+  "setpoint": 0.8071428571428572,
+  "round": 6,
+  "fitness": 226.66318608940333,
+  "per_mission": [
+   56.58,
+   56.56,
+   56.89,
+   56.64
+  ],
+  "final_strength_min": 0.6529217469459149,
+  "final_strength_mean": 0.8642928907712434,
+  "wear": 59146.12037352061,
+  "falls": 0,
+  "frozen_frac": 0.0006666666666666666
+ },
+ {
+  "id": 7,
+  "arm": "evolved",
+  "w": 0.07985703917253617,
+  "setpoint": 0.7571428571428571,
+  "round": 6,
+  "fitness": 232.71813754676594,
+  "per_mission": [
+   58.08,
+   58.19,
+   58.32,
+   58.13
+  ],
+  "final_strength_min": 0.6922616255253233,
+  "final_strength_mean": 0.8621745565857722,
+  "wear": 60196.40772136914,
+  "falls": 0,
+  "frozen_frac": 0.0006666666666666666
+ },
+ {
+  "id": 8,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 6,
+  "fitness": 198.5499185362601,
+  "per_mission": [
+   49.75,
+   49.93,
+   49.55,
+   49.32
+  ],
+  "final_strength_min": 0.6213855828133998,
+  "final_strength_mean": 0.8522878110759962,
+  "wear": 66602.51057411697,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 9,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 6,
+  "fitness": 201.760121181998,
+  "per_mission": [
+   50.83,
+   50.77,
+   50.3,
+   49.87
+  ],
+  "final_strength_min": 0.6159728705625949,
+  "final_strength_mean": 0.8484661330044582,
+  "wear": 68532.77595528403,
+  "falls": 0,
+  "frozen_frac": 0.0005
+ },
+ {
+  "id": 10,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 6,
+  "fitness": 200.62149212595773,
+  "per_mission": [
+   50.52,
+   50.46,
+   49.96,
+   49.68
+  ],
+  "final_strength_min": 0.6263324935908443,
+  "final_strength_mean": 0.8437006876729729,
+  "wear": 71098.63357782406,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 11,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 6,
+  "fitness": 199.19642537881361,
+  "per_mission": [
+   49.71,
+   49.9,
+   49.7,
+   49.89
+  ],
+  "final_strength_min": 0.6126953202253832,
+  "final_strength_mean": 0.8495771181798024,
+  "wear": 67782.6760382705,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 12,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 6,
+  "fitness": 201.129170507599,
+  "per_mission": [
+   50.34,
+   50.43,
+   50.3,
+   50.06
+  ],
+  "final_strength_min": 0.6590924176993219,
+  "final_strength_mean": 0.833642166166944,
+  "wear": 73447.98028485205,
+  "falls": 0,
+  "frozen_frac": 0.0025
+ },
+ {
+  "id": 13,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 6,
+  "fitness": 211.7013873432794,
+  "per_mission": [
+   53.06,
+   52.99,
+   52.89,
+   52.77
+  ],
+  "final_strength_min": 0.6354184891093929,
+  "final_strength_mean": 0.850429193706438,
+  "wear": 65591.7462010627,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 14,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 6,
+  "fitness": 214.35311819135177,
+  "per_mission": [
+   53.75,
+   53.58,
+   53.57,
+   53.46
+  ],
+  "final_strength_min": 0.6511372575556438,
+  "final_strength_mean": 0.8758804582187713,
+  "wear": 54364.57613079706,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 15,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 6,
+  "fitness": 203.4246998292336,
+  "per_mission": [
+   51.12,
+   50.91,
+   50.72,
+   50.67
+  ],
+  "final_strength_min": 0.6224195835885573,
+  "final_strength_mean": 0.8434038010429914,
+  "wear": 70656.16536557698,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 0,
+  "arm": "evolved",
+  "w": 0.17967833813820636,
+  "setpoint": 0.7571428571428571,
+  "round": 7,
+  "fitness": 218.01135177002612,
+  "per_mission": [
+   53.76,
+   57.77,
+   53.4,
+   53.07
+  ],
+  "final_strength_min": 0.663181173249561,
+  "final_strength_mean": 0.8204815301843379,
+  "wear": 78986.72385011107,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 1,
+  "arm": "evolved",
+  "w": 0.17878441605791678,
+  "setpoint": 0.7571428571428571,
+  "round": 7,
+  "fitness": 217.33039760084014,
+  "per_mission": [
+   53.98,
+   56.13,
+   53.79,
+   53.42
+  ],
+  "final_strength_min": 0.6745729721487081,
+  "final_strength_mean": 0.8499655665555564,
+  "wear": 65635.26958474852,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 2,
+  "arm": "evolved",
+  "w": 0.11918961070527787,
+  "setpoint": 0.7071428571428571,
+  "round": 7,
+  "fitness": 228.60347082047252,
+  "per_mission": [
+   56.6,
+   59.09,
+   56.41,
+   56.5
+  ],
+  "final_strength_min": 0.6795607528566553,
+  "final_strength_mean": 0.85861509259268,
+  "wear": 61556.5287701241,
+  "falls": 0,
+  "frozen_frac": 8.333333333333333e-05
+ },
+ {
+  "id": 3,
+  "arm": "evolved",
+  "w": 0.26817662408687515,
+  "setpoint": 0.7071428571428571,
+  "round": 7,
+  "fitness": 227.93860108034798,
+  "per_mission": [
+   56.5,
+   58.7,
+   56.3,
+   56.44
+  ],
+  "final_strength_min": 0.6734856428987858,
+  "final_strength_mean": 0.8455885823072776,
+  "wear": 66849.99531178741,
+  "falls": 0,
+  "frozen_frac": 8.333333333333333e-05
+ },
+ {
+  "id": 4,
+  "arm": "evolved",
+  "w": 0.053504216245599236,
+  "setpoint": 0.7071428571428571,
+  "round": 7,
+  "fitness": 206.41358064742286,
+  "per_mission": [
+   55.22,
+   58.04,
+   54.48,
+   38.68
+  ],
+  "final_strength_min": 0.6714674875284693,
+  "final_strength_mean": 0.847502990978171,
+  "wear": 67842.35978508153,
+  "falls": 1,
+  "frozen_frac": 0.02993019197207679
+ },
+ {
+  "id": 5,
+  "arm": "evolved",
+  "w": 0.26817662408687515,
+  "setpoint": 0.8071428571428572,
+  "round": 7,
+  "fitness": 220.75127183985265,
+  "per_mission": [
+   54.75,
+   57.92,
+   54.16,
+   53.92
+  ],
+  "final_strength_min": 0.6673899278558378,
+  "final_strength_mean": 0.8219464825230838,
+  "wear": 78481.88111748276,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 6,
+  "arm": "evolved",
+  "w": 0.11978555875880426,
+  "setpoint": 0.8071428571428572,
+  "round": 7,
+  "fitness": 228.27505231600196,
+  "per_mission": [
+   56.76,
+   59.42,
+   56.25,
+   55.84
+  ],
+  "final_strength_min": 0.6581050763757407,
+  "final_strength_mean": 0.8415919876151464,
+  "wear": 70274.62783076828,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 7,
+  "arm": "evolved",
+  "w": 0.07985703917253617,
+  "setpoint": 0.7571428571428571,
+  "round": 7,
+  "fitness": 223.00096297396334,
+  "per_mission": [
+   55.36,
+   57.62,
+   54.88,
+   55.14
+  ],
+  "final_strength_min": 0.6383947261565222,
+  "final_strength_mean": 0.8404597796007253,
+  "wear": 71209.73451257515,
+  "falls": 0,
+  "frozen_frac": 0.0005
+ },
+ {
+  "id": 8,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 7,
+  "fitness": 204.4167712978592,
+  "per_mission": [
+   50.3,
+   53.9,
+   50.17,
+   50.05
+  ],
+  "final_strength_min": 0.6425779052204827,
+  "final_strength_mean": 0.8429118631413464,
+  "wear": 69346.55480544937,
+  "falls": 0,
+  "frozen_frac": 0.0
+ },
+ {
+  "id": 9,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 7,
+  "fitness": 195.0989156548389,
+  "per_mission": [
+   48.22,
+   51.52,
+   47.84,
+   47.52
+  ],
+  "final_strength_min": 0.6204784742864926,
+  "final_strength_mean": 0.820301522282548,
+  "wear": 81944.32120788508,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 10,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 7,
+  "fitness": 187.65282630974832,
+  "per_mission": [
+   46.25,
+   50.19,
+   45.73,
+   45.49
+  ],
+  "final_strength_min": 0.6262871436461834,
+  "final_strength_mean": 0.8243905043720892,
+  "wear": 79943.86462835537,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 11,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 7,
+  "fitness": 202.24396676420895,
+  "per_mission": [
+   49.94,
+   52.78,
+   49.8,
+   49.72
+  ],
+  "final_strength_min": 0.650778627481062,
+  "final_strength_mean": 0.8603660102180605,
+  "wear": 61914.41075783831,
+  "falls": 0,
+  "frozen_frac": 0.0
+ },
+ {
+  "id": 12,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 7,
+  "fitness": 183.61275679886512,
+  "per_mission": [
+   45.39,
+   49.34,
+   44.66,
+   44.22
+  ],
+  "final_strength_min": 0.6212386632795639,
+  "final_strength_mean": 0.8098933770980249,
+  "wear": 85860.8834344295,
+  "falls": 0,
+  "frozen_frac": 0.0023333333333333335
+ },
+ {
+  "id": 13,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 7,
+  "fitness": 204.97075589166684,
+  "per_mission": [
+   50.21,
+   54.8,
+   50.07,
+   49.9
+  ],
+  "final_strength_min": 0.6567303042822608,
+  "final_strength_mean": 0.8392722637280299,
+  "wear": 70679.9244520171,
+  "falls": 0,
+  "frozen_frac": 8.333333333333333e-05
+ },
+ {
+  "id": 14,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 7,
+  "fitness": 204.23259650531617,
+  "per_mission": [
+   50.15,
+   53.69,
+   50.25,
+   50.14
+  ],
+  "final_strength_min": 0.6403506909207717,
+  "final_strength_mean": 0.8581883002022752,
+  "wear": 62602.838716330065,
+  "falls": 0,
+  "frozen_frac": 0.0
+ },
+ {
+  "id": 15,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 7,
+  "fitness": 197.03015063175516,
+  "per_mission": [
+   49.05,
+   51.17,
+   48.34,
+   48.47
+  ],
+  "final_strength_min": 0.6153734076091212,
+  "final_strength_mean": 0.8274255289069864,
+  "wear": 77887.02484525755,
+  "falls": 0,
+  "frozen_frac": 0.0
+ },
+ {
+  "id": 0,
+  "arm": "evolved",
+  "w": 0.17967833813820636,
+  "setpoint": 0.7571428571428571,
+  "round": 8,
+  "fitness": 230.6657677005748,
+  "per_mission": [
+   54.88,
+   60.49,
+   60.84,
+   54.46
+  ],
+  "final_strength_min": 0.6440477285636061,
+  "final_strength_mean": 0.8278890625238281,
+  "wear": 76486.91080913681,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 1,
+  "arm": "evolved",
+  "w": 0.07985703917253617,
+  "setpoint": 0.657142857142857,
+  "round": 8,
+  "fitness": 232.9886562262995,
+  "per_mission": [
+   55.4,
+   61.5,
+   61.3,
+   54.79
+  ],
+  "final_strength_min": 0.7026690134465858,
+  "final_strength_mean": 0.8686653760345219,
+  "wear": 56625.174637558914,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 2,
+  "arm": "evolved",
+  "w": 0.11918961070527787,
+  "setpoint": 0.7071428571428571,
+  "round": 8,
+  "fitness": 230.03494915847727,
+  "per_mission": [
+   55.65,
+   59.7,
+   59.52,
+   55.16
+  ],
+  "final_strength_min": 0.7165801141197502,
+  "final_strength_mean": 0.8746024136509919,
+  "wear": 53830.3757030731,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 3,
+  "arm": "evolved",
+  "w": 0.26817662408687515,
+  "setpoint": 0.7071428571428571,
+  "round": 8,
+  "fitness": 228.68243489143168,
+  "per_mission": [
+   55.38,
+   58.78,
+   58.92,
+   55.6
+  ],
+  "final_strength_min": 0.7420825919548929,
+  "final_strength_mean": 0.8714469493466678,
+  "wear": 54714.53113927545,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 4,
+  "arm": "evolved",
+  "w": 0.17967833813820638,
+  "setpoint": 0.8571428571428572,
+  "round": 8,
+  "fitness": 220.1590194760068,
+  "per_mission": [
+   54.75,
+   55.92,
+   55.53,
+   53.96
+  ],
+  "final_strength_min": 0.6798524169632169,
+  "final_strength_mean": 0.8659546928977893,
+  "wear": 58668.41866483011,
+  "falls": 0,
+  "frozen_frac": 0.0004166666666666667
+ },
+ {
+  "id": 5,
+  "arm": "evolved",
+  "w": 0.26817662408687515,
+  "setpoint": 0.8071428571428572,
+  "round": 8,
+  "fitness": 231.80550392330363,
+  "per_mission": [
+   55.19,
+   60.88,
+   60.99,
+   54.74
+  ],
+  "final_strength_min": 0.6803269135110628,
+  "final_strength_mean": 0.8421772251938018,
+  "wear": 69263.43942361676,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 6,
+  "arm": "evolved",
+  "w": 0.11978555875880426,
+  "setpoint": 0.8071428571428572,
+  "round": 8,
+  "fitness": 233.35478460535404,
+  "per_mission": [
+   56.27,
+   60.38,
+   60.42,
+   56.28
+  ],
+  "final_strength_min": 0.6751927876807942,
+  "final_strength_mean": 0.8606360722317015,
+  "wear": 60955.43374554407,
+  "falls": 0,
+  "frozen_frac": 0.0004166666666666667
+ },
+ {
+  "id": 7,
+  "arm": "evolved",
+  "w": 0.07985703917253617,
+  "setpoint": 0.7571428571428571,
+  "round": 8,
+  "fitness": 235.57969483970402,
+  "per_mission": [
+   56.84,
+   61.12,
+   61.13,
+   56.49
+  ],
+  "final_strength_min": 0.6342574009875975,
+  "final_strength_mean": 0.8431137653806767,
+  "wear": 69864.44103695077,
+  "falls": 0,
+  "frozen_frac": 0.0005
+ },
+ {
+  "id": 8,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 8,
+  "fitness": 200.6470869932404,
+  "per_mission": [
+   48.04,
+   52.8,
+   52.36,
+   47.46
+  ],
+  "final_strength_min": 0.6271022784284057,
+  "final_strength_mean": 0.845104771128998,
+  "wear": 68561.7772725658,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 9,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 8,
+  "fitness": 192.99676277515238,
+  "per_mission": [
+   47.66,
+   49.02,
+   49.06,
+   47.24
+  ],
+  "final_strength_min": 0.6435108902937854,
+  "final_strength_mean": 0.8475446227733653,
+  "wear": 67917.94894555974,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 10,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 8,
+  "fitness": 209.6868000787706,
+  "per_mission": [
+   50.16,
+   55.1,
+   54.87,
+   49.56
+  ],
+  "final_strength_min": 0.6363643911354678,
+  "final_strength_mean": 0.8586864675702173,
+  "wear": 62484.70829047082,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 11,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 8,
+  "fitness": 203.84439749866118,
+  "per_mission": [
+   49.1,
+   53.11,
+   52.7,
+   48.93
+  ],
+  "final_strength_min": 0.6491776797621196,
+  "final_strength_mean": 0.8651744775925586,
+  "wear": 59380.85822755299,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 12,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 8,
+  "fitness": 203.05219965628493,
+  "per_mission": [
+   49.0,
+   52.59,
+   52.47,
+   49.0
+  ],
+  "final_strength_min": 0.6574636618975682,
+  "final_strength_mean": 0.846638932212671,
+  "wear": 67756.43969819957,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 13,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 8,
+  "fitness": 213.91558369240036,
+  "per_mission": [
+   50.67,
+   56.59,
+   56.57,
+   50.09
+  ],
+  "final_strength_min": 0.6507765611183428,
+  "final_strength_mean": 0.846803457009242,
+  "wear": 67531.953092718,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 14,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 8,
+  "fitness": 215.40877045085813,
+  "per_mission": [
+   50.73,
+   57.01,
+   57.0,
+   50.67
+  ],
+  "final_strength_min": 0.6460981747811478,
+  "final_strength_mean": 0.8622419743441511,
+  "wear": 60774.12346213928,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 15,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 8,
+  "fitness": 198.07187221700968,
+  "per_mission": [
+   48.32,
+   51.12,
+   50.91,
+   47.72
+  ],
+  "final_strength_min": 0.6223725397932619,
+  "final_strength_mean": 0.8527331867277299,
+  "wear": 66347.34716973024,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 0,
+  "arm": "evolved",
+  "w": 0.17967833813820636,
+  "setpoint": 0.7571428571428571,
+  "round": 9,
+  "fitness": 219.60869616185457,
+  "per_mission": [
+   55.87,
+   52.66,
+   52.85,
+   58.22
+  ],
+  "final_strength_min": 0.6581339421358536,
+  "final_strength_mean": 0.8450276025588352,
+  "wear": 68919.035585649,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 1,
+  "arm": "evolved",
+  "w": 0.07985703917253617,
+  "setpoint": 0.657142857142857,
+  "round": 9,
+  "fitness": 229.787334191675,
+  "per_mission": [
+   58.88,
+   56.23,
+   55.86,
+   58.82
+  ],
+  "final_strength_min": 0.7032064379292867,
+  "final_strength_mean": 0.8639504777011066,
+  "wear": 59101.62917402839,
+  "falls": 0,
+  "frozen_frac": 8.333333333333333e-05
+ },
+ {
+  "id": 2,
+  "arm": "evolved",
+  "w": 0.11918961070527787,
+  "setpoint": 0.7071428571428571,
+  "round": 9,
+  "fitness": 230.57818048867088,
+  "per_mission": [
+   58.51,
+   56.4,
+   56.45,
+   59.22
+  ],
+  "final_strength_min": 0.7089754045057816,
+  "final_strength_mean": 0.871470393255322,
+  "wear": 55037.54820312634,
+  "falls": 0,
+  "frozen_frac": 8.333333333333333e-05
+ },
+ {
+  "id": 3,
+  "arm": "evolved",
+  "w": 0.053504216245599236,
+  "setpoint": 0.7071428571428571,
+  "round": 9,
+  "fitness": 235.30741973704477,
+  "per_mission": [
+   60.23,
+   56.59,
+   56.69,
+   61.8
+  ],
+  "final_strength_min": 0.663205878502554,
+  "final_strength_mean": 0.8459791495881347,
+  "wear": 68512.55695424811,
+  "falls": 0,
+  "frozen_frac": 0.0004166666666666667
+ },
+ {
+  "id": 4,
+  "arm": "evolved",
+  "w": 0.08025632436839886,
+  "setpoint": 0.8571428571428572,
+  "round": 9,
+  "fitness": 211.5448635488048,
+  "per_mission": [
+   60.64,
+   54.25,
+   34.24,
+   62.42
+  ],
+  "final_strength_min": 0.6402750934365851,
+  "final_strength_mean": 0.8565485538970564,
+  "wear": 63346.30017900818,
+  "falls": 0,
+  "frozen_frac": 0.11133333333333334
+ },
+ {
+  "id": 5,
+  "arm": "evolved",
+  "w": 0.26817662408687515,
+  "setpoint": 0.8071428571428572,
+  "round": 9,
+  "fitness": 229.13825696525114,
+  "per_mission": [
+   58.3,
+   55.25,
+   54.98,
+   60.6
+  ],
+  "final_strength_min": 0.6421388940295544,
+  "final_strength_mean": 0.8230886043303937,
+  "wear": 78479.04595056779,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 6,
+  "arm": "evolved",
+  "w": 0.11978555875880426,
+  "setpoint": 0.8071428571428572,
+  "round": 9,
+  "fitness": 235.40676549534498,
+  "per_mission": [
+   60.47,
+   56.82,
+   57.08,
+   61.04
+  ],
+  "final_strength_min": 0.665429678267199,
+  "final_strength_mean": 0.8466998036431201,
+  "wear": 67448.0078093896,
+  "falls": 0,
+  "frozen_frac": 0.0004166666666666667
+ },
+ {
+  "id": 7,
+  "arm": "evolved",
+  "w": 0.07985703917253617,
+  "setpoint": 0.7571428571428571,
+  "round": 9,
+  "fitness": 230.36881010532414,
+  "per_mission": [
+   59.21,
+   54.97,
+   54.92,
+   61.26
+  ],
+  "final_strength_min": 0.6552335933251893,
+  "final_strength_mean": 0.8447627584010885,
+  "wear": 69273.25720661496,
+  "falls": 0,
+  "frozen_frac": 0.0004166666666666667
+ },
+ {
+  "id": 8,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 9,
+  "fitness": 210.11179082412698,
+  "per_mission": [
+   52.78,
+   51.59,
+   51.15,
+   54.59
+  ],
+  "final_strength_min": 0.6265864625928974,
+  "final_strength_mean": 0.8360440744534238,
+  "wear": 73012.19820843627,
+  "falls": 0,
+  "frozen_frac": 0.0
+ },
+ {
+  "id": 9,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 9,
+  "fitness": 208.60083466030292,
+  "per_mission": [
+   53.31,
+   49.66,
+   49.48,
+   56.15
+  ],
+  "final_strength_min": 0.6543620384722544,
+  "final_strength_mean": 0.8516960606427918,
+  "wear": 65229.39901407139,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 10,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 9,
+  "fitness": 213.43276336122568,
+  "per_mission": [
+   54.37,
+   51.56,
+   51.43,
+   56.08
+  ],
+  "final_strength_min": 0.6367268309469755,
+  "final_strength_mean": 0.845323709836074,
+  "wear": 68350.59959120704,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 11,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 9,
+  "fitness": 193.86540360172754,
+  "per_mission": [
+   50.08,
+   46.46,
+   46.51,
+   50.82
+  ],
+  "final_strength_min": 0.6585094599221297,
+  "final_strength_mean": 0.8762391123408477,
+  "wear": 54686.43873476968,
+  "falls": 0,
+  "frozen_frac": 0.0
+ },
+ {
+  "id": 12,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 9,
+  "fitness": 202.16287284400346,
+  "per_mission": [
+   52.14,
+   48.39,
+   48.22,
+   53.41
+  ],
+  "final_strength_min": 0.6544936771166909,
+  "final_strength_mean": 0.8280631116024377,
+  "wear": 76946.89739001147,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 13,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 9,
+  "fitness": 210.41083143712206,
+  "per_mission": [
+   53.93,
+   50.8,
+   50.67,
+   55.01
+  ],
+  "final_strength_min": 0.6479996574280598,
+  "final_strength_mean": 0.8506541420868242,
+  "wear": 65743.80305647635,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 14,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 9,
+  "fitness": 219.49486472085445,
+  "per_mission": [
+   56.62,
+   51.89,
+   51.99,
+   58.99
+  ],
+  "final_strength_min": 0.6154262576237425,
+  "final_strength_mean": 0.8487709059542051,
+  "wear": 67436.2666944765,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 15,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 9,
+  "fitness": 188.2050335586751,
+  "per_mission": [
+   52.9,
+   50.93,
+   30.37,
+   54.01
+  ],
+  "final_strength_min": 0.660797799636944,
+  "final_strength_mean": 0.8693718982042262,
+  "wear": 57071.72483706361,
+  "falls": 1,
+  "frozen_frac": 0.0554240112251162
+ },
+ {
+  "id": 0,
+  "arm": "evolved",
+  "w": 0.17967833813820638,
+  "setpoint": 0.7571428571428571,
+  "round": 10,
+  "fitness": 222.79347002256935,
+  "per_mission": [
+   54.39,
+   54.54,
+   56.89,
+   56.97
+  ],
+  "final_strength_min": 0.669039114488953,
+  "final_strength_mean": 0.8618186495485842,
+  "wear": 59991.79608923371,
+  "falls": 0,
+  "frozen_frac": 0.0004166666666666667
+ },
+ {
+  "id": 1,
+  "arm": "evolved",
+  "w": 0.07985703917253617,
+  "setpoint": 0.657142857142857,
+  "round": 10,
+  "fitness": 231.02600700177877,
+  "per_mission": [
+   55.8,
+   55.49,
+   59.76,
+   59.98
+  ],
+  "final_strength_min": 0.7015330995019221,
+  "final_strength_mean": 0.8738116993060685,
+  "wear": 54292.68411836715,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 2,
+  "arm": "evolved",
+  "w": 0.11918961070527787,
+  "setpoint": 0.7071428571428571,
+  "round": 10,
+  "fitness": 225.6055898035966,
+  "per_mission": [
+   55.4,
+   55.41,
+   57.38,
+   57.42
+  ],
+  "final_strength_min": 0.7405083882030409,
+  "final_strength_mean": 0.8828021195845311,
+  "wear": 49700.35398497178,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 3,
+  "arm": "evolved",
+  "w": 0.053504216245599236,
+  "setpoint": 0.7071428571428571,
+  "round": 10,
+  "fitness": 233.62221761093195,
+  "per_mission": [
+   56.1,
+   55.95,
+   60.84,
+   60.73
+  ],
+  "final_strength_min": 0.6580266147083907,
+  "final_strength_mean": 0.8543939465871443,
+  "wear": 64753.35521107634,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 4,
+  "arm": "evolved",
+  "w": 0.03584782488455149,
+  "setpoint": 0.657142857142857,
+  "round": 10,
+  "fitness": 230.6594306987569,
+  "per_mission": [
+   55.59,
+   55.56,
+   59.81,
+   59.7
+  ],
+  "final_strength_min": 0.6510630031841242,
+  "final_strength_mean": 0.8500434889497014,
+  "wear": 66837.04306431251,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 5,
+  "arm": "evolved",
+  "w": 0.26817662408687515,
+  "setpoint": 0.8071428571428572,
+  "round": 10,
+  "fitness": 236.7897966666892,
+  "per_mission": [
+   57.67,
+   57.71,
+   60.51,
+   60.89
+  ],
+  "final_strength_min": 0.673302139943348,
+  "final_strength_mean": 0.8460459585525103,
+  "wear": 67765.36314871043,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 6,
+  "arm": "evolved",
+  "w": 0.11978555875880426,
+  "setpoint": 0.8071428571428572,
+  "round": 10,
+  "fitness": 234.70432670115213,
+  "per_mission": [
+   57.04,
+   57.15,
+   60.14,
+   60.37
+  ],
+  "final_strength_min": 0.6642641037090423,
+  "final_strength_mean": 0.8644828108972554,
+  "wear": 58703.80010258345,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 7,
+  "arm": "evolved",
+  "w": 0.07985703917253617,
+  "setpoint": 0.7571428571428571,
+  "round": 10,
+  "fitness": 228.13144928764655,
+  "per_mission": [
+   54.23,
+   53.82,
+   60.0,
+   60.08
+  ],
+  "final_strength_min": 0.6449904722688533,
+  "final_strength_mean": 0.8499495321809221,
+  "wear": 67062.90427475545,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 8,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 10,
+  "fitness": 208.36165079207558,
+  "per_mission": [
+   49.37,
+   49.5,
+   54.73,
+   54.77
+  ],
+  "final_strength_min": 0.6260696744972359,
+  "final_strength_mean": 0.8536043073935571,
+  "wear": 65011.80577170677,
+  "falls": 0,
+  "frozen_frac": 0.0
+ },
+ {
+  "id": 9,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 10,
+  "fitness": 212.02231762298203,
+  "per_mission": [
+   50.95,
+   50.83,
+   55.1,
+   55.14
+  ],
+  "final_strength_min": 0.6259014765990897,
+  "final_strength_mean": 0.8585250057998349,
+  "wear": 62751.42737388094,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 10,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 10,
+  "fitness": 213.80432802673428,
+  "per_mission": [
+   50.41,
+   49.79,
+   56.51,
+   57.09
+  ],
+  "final_strength_min": 0.6328938559519086,
+  "final_strength_mean": 0.8629191576502183,
+  "wear": 61312.27299744164,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 11,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 10,
+  "fitness": 215.6302519768402,
+  "per_mission": [
+   51.33,
+   51.1,
+   56.47,
+   56.74
+  ],
+  "final_strength_min": 0.6261030504929354,
+  "final_strength_mean": 0.8603540932965853,
+  "wear": 61868.87601561066,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 12,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 10,
+  "fitness": 209.23823544818282,
+  "per_mission": [
+   50.24,
+   50.13,
+   54.6,
+   54.27
+  ],
+  "final_strength_min": 0.6614977281680676,
+  "final_strength_mean": 0.8376927893235013,
+  "wear": 72344.76204235271,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 13,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 10,
+  "fitness": 218.66982315451432,
+  "per_mission": [
+   52.18,
+   52.02,
+   57.24,
+   57.23
+  ],
+  "final_strength_min": 0.645977736193982,
+  "final_strength_mean": 0.8507045533098481,
+  "wear": 65821.39027394519,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 14,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 10,
+  "fitness": 218.33462846435475,
+  "per_mission": [
+   51.83,
+   51.97,
+   57.08,
+   57.45
+  ],
+  "final_strength_min": 0.6053034744711513,
+  "final_strength_mean": 0.8491779405766828,
+  "wear": 67110.00716913122,
+  "falls": 0,
+  "frozen_frac": 8.333333333333333e-05
+ },
+ {
+  "id": 15,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 10,
+  "fitness": 217.08847650844558,
+  "per_mission": [
+   51.51,
+   50.99,
+   57.29,
+   57.29
+  ],
+  "final_strength_min": 0.6398300353299147,
+  "final_strength_mean": 0.8578962997918866,
+  "wear": 62809.047176484295,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 0,
+  "arm": "evolved",
+  "w": 0.08025632436839886,
+  "setpoint": 0.7571428571428571,
+  "round": 11,
+  "fitness": 240.36514252187305,
+  "per_mission": [
+   61.67,
+   61.96,
+   56.97,
+   59.77
+  ],
+  "final_strength_min": 0.6572569323474734,
+  "final_strength_mean": 0.8585460047009333,
+  "wear": 62053.26071690824,
+  "falls": 0,
+  "frozen_frac": 0.00025
+ },
+ {
+  "id": 1,
+  "arm": "evolved",
+  "w": 0.07985703917253617,
+  "setpoint": 0.657142857142857,
+  "round": 11,
+  "fitness": 237.64469035392142,
+  "per_mission": [
+   60.54,
+   60.45,
+   57.31,
+   59.35
+  ],
+  "final_strength_min": 0.7459822394496163,
+  "final_strength_mean": 0.8872244824753909,
+  "wear": 47855.01217319086,
+  "falls": 0,
+  "frozen_frac": 0.0
+ },
+ {
+  "id": 2,
+  "arm": "evolved",
+  "w": 0.4022649361303127,
+  "setpoint": 0.7571428571428571,
+  "round": 11,
+  "fitness": 228.41001807432673,
+  "per_mission": [
+   58.36,
+   59.23,
+   54.6,
+   56.22
+  ],
+  "final_strength_min": 0.6795514924466621,
+  "final_strength_mean": 0.863813701809233,
+  "wear": 59031.93292769733,
+  "falls": 0,
+  "frozen_frac": 8.333333333333333e-05
+ },
+ {
+  "id": 3,
+  "arm": "evolved",
+  "w": 0.053504216245599236,
+  "setpoint": 0.7071428571428571,
+  "round": 11,
+  "fitness": 235.5020727527806,
+  "per_mission": [
+   59.88,
+   60.01,
+   55.95,
+   59.66
+  ],
+  "final_strength_min": 0.6552836349423871,
+  "final_strength_mean": 0.8549514873374015,
+  "wear": 65065.56323361034,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 4,
+  "arm": "evolved",
+  "w": 0.03584782488455149,
+  "setpoint": 0.657142857142857,
+  "round": 11,
+  "fitness": 229.56900442467094,
+  "per_mission": [
+   59.0,
+   58.91,
+   53.52,
+   58.14
+  ],
+  "final_strength_min": 0.6368344491061076,
+  "final_strength_mean": 0.857054930815668,
+  "wear": 63567.26017517716,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 5,
+  "arm": "evolved",
+  "w": 0.26817662408687515,
+  "setpoint": 0.8071428571428572,
+  "round": 11,
+  "fitness": 225.89498332321875,
+  "per_mission": [
+   57.68,
+   57.77,
+   54.36,
+   56.09
+  ],
+  "final_strength_min": 0.6971846388042234,
+  "final_strength_mean": 0.8652438506090007,
+  "wear": 59010.63631679856,
+  "falls": 0,
+  "frozen_frac": 0.0
+ },
+ {
+  "id": 6,
+  "arm": "evolved",
+  "w": 0.11978555875880426,
+  "setpoint": 0.8071428571428572,
+  "round": 11,
+  "fitness": 239.6987996497901,
+  "per_mission": [
+   61.14,
+   61.12,
+   56.94,
+   60.5
+  ],
+  "final_strength_min": 0.6625135720232225,
+  "final_strength_mean": 0.8647738131390578,
+  "wear": 59367.79369475443,
+  "falls": 0,
+  "frozen_frac": 8.333333333333333e-05
+ },
+ {
+  "id": 7,
+  "arm": "evolved",
+  "w": 0.07985703917253617,
+  "setpoint": 0.7571428571428571,
+  "round": 11,
+  "fitness": 229.9368396081461,
+  "per_mission": [
+   58.63,
+   58.75,
+   54.49,
+   58.06
+  ],
+  "final_strength_min": 0.6770344174329876,
+  "final_strength_mean": 0.8563490637196588,
+  "wear": 63575.589544101626,
+  "falls": 0,
+  "frozen_frac": 0.00016666666666666666
+ },
+ {
+  "id": 8,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 11,
+  "fitness": 215.65807355413997,
+  "per_mission": [
+   55.76,
+   55.94,
+   50.19,
+   53.77
+  ],
+  "final_strength_min": 0.624901873979981,
+  "final_strength_mean": 0.8668701938989033,
+  "wear": 59525.50624759795,
+  "falls": 0,
+  "frozen_frac": 8.333333333333333e-05
+ },
+ {
+  "id": 9,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 11,
+  "fitness": 213.22797566285297,
+  "per_mission": [
+   55.03,
+   54.56,
+   50.18,
+   53.46
+  ],
+  "final_strength_min": 0.630572205088832,
+  "final_strength_mean": 0.8470044438022991,
+  "wear": 68586.13752034343,
+  "falls": 0,
+  "frozen_frac": 0.0003333333333333333
+ },
+ {
+  "id": 10,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 11,
+  "fitness": 183.45770568285914,
+  "per_mission": [
+   54.31,
+   54.34,
+   23.49,
+   51.32
+  ],
+  "final_strength_min": 0.6505278228869422,
+  "final_strength_mean": 0.8771381661450753,
+  "wear": 54390.36183242241,
+  "falls": 1,
+  "frozen_frac": 0.04707170224411604
+ },
+ {
+  "id": 11,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 11,
+  "fitness": 211.13159031239687,
+  "per_mission": [
+   54.58,
+   54.74,
+   49.38,
+   52.43
+  ],
+  "final_strength_min": 0.6311621075358395,
+  "final_strength_mean": 0.8640666871647489,
+  "wear": 59897.765842909845,
+  "falls": 0,
+  "frozen_frac": 0.0
+ },
+ {
+  "id": 12,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 11,
+  "fitness": 223.7110006241937,
+  "per_mission": [
+   58.12,
+   57.4,
+   52.33,
+   55.86
+  ],
+  "final_strength_min": 0.663331113016773,
+  "final_strength_mean": 0.8630562979976252,
+  "wear": 60209.10510123016,
+  "falls": 0,
+  "frozen_frac": 8.333333333333333e-05
+ },
+ {
+  "id": 13,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 11,
+  "fitness": 223.68662439155284,
+  "per_mission": [
+   57.48,
+   57.05,
+   52.67,
+   56.5
+  ],
+  "final_strength_min": 0.6590579287419598,
+  "final_strength_mean": 0.8619055870408441,
+  "wear": 60508.27342972457,
+  "falls": 0,
+  "frozen_frac": 8.333333333333333e-05
+ },
+ {
+  "id": 14,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 11,
+  "fitness": 215.78307332597115,
+  "per_mission": [
+   55.44,
+   55.13,
+   50.97,
+   54.24
+  ],
+  "final_strength_min": 0.6204864346565127,
+  "final_strength_mean": 0.8677460313386088,
+  "wear": 58756.66664333126,
+  "falls": 0,
+  "frozen_frac": 8.333333333333333e-05
+ },
+ {
+  "id": 15,
+  "arm": "control",
+  "w": 0.0,
+  "setpoint": 0.6,
+  "round": 11,
+  "fitness": 220.05277939719133,
+  "per_mission": [
+   56.34,
+   57.05,
+   50.91,
+   55.76
+  ],
+  "final_strength_min": 0.6295082027158964,
+  "final_strength_mean": 0.8625652635379369,
+  "wear": 61388.49308617137,
+  "falls": 0,
+  "frozen_frac": 8.333333333333333e-05
+ }
+]

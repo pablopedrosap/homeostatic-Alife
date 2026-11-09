@@ -98,9 +98,9 @@ def figure(res, out: Path):
     ax = axes[1]
     tr = res["trajectory"]["evolved"]
     ax.plot([t["round"] for t in tr], [t["median_w"] for t in tr], color=BLUE, marker="o", ms=4)
-    ax.set_yscale("log")
+    ax.set_ylim(0, None)
     ax.set_xlabel("generation")
-    ax.set_ylabel("how much robots care about heat (w)")
+    ax.set_ylabel("how much robots care about heat (w), median")
     ax.set_title("(b) What selection did to the drive", loc="left")
     ax = axes[2]
     p1 = res["P1_lifetime_distance"]
