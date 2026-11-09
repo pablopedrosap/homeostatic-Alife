@@ -310,10 +310,12 @@ class Population:
                 jax.block_until_ready(stats)
                 done_iter += cfg.chunk
                 dt = time.time() - tc
-                if rnd == 0 and done_iter == 2 * cfg.chunk and cfg.hours_budget:   # 2nd chunk: no compilation
+                # time the 4th chunk: the first ones still include compilation and warm-up (on a T4x2 the 2nd chunk
+                # took twice as long as the steady state, so a 10-h budget ran in ~5 h)
+                if rnd == 0 and done_iter == 4 * cfg.chunk and cfg.hours_budget:
                     per_iter = dt / cfg.chunk
                     budget = cfg.hours_budget * 3600 * 0.85 - (time.time() - t0)
-                    n_iter = max(2 * cfg.chunk, int(budget / cfg.rounds / per_iter) // cfg.chunk * cfg.chunk)
+                    n_iter = max(4 * cfg.chunk, int(budget / cfg.rounds / per_iter) // cfg.chunk * cfg.chunk)
                     log(f"  speed {self.B * iter_steps / per_iter:,.0f} steps/s -> {n_iter * iter_steps / 1e6:.1f}M steps "
                         f"per brain per round, {cfg.rounds} rounds in ~{cfg.hours_budget:g} h")
                 s = self._merge(stats)
