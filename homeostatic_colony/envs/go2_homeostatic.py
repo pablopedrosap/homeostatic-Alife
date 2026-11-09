@@ -95,6 +95,11 @@ class Go2HomeostaticConfig:
     payload_switch_rate: float = 0.0               # ... switching at this rate (1/s) mid-episode
     fault_max: float = 0.0                         # per episode, one random motor weakened by U(0, fault_max)
 
+    # --- HAB-P10: an evolved valence ("feelings" about its own body). None = off. ---
+    # (a_heat, setpoint, a_effort, a_hot_effort, a_progress): reward += -a_heat·Σ excess heat
+    # - a_effort·Σ effort - a_hot_effort·Σ effort·T + a_progress·forward speed
+    valence: tuple | None = None
+
     seed: int | None = None
     scene_path: str = field(default_factory=lambda: str(GO2_SCENE))
 
@@ -270,6 +275,12 @@ class Go2HomeostaticEnv(gym.Env):
                         - c.homeo_step_cost * excess.sum())
         self._prev_excess = excess
         reward = r_task + (c.homeo_weight * r_homeo if c.reward_mode == "hybrid" else 0.0)
+        if c.valence is not None:
+            a_heat, sp, a_eff, a_hot_eff, a_prog = c.valence
+            heat = np.maximum(0.0, self.temp - sp) / max(1.0 - sp, 1e-3)
+            feel = (-a_heat * heat.sum() - a_eff * sq.sum() - a_hot_eff * float((sq * self.temp).sum())
+                    + a_prog * float(v[0]))
+            reward += feel
 
         self.last_action = a
         truncated = self.steps >= c.max_steps
