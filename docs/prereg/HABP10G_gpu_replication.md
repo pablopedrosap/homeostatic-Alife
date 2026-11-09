@@ -54,3 +54,9 @@ reported with its data and the cause, and not scored.
 ## What a PASS does NOT prove
 That the robot feels anything (the "feelings" are a reward function), hardware transfer, or
 generality beyond this robot and task family.
+
+## Amendment 1 (2026-11-09, before running)
+The notebook now runs a ~20-min technical check first: a separate small population (4 brains per arm,
+1.2M steps per brain, 20-s missions, output in `quick_check/`) that stops the notebook if the median
+distance is below 16 m, to avoid spending 10 GPU hours on a trainer that does not learn. It uses its own
+output directory and does not touch the experiment, whose configuration is unchanged.
