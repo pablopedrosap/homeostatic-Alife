@@ -36,10 +36,11 @@ Las sesiones interactivas se cortan si cierras el navegador o estás inactivo. P
 3. Cuando termine: abre la versión guardada → pestaña **Output** → descarga `results/`
    (`compare_drives.csv`, `evolution_history.json`, gráficas `.png`, vídeo `.mp4`).
 
-Tiempos aproximados (usa tu número de la Parte 0):
-- **Parte 1:** 4 robots × (tiempo de 50M pasos) + misiones (~minutos).
-- **Parte 2:** 2 grupos × 6 robots × 4 generaciones × (tiempo de 20M pasos). Si es demasiado, baja en la
-  celda `pop`, `generations` o `num_timesteps`.
+Tiempos aproximados (usa tu número de la Parte 0; en una T4×2 se midieron ~16.000 pasos/s, sin contar
+la compilación):
+- **Parte 1:** 4 robots × (tiempo de 50M pasos) + misiones: ~3,5 h en T4.
+- **Parte 2:** se ajusta sola a `HOURS_FOR_PART2` (6 h por defecto) con la velocidad medida en la Parte 0.
+  Si avisa de que hay pocos pasos por robot (no aprenderían a andar), baja `POP` / `GENERATIONS`.
 
 Si solo quieres la Parte 1, comenta (#) la celda de `G.evolve(...)` antes de *Save & Run All*.
 
@@ -50,7 +51,7 @@ Si solo quieres la Parte 1, comenta (#) la celda de `G.evolve(...)` antes de *Sa
 | un instinto más fuerte o más débil | `weights=(0.0, 0.2)` → p. ej. `(0.0, 0.1, 0.5)` |
 | más fiabilidad estadística | `seeds=(0, 1)` → `(0, 1, 2, 3)` |
 | robots mejor entrenados | `num_timesteps` |
-| una población evolutiva mayor | `pop=6` → `pop=12` |
+| una población evolutiva mayor | `POP = 4` → `POP = 8` (y más `HOURS_FOR_PART2`) |
 
 ## Problemas típicos
 

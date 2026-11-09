@@ -215,8 +215,10 @@ def train(xml_path: str, homeo_weight: float = 0.0, t_setpoint: float = 0.6, num
         log.append({"step": int(step), "episode_reward": reward, "episode_length": length,
                     "mean_hottest_motor": hottest, "mean_forward_speed": speed, "seconds": time.time() - t0})
         if progress:
+            sps = steady_steps_per_s(log)
             print(f"  [{time.time() - t0:6.0f}s] steps {step:>11,}  reward {reward:8.1f}  episode {length:5.0f} steps  "
-                  f"speed {speed:5.2f} m/s  hottest motor {hottest:.2f}", flush=True)
+                  f"speed {speed:5.2f} m/s  hottest motor {hottest:.2f}"
+                  + (f"  ({sps:,.0f} steps/s)" if sps else ""), flush=True)
 
     kw = dict(num_timesteps=num_timesteps, num_evals=6, reward_scaling=1.0, episode_length=episode_length,
               normalize_observations=True, action_repeat=1, unroll_length=20, num_minibatches=32,
@@ -226,7 +228,15 @@ def train(xml_path: str, homeo_weight: float = 0.0, t_setpoint: float = 0.6, num
                                                 policy_hidden_layer_sizes=(128, 128, 128, 128)))
     kw.update(ppo_overrides)
     make_inference_fn, params, metrics = ppo.train(environment=env, progress_fn=progress_fn, **kw)
-    return params, make_inference_fn, {"log": log, "seconds": time.time() - t0}
+    return params, make_inference_fn, {"log": log, "seconds": time.time() - t0, "steps_per_s": steady_steps_per_s(log)}
+
+
+def steady_steps_per_s(log: list[dict]) -> float | None:
+    """Training speed without compilation: measured between the first and the last evaluation after
+    training has started (the first chunk includes 1-3 min of XLA compilation)."""
+    if len(log) < 3 or log[-1]["seconds"] <= log[1]["seconds"]:
+        return None
+    return (log[-1]["step"] - log[1]["step"]) / (log[-1]["seconds"] - log[1]["seconds"])
 
 
 # ---------------------------------------------------------------------------------------------
