@@ -250,7 +250,8 @@ class Go2HomeostaticEnv(gym.Env):
         if self.self_model is not None:
             self.self_model.observe(self.env_id, self._last_base_obs, self.temp)
         info = self._info(fell=fell)
-        info.update(r_task=float(r_task), r_homeo=r_homeo, cmd=self._effective_cmd())
+        info.update(r_task=float(r_task), r_homeo=r_homeo, cmd=self._effective_cmd(),
+                    torque_sq=sq.copy())   # (τ/τ_peak)² per motor: what the drivers' current sensors report
         return obs, float(reward), bool(fell), bool(truncated), info
 
     def _info(self, fell: bool) -> dict:
