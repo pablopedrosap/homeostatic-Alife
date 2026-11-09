@@ -36,13 +36,15 @@ Las sesiones interactivas se cortan si cierras el navegador o estás inactivo. P
 3. Cuando termine: abre la versión guardada → pestaña **Output** → descarga `results/`
    (`compare_drives.csv`, `evolution_history.json`, gráficas `.png`, vídeo `.mp4`).
 
-Tiempos aproximados (usa tu número de la Parte 0; en una T4×2 se midieron ~16.000 pasos/s, sin contar
-la compilación):
-- **Parte 1:** 4 robots × (tiempo de 50M pasos) + misiones: ~3,5 h en T4.
+Tiempos aproximados (usa tu número de la Parte 0; en una T4×2 se midieron ~22.000 pasos/s, sin contar
+la compilación, que añade ~4 min por robot):
+- **Parte 1:** 4 robots × (tiempo de 50M pasos) + misiones: ~3 h en T4. Prueba real en T4×2: el robot sin
+  instinto ya anda (0,55 m/s de media, sin caerse) a los 24M pasos.
 - **Parte 2:** se ajusta sola a `HOURS_FOR_PART2` (6 h por defecto) con la velocidad medida en la Parte 0.
   Si avisa de que hay pocos pasos por robot (no aprenderían a andar), baja `POP` / `GENERATIONS`.
 
-Si solo quieres la Parte 1, comenta (#) la celda de `G.evolve(...)` antes de *Save & Run All*.
+La Parte 2 viene **apagada** (`RUN_PART2 = False`): *Save & Run All* hace la Parte 0 + la Parte 1 (~3 h).
+Para la evolución, pon `RUN_PART2 = True` en una sesión aparte.
 
 ## Qué cambiar para experimentar (todo en las celdas, sin tocar el código)
 
