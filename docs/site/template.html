@@ -103,13 +103,15 @@ ol.ladder li { padding-left: 4px; }
   <section class="result first" id="go2">
     <div class="eyebrow">Experiment 1 · Unitree Go2 quadruped · real motor-heat physics · <span id="g-seeds"></span></div>
     <h2 id="g-title">Does a robot that manages its own motor heat keep walking when it gets damaged?</h2>
-    <p class="note" style="font-size:16px">Simulated Unitree Go2 (official model from DeepMind's MuJoCo Menagerie, with Unitree's real torque limits). Every motor heats up with the torque it produces. When a motor gets too hot, its driver cuts the torque it can deliver, and at the limit the leg goes limp, as on the real robot. Two kinds of controller are trained the same way. The <b>standard</b> one is rewarded only for walking. The <b>self-regulating</b> one is also rewarded for keeping its motors in a healthy temperature range. Then both are damaged.</p>
-    <figure id="g-videofig" hidden><video id="g-video" controls muted playsinline loop preload="metadata" style="width:100%;display:block;border-radius:3px"></video><figcaption id="g-videocap"></figcaption></figure>
+    <p class="note" style="font-size:16px">Simulated Unitree Go2 (official model from DeepMind's MuJoCo Menagerie, with Unitree's real torque limits). Every motor heats up with the torque it produces. When a motor gets too hot, its driver cuts the torque it can deliver, and at the limit the leg goes limp, as on the real robot. Each robot is sent on 3-minute missions carrying 0, 3 or 6 kg. Five controllers are compared: a <b>standard</b> one rewarded only for walking; the same with a <b>hand-written thermal governor</b> that slows it down when hot (roughly current industry practice); a <b>self-regulating</b> one also rewarded for keeping its motors cool; one that additionally <b>learns a model of its own body</b> and sees its own predicted motor temperatures; and that same robot with the self-model <b>cut out of the loop</b>.</p>
     <div class="verdict"><span class="dot" id="g-dot"></span><span id="g-verdict"></span></div>
     <p id="g-summary"></p>
     <div class="stats" id="g-stats"></div>
-    <div class="figs" id="g-figs"></div>
+    <figure id="g-mainfig" hidden><img id="g-mainimg" alt="" style="width:100%;display:block"><figcaption id="g-maincap"></figcaption></figure>
     <p class="scope" id="g-scope"></p>
+    <h3 id="g-v1head" hidden style="margin-top:8px"></h3>
+    <figure id="g-videofig" hidden><video id="g-video" controls muted playsinline loop preload="metadata" style="width:100%;display:block;border-radius:3px"></video><figcaption id="g-videocap"></figcaption></figure>
+    <div class="figs" id="g-figs"></div>
   </section>
 
   <section class="result" id="ladder">
@@ -118,8 +120,8 @@ ol.ladder li { padding-left: 4px; }
     <p>Nobody can measure whether a machine has experiences, so this project doesn't claim that. What can be built and tested are the working parts people usually mean when they talk about a robot being aware of itself:</p>
     <ol class="ladder">
       <li><b>It feels its own body.</b> Motor temperatures, energy, damage as inputs. <span class="tag done">built, in simulation</span></li>
-      <li><b>It acts to keep its body working.</b> Self-regulation that pays off when something breaks. <span class="tag now">tested, not yet shown (both experiments failed, causes diagnosed)</span></li>
-      <li><b>It knows what it can do right now</b> ("my left knee is weak") and changes its plan. <span class="tag next">next</span></li>
+      <li><b>It acts to keep its body working.</b> Self-regulation that pays off when something breaks. <span class="tag now">partly: free cooling unloaded; no gain under load yet</span></li>
+      <li><b>It knows what it can do right now</b> ("my left knee is weak") and changes its plan. <span class="tag now">self-model built and learned; not yet used</span></li>
       <li><b>It does all of this on a real robot.</b> One quadruped that keeps walking with a failing motor. <span class="tag next">goal</span></li>
     </ol>
   </section>
@@ -399,6 +401,11 @@ const DATA = /*__DATA__*/null;
     verdict("g-dot", "g-verdict", G.verdict === "PASS", G.verdict_label);
     $("g-summary").textContent = G.summary;
     G.stats.forEach((s) => stat("g-stats", s[0], s[1]));
+    if (G.figure) {
+      $("g-mainimg").src = G.figure.src; $("g-mainimg").alt = G.figure.alt; $("g-maincap").textContent = G.figure.caption;
+      $("g-mainfig").hidden = false;
+    }
+    if (G.v1_heading) { $("g-v1head").textContent = G.v1_heading; $("g-v1head").hidden = false; }
     if (G.video) {
       $("g-video").src = G.video.src; $("g-video").poster = G.video.poster || "";
       $("g-videocap").textContent = G.video.caption; $("g-videofig").hidden = false;

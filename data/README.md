@@ -8,4 +8,5 @@ models are not included (they are large and fully reproducible from the scripts 
 |---|---|---|
 | `hab1_v1/` | `scripts/run_hab1_v1.py` | `python scripts/analyze_hab1_v1.py --csv data/hab1_v1/progressive_damage.csv --out data/hab1_v1` |
 | `habp1_go2/` | `scripts/run_go2.py` | `python scripts/analyze_go2.py --csv data/habp1_go2/go2_damage.csv` |
+| `habp2_go2/` | `scripts/run_go2_v2.py`, `scripts/explore_go2_v2.py` (exploratory) | `python scripts/analyze_go2_v2.py --csv data/habp2_go2/missions.csv` |
 | `regulator_law/` | `scripts/run_regulator_law.py`, `scripts/run_channel_dissection.py` | `python scripts/run_regulator_law.py --analyze-only --out data/regulator_law` |

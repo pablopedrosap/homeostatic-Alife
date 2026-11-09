@@ -224,11 +224,75 @@ def fig_go2(csv_path: Path, out: Path) -> Path:
     return p
 
 
+def fig_go2_v2(csv_path: Path, out: Path) -> Path:
+    _style()
+    rows = list(csv.DictReader(open(csv_path)))
+    for r in rows:
+        for k in r:
+            if k != "condition":
+                r[k] = float(r[k])
+    conds = [("standard", ORANGE, "o", ORANGE, "Standard"),
+             ("governor", GRAY, "s", GRAY, "Standard + rule-based governor"),
+             ("hybrid", BLUE, "o", BLUE, "Self-regulating"),
+             ("selfmodel", AQUA, "D", AQUA, "Self-regulating + self-model loop"),
+             ("loopcut", AQUA, "D", SURFACE, "Same, loop cut at test time")]
+    payloads = sorted({r["payload"] for r in rows})
+    fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.2), gridspec_kw={"width_ratios": [1.25, 1.0, 0.8]})
+    for ax, metric, ylab, title in ((axes[0], "distance", "metres covered in a 3-minute mission", "(a) Mission distance"),
+                                    (axes[1], "hot_motor_mean_T", "hottest motor, time-averaged T", "(b) How hot the motors run")):
+        for j, (c, col, mk, face, lab) in enumerate(conds):
+            xs, ms, los, his = [], [], [], []
+            for i, pl in enumerate(payloads):
+                vals = [r[metric] for r in rows if r["condition"] == c and r["payload"] == pl]
+                if not vals:
+                    continue
+                m, lo, hi = _ci(vals)
+                xs.append(i + (j - 2) * 0.13); ms.append(m); los.append(lo); his.append(hi)
+            if not xs:
+                continue
+            ax.vlines(xs, los, his, color=col, lw=1.6)
+            ax.plot(xs, ms, ls="none", marker=mk, ms=7, mfc=face, mec=col, mew=1.6, label=lab)
+        ax.set_xticks(range(len(payloads)))
+        ax.set_xticklabels([f"{pl:g} kg" for pl in payloads])
+        ax.set_xlabel("payload")
+        ax.set_ylabel(ylab)
+        ax.set_title(title, loc="left")
+    axes[1].axhspan(0.7, 1.0, color=ORANGE, alpha=0.07, lw=0)
+    axes[1].text(0.98, 0.985, "derating band (T > 0.7)", transform=axes[1].get_yaxis_transform(), fontsize=8,
+                 color=INK2, ha="right", va="top")
+    axes[0].set_ylim(bottom=0)
+    axes[0].legend(loc="upper right", fontsize=8.2)
+    ax = axes[2]
+    seeds = sorted({r["seed"] for r in rows if r["condition"] == "selfmodel"})
+    loaded = [pl for pl in payloads if pl > 0]
+    for s in seeds:
+        a = np.mean([r["distance"] for r in rows if r["condition"] == "selfmodel" and r["seed"] == s and r["payload"] in loaded])
+        b = np.mean([r["distance"] for r in rows if r["condition"] == "loopcut" and r["seed"] == s and r["payload"] in loaded])
+        ax.plot([0, 1], [a, b], color=AQUA, lw=1.2, alpha=0.8)
+        ax.plot([0], [a], marker="D", ms=6, mfc=AQUA, mec=AQUA)
+        ax.plot([1], [b], marker="D", ms=6, mfc=SURFACE, mec=AQUA, mew=1.5)
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels(["loop intact", "loop cut"])
+    ax.set_xlim(-0.3, 1.3)
+    ax.set_ylabel("loaded-mission distance (m), per seed")
+    ax.set_title("(c) Cutting the self-model loop", loc="left")
+    n = len(seeds)
+    fig.text(0.01, -0.05, f"Unitree Go2, 3-minute missions at 1.0 m/s; falling ends the mission. Mean ± 95% CI over {n} trained "
+             f"robots per controller, 5 missions each. Governor and loop-cut are evaluation-time variants of the same robots.",
+             color=INK2, fontsize=8.5)
+    fig.tight_layout()
+    p = out / "habp2_go2_missions.png"
+    fig.savefig(p, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+    return p
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--hab1", type=Path)
     ap.add_argument("--regulator", type=Path)
     ap.add_argument("--go2", type=Path)
+    ap.add_argument("--go2v2", type=Path)
     ap.add_argument("--out", type=Path, default=FIG)
     a = ap.parse_args()
     a.out.mkdir(parents=True, exist_ok=True)
@@ -241,6 +305,8 @@ def main():
         print(fig_regulator(a.regulator, a.out))
     if a.go2:
         print(fig_go2(a.go2, a.out))
+    if a.go2v2:
+        print(fig_go2_v2(a.go2v2, a.out))
 
 
 if __name__ == "__main__":

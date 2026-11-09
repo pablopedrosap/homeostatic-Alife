@@ -1,0 +1,46 @@
+{
+ "seeds": "8",
+ "steps": "5000000",
+ "episodes": "5",
+ "workers": "8",
+ "out": "/Users/pablopedrosa/Desktop/github/homeostatic-Alife/results/habp2_go2",
+ "pilot": "False",
+ "eval_only": "False",
+ "train_cfg": {
+  "cmd_range": [
+   0.4,
+   1.2
+  ],
+  "t_init_low": 0.0,
+  "t_init_high": 0.8,
+  "max_steps": 1000
+ },
+ "homeo_cfg": {
+  "reward_mode": "hybrid",
+  "homeo_weight": 1.0,
+  "t_setpoint": 0.6,
+  "homeo_quad_cost": 0.1,
+  "homeo_step_cost": 0.2
+ },
+ "mission": {
+  "cmd_vx": 1.0,
+  "max_steps": 9000
+ },
+ "payloads": [
+  0.0,
+  3.0,
+  6.0
+ ],
+ "ppo": {
+  "n_steps": 1024,
+  "batch_size": 256,
+  "n_epochs": 5,
+  "learning_rate": 0.0003,
+  "gamma": 0.99,
+  "gae_lambda": 0.95,
+  "clip_range": 0.2,
+  "ent_coef": 0.0,
+  "verbose": 0
+ },
+ "n_envs": 4
+}
