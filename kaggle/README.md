@@ -46,6 +46,22 @@ la compilación, que añade ~4 min por robot):
 La Parte 2 viene **apagada** (`RUN_PART2 = False`): *Save & Run All* hace la Parte 0 + la Parte 1 (~3 h).
 Para la evolución, pon `RUN_PART2 = True` en una sesión aparte.
 
+## HAB-P10 en GPU: 24 cerebros a la vez ([`habp10_gpu.ipynb`](habp10_gpu.ipynb))
+
+El experimento de los "sentimientos evolucionados" (evolucionados / aleatorios / sin sentimientos, 8 robots
+por grupo) con varias veces más entrenamiento por robot que en el portátil. Los 24 cerebros aprenden **a
+la vez dentro de un único programa compilado** ([`population.py`](population.py): PPO vectorizado sobre
+cerebros y repartido entre las 2 GPUs). Entre rondas, la selección copia los mejores cerebros sobre los
+peores, igual que en la versión de CPU.
+
+1. Importa `https://github.com/pablopedrosap/homeostatic-Alife/blob/main/kaggle/habp10_gpu.ipynb`.
+2. GPU T4 x2 + Internet On → **Save Version → Save & Run All** (~10 h; puedes cerrar la pestaña).
+3. Output → descarga `results/habp10_gpu/`: el veredicto (`verdict.txt`) lo calcula el mismo analizador
+   prerregistrado que la versión de CPU, más la figura y un vídeo del mejor robot de cada grupo.
+
+`PopConfig(hours_budget=10.0)` decide los pasos por cerebro según la velocidad medida. Lanza una sesión
+cada vez: espera a que termine la Parte 1 antes de lanzar esta.
+
 ## Qué cambiar para experimentar (todo en las celdas, sin tocar el código)
 
 | Quieres… | Cambia… |

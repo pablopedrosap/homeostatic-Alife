@@ -143,7 +143,18 @@ def report(res):
     return "\n".join(L)
 
 
-def figure(res, members, out: Path):
+def run_description(d: Path, hist) -> str:
+    """One line describing how the run was trained (CPU default, or the GPU population run's config)."""
+    cfg_path = d / "run_config.json"
+    if not cfg_path.exists():
+        return "Unitree Go2, 8 robots per arm, 12 generations × 400k PPO steps (CPU)"
+    cfg = json.loads(cfg_path.read_text())
+    steps = max(h.get("steps_per_brain", 0) for h in hist) / 1e6
+    return (f"Unitree Go2, {cfg['per_arm']} brains per arm, {cfg['rounds']} generations, {steps:.0f}M PPO steps per brain "
+            f"(GPU population run, {cfg['n_devices']} device(s))")
+
+
+def figure(res, members, out: Path, desc: str = "Unitree Go2, 8 robots per arm, 12 generations × 400k PPO steps (CPU)"):
     sys.path.insert(0, str(ROOT / "scripts"))
     from make_figures import _style, BLUE, ORANGE, AQUA, GRAY, INK2, GRID, _ci
     import matplotlib.pyplot as plt
@@ -217,7 +228,7 @@ def figure(res, members, out: Path):
         if i == 0:
             ax.set_ylabel("evolved gene: median, range")
     fig.text(0.01, 0.005, "(d) Genes over generations. Blue: evolved arm (line = median, band = range); dotted: range of the "
-             "random arm's fixed genomes. Unitree Go2, 8 robots per arm, 12 generations × 400k PPO steps; lifetime = 4 one-minute "
+             f"random arm's fixed genomes. {desc}; lifetime = 4 one-minute "
              "missions (0/3/6 kg) with permanent heat aging. Panel (b): mean over the final evolved genomes, all 12 motors at the same "
              "temperature and effort; speed term not shown.", color=INK2, fontsize=8, wrap=True)
     p = out / "habp10_feelings.png"
@@ -237,7 +248,7 @@ def main():
     txt = report(res)
     (a.dir / "verdict.txt").write_text(txt)
     print(txt)
-    print(figure(res, members, a.fig_dir))
+    print(figure(res, members, a.fig_dir, run_description(a.dir, hist)))
 
 
 if __name__ == "__main__":

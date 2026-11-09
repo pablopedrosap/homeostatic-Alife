@@ -72,7 +72,8 @@ class Go2BodyBudget(Env):
                  payload_switch_rate: float = 0.1, fault_max: float = 0.5, history: int = 3,
                  kp: float = 50.0, kd: float = 0.5, n_sub: int = 5, sim_dt: float = 0.004,
                  tau_thermal: float = 10.0, heat_gain: float = 0.57, t_derate: float = 0.7,
-                 t_cutoff: float = 1.0, action_scale: float = 0.25):
+                 t_cutoff: float = 1.0, action_scale: float = 0.25, feelings: bool = False,
+                 genome_obs: bool = False):
         self.mj_model, peak = load_torque_model(xml_path, sim_dt)
         self.sys = mjx.put_model(self.mj_model)
         self.peak = jp.asarray(peak)
@@ -88,11 +89,16 @@ class Go2BodyBudget(Env):
         self.tau, self.gain = tau_thermal, heat_gain
         self.t_derate, self.t_cutoff, self.action_scale = t_derate, t_cutoff, action_scale
         self.per_obs = 70
+        # HAB-P10 'feelings': a 5-gene valence (a_heat, setpoint, a_effort, a_hot_effort, a_progress) carried in
+        # info["genome"] and added to the reward (same formula as the CPU environment); genome_obs also shows it
+        # to the policy (off by default, as on the CPU, where each brain has a fixed genome).
+        self.feelings = bool(feelings)
+        self.genome_obs = self.feelings and bool(genome_obs)
 
     # -- Brax Env interface ------------------------------------------------------------------
     @property
     def observation_size(self) -> int:
-        return self.per_obs * self.history
+        return self.per_obs * self.history + (5 if self.genome_obs else 0)
 
     @property
     def action_size(self) -> int:
@@ -102,16 +108,16 @@ class Go2BodyBudget(Env):
     def backend(self) -> str:
         return "mjx"
 
-    def reset(self, rng: jax.Array) -> State:
+    def reset(self, rng: jax.Array, genome=None) -> State:
         k = jax.random.split(rng, 8)
         cmd = jax.random.uniform(k[0], (), minval=self.cmd_range[0], maxval=self.cmd_range[1])
         temps = jax.random.uniform(k[1], (12,), maxval=self.t_init_high)
         payload = jax.random.uniform(k[2], (), maxval=self.payload_max)
         weak = jax.random.randint(k[3], (), 0, 12)
         strength = jp.ones(12).at[weak].set(1.0 - jax.random.uniform(k[4], (), maxval=self.fault_max))
-        return self.reset_with(k[5], cmd, temps, payload, strength, switch=True)
+        return self.reset_with(k[5], cmd, temps, payload, strength, switch=True, genome=genome)
 
-    def reset_with(self, rng, cmd, temps, payload, strength, switch=False) -> State:
+    def reset_with(self, rng, cmd, temps, payload, strength, switch=False, genome=None) -> State:
         """Reset with explicit conditions (used for missions/lifetimes)."""
         k1, k2, k3 = jax.random.split(rng, 3)
         qpos = self.home_qpos.at[7:].add(jax.random.uniform(k1, (12,), minval=-0.05, maxval=0.05))
@@ -122,11 +128,15 @@ class Go2BodyBudget(Env):
                 "payload": jp.asarray(payload, jp.float32), "strength": jp.asarray(strength, jp.float32),
                 "switch": jp.asarray(switch, jp.float32), "last_action": jp.zeros(12), "last_sq": jp.zeros(12),
                 "wear": jp.zeros(12), "path": jp.zeros(()), "prev_xy": qpos[0:2]}
+        if self.feelings:
+            info["genome"] = jp.zeros(5) if genome is None else jp.asarray(genome, jp.float32)
         single = self._single_obs(data, info)
         info["hist"] = jp.tile(single, (self.history, 1))
-        obs = info["hist"].reshape(-1)
+        obs = self._full_obs(info)
         metrics = {"forward_vel": jp.zeros(()), "hottest_motor": jp.max(info["temps"]), "r_homeo": jp.zeros(()),
                    "payload_kg": info["payload"]}
+        if self.feelings:
+            metrics["feel"] = jp.zeros(())
         return State(data, obs, jp.zeros(()), jp.zeros(()), metrics, info)
 
     def step(self, state: State, action: jax.Array) -> State:
@@ -162,6 +172,11 @@ class Go2BodyBudget(Env):
         excess = jp.maximum(0.0, temps - self.sp) / (1.0 - self.sp)
         r_homeo = -jp.sum(excess)
         reward = r_task + self.w * r_homeo
+        if self.feelings:
+            a_heat, sp, a_eff, a_hot, a_prog = (info["genome"][i] for i in range(5))
+            heat = jp.maximum(0.0, temps - sp) / jp.maximum(1.0 - sp, 1e-3)
+            feel = -a_heat * jp.sum(heat) - a_eff * jp.sum(sq) - a_hot * jp.sum(sq * temps) + a_prog * v[0]
+            reward = reward + feel
 
         xy = data.qpos[0:2]
         info.update(rng=rng, temps=temps, payload=payload, last_action=a, last_sq=sq,
@@ -169,12 +184,14 @@ class Go2BodyBudget(Env):
                     path=info["path"] + jp.linalg.norm(xy - info["prev_xy"]), prev_xy=xy)
         single = self._single_obs(data, info)
         info["hist"] = jp.concatenate([info["hist"][1:], single[None]], axis=0)
-        obs = info["hist"].reshape(-1)
+        obs = self._full_obs(info)
         bad = ~jp.all(jp.isfinite(obs))
         obs = jp.where(bad, 0.0, obs)
         done = jp.where(fell | bad, 1.0, 0.0)
         metrics = dict(state.metrics)          # keep keys that Brax's wrappers added (e.g. "reward")
         metrics.update(forward_vel=v[0], hottest_motor=jp.max(temps), r_homeo=r_homeo, payload_kg=payload)
+        if self.feelings:
+            metrics["feel"] = feel
         return state.replace(pipeline_state=data, obs=obs, reward=jp.where(bad, 0.0, reward), done=done,
                              metrics=metrics, info=info)
 
@@ -185,6 +202,10 @@ class Go2BodyBudget(Env):
         w = data.qvel[3:6]
         g = R.T @ jp.array([0.0, 0.0, -1.0])
         return v, w, g
+
+    def _full_obs(self, info):
+        obs = info["hist"].reshape(-1)
+        return jp.concatenate([obs, info["genome"]]) if self.genome_obs else obs
 
     def _single_obs(self, data, info):
         v, w, g = self._base_frame(data)
