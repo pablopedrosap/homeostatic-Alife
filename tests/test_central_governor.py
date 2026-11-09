@@ -83,3 +83,40 @@ def test_end_spurt_near_the_finish():
 def test_wear_doubles_every_10_degrees():
     assert wear_rate(np.array([10 / 75]))[0] == pytest.approx(2.0)
     assert wear_rate(np.array([0.0]))[0] == pytest.approx(1.0)
+
+
+def test_anticipatory_governor_precools_before_a_short_heavy_burst():
+    """A short burst (comparable to the thermal time constant): arriving cool lowers the peak,
+    so a governor that knows the burst is coming walks slower beforehand."""
+    from homeostatic_colony.control.anticipatory import AnticipatoryGovernor
+    s = _schema()
+    heavy = {6.0: np.full(12, 2.5)}
+    T0 = np.full(12, 0.3)
+    knows = AnticipatoryGovernor(s, 180.0, [(0, 40, 0.0), (40, 55, 6.0), (55, 180, 0.0)], heavy, dt=DT)
+    naive = AnticipatoryGovernor(s, 180.0, [(0, 40, 0.0), (40, 55, 0.0), (55, 180, 0.0)], heavy, dt=DT)  # same phases, no load
+    knows.steps = naive.steps = int(30 / DT) // 50 * 50      # 10 s before the burst
+    v_knows = knows.update(T0, s.q_nominal(knows.cmd))
+    v_naive = naive.update(T0, s.q_nominal(naive.cmd))
+    assert v_knows < v_naive
+
+
+def test_long_load_makes_precooling_pointless():
+    """A load much longer than the thermal time constant: the peak no longer depends on the entry
+    temperature, so the governor does not sacrifice speed beforehand (physics, not a bug)."""
+    from homeostatic_colony.control.anticipatory import AnticipatoryGovernor
+    s = _schema()
+    gov = AnticipatoryGovernor(s, 180.0, [(0, 60, 0.0), (60, 120, 6.0), (120, 180, 0.0)],
+                               {6.0: np.full(12, 2.5)}, dt=DT)
+    peaks = gov._simulate_peaks(np.full(12, 0.3), 40.0)
+    assert peaks.max() - peaks.min() < 0.1
+
+
+def test_anticipatory_governor_is_vectorised_and_bounded():
+    from homeostatic_colony.control.anticipatory import AnticipatoryGovernor
+    s = _schema()
+    gov = AnticipatoryGovernor(s, 180.0, [(0, 90, 0.0), (90, 180, 3.0)], {3.0: np.full(12, 1.7)}, dt=DT)
+    peaks = gov._simulate_peaks(np.full(12, 0.2), 0.0)
+    assert peaks.shape == (len(gov.candidates),)
+    assert np.all(np.diff(peaks) <= 1e-9)            # candidates fastest-first → peaks non-increasing
+    v = gov.update(np.full(12, 0.2), np.zeros(12))
+    assert 0.4 <= v <= 1.2
