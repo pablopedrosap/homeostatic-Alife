@@ -128,6 +128,11 @@ def train_and_live(args) -> dict:
     path = OUT / "models" / f"m{member['id']:02d}.zip"
     if path.exists():
         model = PPO.load(str(path), env=venv, device="cpu")
+        # A loaded model re-seeds itself with the seed saved in the file. Copies of a winner would
+        # then train on identical random streams and stay exact clones forever (the bug that voided
+        # the first HAB-P9 run). Give every robot its own stream.
+        model.seed = seed
+        model.set_random_seed(seed)
     else:
         model = PPO("MlpPolicy", venv, seed=seed, device="cpu",
                     policy_kwargs=dict(net_arch=dict(pi=[256, 256], vf=[256, 256]), log_std_init=-1.0), **PPO_KW)

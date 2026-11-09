@@ -1,0 +1,26 @@
+====================================================================================
+HAB-P9 — evolved drives vs no drive (lifetime with aging) — pre-registered
+====================================================================================
+P1  lifetime distance: evolved 221.9 m vs control 219.0 m (ratio 1.01, Welch p = 0.35)
+    evolved robots: [226.8, 222.7, 208.4, 226.6, 228.2, 210.9, 221.0, 230.7]
+    control robots: [219.0, 219.0, 219.0, 219.0, 219.0, 219.0, 219.0, 219.0]
+S1  final evolved drives w = [0.024, 0.268, 0.053, 0.079, 0.054, 0.179, 0.036, 0.016]  (median 0.053)
+S2  motor strength after a lifetime: evolved 0.840 vs control 0.856 (p = 0.0039)
+S3  evolved: falls/lifetime 0.03, frozen 2%, wear 71k; control: falls/lifetime 0.00, frozen 0%, wear 65k
+
+Generations (median fitness / evolved median w):
+    round  0: evolved   90.1 m (w 0.103)   control   86.8 m
+    round  1: evolved   91.7 m (w 0.103)   control   88.6 m
+    round  2: evolved  153.2 m (w 0.103)   control  173.0 m
+    round  3: evolved  178.6 m (w 0.075)   control  202.2 m
+    round  4: evolved  178.8 m (w 0.062)   control  194.4 m
+    round  5: evolved  186.6 m (w 0.075)   control  199.8 m
+    round  6: evolved  224.5 m (w 0.082)   control  212.6 m
+    round  7: evolved  215.2 m (w 0.082)   control  206.3 m
+    round  8: evolved  225.4 m (w 0.099)   control  210.0 m
+    round  9: evolved  219.5 m (w 0.099)   control  211.6 m
+    round 10: evolved  228.5 m (w 0.053)   control  221.9 m
+    round 11: evolved  229.9 m (w 0.053)   control  222.2 m
+
+>>> HAB-P9 VERDICT: FAIL
+====================================================================================

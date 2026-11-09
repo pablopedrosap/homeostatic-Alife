@@ -53,3 +53,16 @@ discount horizon (~2 s) is short, and control robots already feel within-mission
 ## What a PASS does NOT prove
 Hardware transfer (the thermal and aging constants are time-compressed and not identified on a real
 Go2), that this is how animal drives evolved, or anything about experience.
+
+## Amendment 1 (2026-11-09, after run 1, before run 2)
+
+Run 1 is **void**. `PPO.load` re-seeds a model with the seed stored in its file, so when selection
+copied a winner's brain into a loser, the copy trained on the winner's exact random streams and
+remained an identical clone. The control arm (no drive mutations to break the symmetry) collapsed
+to one genome by round 3: all 8 robots scored exactly 219.0 m, and the pre-registered Welch test
+compared 8 diverse robots with 8 copies of one. Fix: after loading, each robot is re-seeded with
+its own seed (`model.seed = seed; model.set_random_seed(seed)`), verified by a check that a parent
+and its clone diverge after one more round. **Run 2 uses the frozen design above unchanged.** Run 1's
+data are kept, labelled VOID, in `data/habp9_go2_run1_VOID/`. Its descriptive observations (evolved
+median drive fell to 0.05; evolved robots slightly more worn) are not evidence, because the
+comparison was broken.
