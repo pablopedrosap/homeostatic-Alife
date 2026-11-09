@@ -10,4 +10,5 @@ models are not included (they are large and fully reproducible from the scripts 
 | `habp1_go2/` | `scripts/run_go2.py` | `python scripts/analyze_go2.py --csv data/habp1_go2/go2_damage.csv` |
 | `habp2_go2/` | `scripts/run_go2_v2.py`, `scripts/explore_go2_v2.py` (exploratory) | `python scripts/analyze_go2_v2.py --csv data/habp2_go2/missions.csv` |
 | `habp7_go2/` | `scripts/run_go2_v7.py` (`learned_body_schemas/` = what each robot learned about itself) | `python scripts/analyze_go2_v7.py --csv data/habp7_go2/missions.csv` |
+| `habp8_go2/` | `scripts/run_go2_v8.py` | `python scripts/analyze_go2_v8.py --csv data/habp8_go2/missions.csv` |
 | `regulator_law/` | `scripts/run_regulator_law.py`, `scripts/run_channel_dissection.py` | `python scripts/run_regulator_law.py --analyze-only --out data/regulator_law` |

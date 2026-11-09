@@ -268,8 +268,8 @@ class Go2HomeostaticEnv(gym.Env):
         if self._renderer is None:
             self._renderer = mujoco.Renderer(self.model, 360, 480)
         cam = mujoco.MjvCamera()
-        cam.type = mujoco.mjtCamera.mjCAMERA_TRACKING
-        cam.trackbodyid = self.base_id
+        cam.type = mujoco.mjtCamera.mjCAMERA_FREE          # aim straight at the trunk every frame
+        cam.lookat[:] = self.data.xpos[self.base_id]       # (a fresh tracking camera lags behind)
         cam.distance, cam.elevation, cam.azimuth = 1.6, -18, 140
         self._renderer.update_scene(self.data, cam)
         return self._renderer.render()

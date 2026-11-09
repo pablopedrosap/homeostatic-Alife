@@ -42,27 +42,28 @@
   },
   "go2": {
     "title": "Can a robot learn its own body and pace itself the way animals do?",
-    "verdict_label": "Pre-registered test failed on distance · motor wear per metre −33% (p = 0.0003)",
-    "summary": "Third version, built like a nervous system. The motor drivers act as reflexes and the trained walking policy as the pattern generator. Each robot first takes a two-minute exploratory walk and learns its own thermal physics from 1 °C sensor readings. During the mission it keeps re-checking how fast it is heating right now, which is how it notices a payload. A central governor then simulates its own body to the end of the mission and picks the fastest pace it can sustain. It worked as a regulator: a third less motor wear per metre walked. But it walked noticeably less far, and a simple rule that just slows down when hot did equally well.",
+    "verdict_label": "v7 and v8 pre-registered tests failed on distance · motor wear per metre −26% to −33% (p ≤ 0.026)",
+    "summary": "Built like a nervous system. The motor drivers act as reflexes and a trained walking policy as the pattern generator. Each robot first takes a two-minute exploratory walk and learns its own thermal physics from 1 °C sensor readings, including how much harder its motors work when carrying a load. During missions a governor simulates its own body ahead and picks its pace. v7 used the standard walking style; v8 added a learned, cooler walking style and a governor that knows when heavy loads are coming. Both cut motor wear per metre by a quarter to a third. Both walked less far than today's practice, and planning ahead never beat a simple slow-down-when-hot rule.",
     "stats": [
       [
         "±1.5%",
         "how accurately every robot learned its own heating and cooling constants from a 2-minute walk"
       ],
       [
-        "−33%",
-        "motor wear per metre walked, against the same robots at full speed (p = 0.0003)"
+        "−26% to −33%",
+        "motor wear per metre walked (v8 and v7, p ≤ 0.026), so far always at some cost in distance"
       ],
       [
-        "55%",
-        "share of motor heat that remains even at walking pace: bearing weight, not speed, is what heats the motors"
+        "1 of 16",
+        "robots that fell during their own pre-mission self-test: the same robot that then failed 28 of 45 missions"
       ]
     ],
-    "scope": "Why it didn't win on distance: most heat comes from carrying the body, so slowing down is a weak lever, and in steady missions planning ahead collapses into picking a slower pace, which a simple rule does just as well. The one real efficiency gain in the project came from a learned gait that produces 13% less heat at almost the same speed. The next version combines that gait with the governor, on missions whose demands change over time.",
+    "scope": "Why distance suffers: about 55% of motor heat comes from carrying the body, so slowing down is a weak lever, and with a 10-second thermal memory there is little for planning ahead to exploit. The cooler learned walking style is the real lever, but it was never trained with loads, so it sometimes freezes or falls under them. v9 would train it with changing loads and use the self-test as a fitness check.",
     "figure_caption": "Motor wear per metre against distance walked, per mission type. Better is right and down. The governor at three pain thresholds (diamonds) traces the same curve as a simple reactive rule (square); full speed (circle) walks furthest at the highest wear.",
-    "v1_heading": "Earlier versions: HAB-P2 (end-to-end RL with a heat cost; robots froze under load and ignored their self-model) and HAB-P1 (20-second damage tests; self-regulation reward too weak). Below: the HAB-P1 tests and video.",
-    "video_caption": "From the earlier version (HAB-P1), scenario fixed before any results: 75% of the front-left knee's torque removed. Here the self-regulating robot walks 14.6 m and the standard one 1.6 m, but both run their motors equally hot, and across all trained robots the difference is not reliable. An illustration of the testbed, not evidence.",
-    "seeds_label": "8 robots, 960 three-minute missions (HAB-P7), all reported",
-    "figure_file": "habp7_tradeoff.png"
+    "v1_heading": "The v8 courier video, then the earliest version (HAB-P1, 20-second damage tests). HAB-P2 is described in the report.",
+    "video_caption": "v8 video (4× speed), episode fixed in advance (robot 0, first episode): today's practice (left) vs v8 (right) on a courier route with three 6 kg carries. Here v8 freezes after about 50 s and ends at 37 m against 102 m. It shows the main failure mode; the averages are in the charts.",
+    "seeds_label": "8 robots per controller, 1,680 three-minute missions (HAB-P7 + P8), all reported",
+    "figure_file": "habp7_tradeoff.png",
+    "video_file": "go2_v8_courier.mp4"
   }
 }

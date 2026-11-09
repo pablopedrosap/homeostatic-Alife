@@ -1,0 +1,35 @@
+==========================================================================================
+HAB-P8 — heat-aware gait + anticipatory pacing vs standard gait + reactive rule — pre-registered
+==========================================================================================
+seeds: [0, 1, 2, 3, 4, 5, 6, 7]
+P1  wear per metre (bursts): 360 vs 470  geo ratio 0.74×  p=0.026 -> supported
+P2  path walked (bursts): ratio 0.92  95% CI [0.68, 1.14]  (need lower ≥ 0.95) -> FAILS
+
+Secondary (Holm over 3):
+    S1_gait_lever                  geo ratio 0.76×  p=0.041  p_holm=0.12  -> not supported
+    S2_pacing_lever                geo ratio 0.95×  p=0.11  p_holm=0.22  -> not supported
+    S3_anticipation_needs_change   mean log diff +0.138  p=0.3  p_holm=0.3  -> not supported
+
+Descriptive (mean over robots × missions):
+    condition|mission                       path m   wear/m   hotT  peakT  frozen  fell   cmd
+    heat_aware+anticipatory|bursts            87.0    359.6   0.71   0.85     19%   12%  0.72
+    heat_aware+anticipatory|long_carry        88.3    332.5   0.71   0.84     13%   12%  0.72
+    heat_aware+anticipatory|steady3           67.2    569.4   0.70   0.77     13%    0%  0.55
+    heat_aware+full|bursts                   109.3    406.5   0.79   0.87     19%   12%  1.00
+    heat_aware+full|long_carry               106.3    413.9   0.78   0.87     18%    8%  1.00
+    heat_aware+full|steady3                   91.3    765.5   0.83   0.87     22%    0%  1.00
+    heat_aware+reactive|bursts                91.4    387.0   0.74   0.84     20%   12%  0.66
+    heat_aware+reactive|long_carry            91.6    355.6   0.73   0.85     15%   12%  0.67
+    heat_aware+reactive|steady3               72.7    680.0   0.77   0.81     22%    0%  0.59
+    standard+anticipatory|bursts              81.4    456.2   0.72   0.86      2%    2%  0.52
+    standard+anticipatory|long_carry          76.9    511.4   0.73   0.86      3%    0%  0.50
+    standard+anticipatory|steady3             65.3    516.5   0.71   0.79      0%    0%  0.42
+    standard+full|bursts                     123.5    601.7   0.83   0.87     11%    0%  1.00
+    standard+full|long_carry                 119.0    619.1   0.83   0.87     11%    0%  1.00
+    standard+full|steady3                    114.2    787.4   0.84   0.87      0%    0%  1.00
+    standard+reactive|bursts                  94.2    469.5   0.77   0.86      1%    0%  0.58
+    standard+reactive|long_carry              89.6    517.4   0.78   0.86      2%    0%  0.57
+    standard+reactive|steady3                 82.0    609.0   0.79   0.83      0%    0%  0.54
+
+>>> HAB-P8 VERDICT: FAIL
+==========================================================================================

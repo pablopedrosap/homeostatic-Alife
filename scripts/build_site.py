@@ -118,10 +118,11 @@ def go2_data(narr: dict, video_prefix: str) -> dict | None:
     if fig.exists() and "figure_caption" in narr["go2"]:
         out["figure"] = {"src": video_prefix.replace("media/", "figures/") + fig_name,
                          "alt": "HAB-P2 mission results", "caption": narr["go2"]["figure_caption"]}
-    vid = ROOT / "docs/media/go2_fault_side_by_side.mp4"
+    vid_name = narr["go2"].get("video_file", "go2_fault_side_by_side.mp4")
+    vid = ROOT / "docs/media" / vid_name
     if vid.exists() and "video_caption" in narr["go2"]:
-        out["video"] = {"src": video_prefix + "go2_fault_side_by_side.mp4",
-                        "poster": video_prefix + "go2_fault_side_by_side.png",
+        out["video"] = {"src": video_prefix + vid_name,
+                        "poster": video_prefix + vid_name.replace(".mp4", ".png"),
                         "caption": narr["go2"]["video_caption"]}
     return out
 

@@ -1,0 +1,10 @@
+{
+ "label": "EXPLORATORY sensitivity \u2014 robot 3 excluded post hoc; verdict unchanged",
+ "wear_ratio": 0.7057218232606746,
+ "wear_p": 0.021827256237016295,
+ "path_ratio": 0.9859187009116929,
+ "path_ci95": [
+  0.755868285116428,
+  1.156855712075991
+ ]
+}
