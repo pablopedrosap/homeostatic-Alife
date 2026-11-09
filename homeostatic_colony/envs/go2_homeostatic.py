@@ -89,6 +89,12 @@ class Go2HomeostaticConfig:
     gov_t_full: float = 0.9                        # ... reach the minimum command here
     gov_min_frac: float = 0.3
 
+    # --- HAB-P9 options (development under variability + effort sense). Defaults: off. ---
+    obs_effort: bool = False                       # also sense per-motor effort (τ/τ_peak)², like tendon organs
+    payload_max: float = 0.0                       # loads drawn from U(0, payload_max) ...
+    payload_switch_rate: float = 0.0               # ... switching at this rate (1/s) mid-episode
+    fault_max: float = 0.0                         # per episode, one random motor weakened by U(0, fault_max)
+
     seed: int | None = None
     scene_path: str = field(default_factory=lambda: str(GO2_SCENE))
 
@@ -129,7 +135,9 @@ class Go2HomeostaticEnv(gym.Env):
         self.fault_frac[c.fault_motor] = 1.0 - c.fault_severity
 
         self.action_space = gym.spaces.Box(-1.0, 1.0, (12,), np.float32)
-        dim = OBS_DIM + (12 if self_model is not None else 0)
+        dim = OBS_DIM + (12 if self_model is not None else 0) + (12 if c.obs_effort else 0)
+        self.strength = np.ones(12)           # persistent motor strength (aging), applied with faults
+        self._last_sq = np.zeros(12)
         self.observation_space = gym.spaces.Box(-np.inf, np.inf, (dim,), np.float32)
         self.cmd = c.cmd_vx
         self._rng = np.random.default_rng(c.seed)
@@ -141,9 +149,16 @@ class Go2HomeostaticEnv(gym.Env):
         return thermal * self.fault_frac
 
     def _apply_limits(self) -> None:
-        lim = np.maximum(self.peak * self._torque_limit_frac(), 1e-6)
+        lim = np.maximum(self.peak * self._torque_limit_frac() * self.strength, 1e-6)
         self.model.actuator_forcerange[:, 0] = -lim
         self.model.actuator_forcerange[:, 1] = lim
+
+    def set_payload(self, kg: float) -> None:
+        """Change the load on the trunk (mid-episode allowed)."""
+        m, b = self.model, self.base_id
+        m.body_mass[b] = self._base_mass + kg
+        m.body_inertia[b] = self._base_inertia * (self._base_mass + kg) / self._base_mass
+        self.payload_now = kg
 
     def _base_frame(self):
         R = self.data.xmat[self.base_id].reshape(3, 3)
@@ -158,6 +173,8 @@ class Go2HomeostaticEnv(gym.Env):
         qd = self.data.qvel[6:18] * 0.05
         base = np.concatenate([v * 2.0, w * 0.25, g, [self._effective_cmd()], q, qd, self.last_action,
                                self.temp]).astype(np.float32)
+        if self.cfg.obs_effort:
+            base = np.concatenate([base, self._last_sq]).astype(np.float32)
         if self.self_model is None:
             return base
         self._last_base_obs = base
@@ -193,6 +210,13 @@ class Go2HomeostaticEnv(gym.Env):
         self._apply_limits()
         mujoco.mj_forward(m, d)
         self.cmd = (float(self._rng.uniform(*c.cmd_range)) if c.cmd_range is not None else c.cmd_vx)
+        self._last_sq = np.zeros(12)
+        if c.fault_max > 0:
+            self.fault_frac = np.ones(12)
+            self.fault_frac[self._rng.integers(12)] = 1.0 - self._rng.uniform(0, c.fault_max)
+            self._apply_limits()
+        if c.payload_max > 0:
+            self.set_payload(float(self._rng.uniform(0, c.payload_max)))
         if self.self_model is not None:
             self.self_model.reset_stream(self.env_id)
         self.last_action = np.zeros(12)
@@ -207,6 +231,8 @@ class Go2HomeostaticEnv(gym.Env):
     def step(self, action):
         c, m, d = self.cfg, self.model, self.data
         a = np.clip(np.asarray(action, dtype=np.float64), -1.0, 1.0)
+        if c.payload_switch_rate > 0 and self._rng.random() < c.payload_switch_rate * self.dt:
+            self.set_payload(float(self._rng.uniform(0, c.payload_max)))
         d.ctrl[:] = np.clip(self.home_ctrl + c.action_scale * a, self.ctrl_lo, self.ctrl_hi)
 
         sq = np.zeros(12)
@@ -217,6 +243,7 @@ class Go2HomeostaticEnv(gym.Env):
             sq += (tau / self.peak) ** 2
             power += float(np.abs(tau * d.qvel[6:18]).sum())
         sq /= c.substeps
+        self._last_sq = sq.copy()
         self.energy_j += power / c.substeps * self.dt
 
         # Motor thermal dynamics, then the driver's derating for the next step.
