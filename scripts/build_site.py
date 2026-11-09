@@ -113,9 +113,10 @@ def go2_data(narr: dict, video_prefix: str) -> dict | None:
                        "yMax": ymax, "yTicks": [x for x in range(0, int(ymax) + 1, 5)]})
     out = {"seeds_label": f"{len(v['seeds'])} training seeds per controller, all reported",
            **narr["go2"], "verdict": v["verdict"], "curves": curves}
-    fig = ROOT / "docs/figures/habp2_go2_missions.png"
+    fig_name = narr["go2"].get("figure_file", "habp2_go2_missions.png")
+    fig = ROOT / "docs/figures" / fig_name
     if fig.exists() and "figure_caption" in narr["go2"]:
-        out["figure"] = {"src": video_prefix.replace("media/", "figures/") + "habp2_go2_missions.png",
+        out["figure"] = {"src": video_prefix.replace("media/", "figures/") + fig_name,
                          "alt": "HAB-P2 mission results", "caption": narr["go2"]["figure_caption"]}
     vid = ROOT / "docs/media/go2_fault_side_by_side.mp4"
     if vid.exists() and "video_caption" in narr["go2"]:

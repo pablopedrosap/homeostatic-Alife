@@ -1,0 +1,74 @@
+[
+ {
+  "seed": 0,
+  "gain_learned": 0.5623039952837677,
+  "gain_true": 0.57,
+  "tau_learned": 10.145008304998026,
+  "tau_true": 10.0,
+  "dev_steps": 6750,
+  "fell_during_development": false
+ },
+ {
+  "seed": 1,
+  "gain_learned": 0.5712329134202567,
+  "gain_true": 0.57,
+  "tau_learned": 9.977969434811973,
+  "tau_true": 10.0,
+  "dev_steps": 6750,
+  "fell_during_development": false
+ },
+ {
+  "seed": 2,
+  "gain_learned": 0.5684014098225707,
+  "gain_true": 0.57,
+  "tau_learned": 10.02994865633314,
+  "tau_true": 10.0,
+  "dev_steps": 6750,
+  "fell_during_development": false
+ },
+ {
+  "seed": 3,
+  "gain_learned": 0.5708967289855983,
+  "gain_true": 0.57,
+  "tau_learned": 9.98524339433191,
+  "tau_true": 10.0,
+  "dev_steps": 6750,
+  "fell_during_development": false
+ },
+ {
+  "seed": 4,
+  "gain_learned": 0.5695206735869558,
+  "gain_true": 0.57,
+  "tau_learned": 10.00879414306852,
+  "tau_true": 10.0,
+  "dev_steps": 6750,
+  "fell_during_development": false
+ },
+ {
+  "seed": 5,
+  "gain_learned": 0.5669693824478821,
+  "gain_true": 0.57,
+  "tau_learned": 10.055020358882857,
+  "tau_true": 10.0,
+  "dev_steps": 6750,
+  "fell_during_development": false
+ },
+ {
+  "seed": 6,
+  "gain_learned": 0.5707513169598687,
+  "gain_true": 0.57,
+  "tau_learned": 9.985126305222932,
+  "tau_true": 10.0,
+  "dev_steps": 6750,
+  "fell_during_development": false
+ },
+ {
+  "seed": 7,
+  "gain_learned": 0.5686854483615444,
+  "gain_true": 0.57,
+  "tau_learned": 10.024295526750555,
+  "tau_true": 10.0,
+  "dev_steps": 6750,
+  "fell_during_development": false
+ }
+]

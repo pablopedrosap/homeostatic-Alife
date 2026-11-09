@@ -1,0 +1,41 @@
+======================================================================================
+HAB-P7 — nature-inspired homeostatic control stack on the Go2 — pre-registered analysis
+======================================================================================
+seeds: [0, 1, 2, 3, 4, 5, 6, 7]
+P1  wear per metre, central / standard = 0.67×  (mean log -0.399, p=0.0003) -> supported
+P2  path walked, central / standard = 0.78  95% CI [0.33, 1.24]  (need lower bound ≥ 0.85) -> FAILS
+
+Secondary (Holm over 3):
+    S1_central_vs_reactive   wear/m ratio 0.86×  p=2.3e-05  p_holm=6.8e-05  path ratio 0.81 [0.78,0.85]  -> not supported
+    S2_selfcalibration       wear/m ratio 0.95×  p=0.049  p_holm=0.049  -> supported
+    S3_t0.8_vs_standard      wear/m ratio 0.77×  p=0.0057  p_holm=0.011  path ratio 0.87 [0.43,1.31]  -> not supported
+
+Descriptive (mean over seeds × episodes):
+    condition|mission           path m   wear/m   hotT  peakT  frozen  fell   cmd
+    central|unloaded              81.2    303.0   0.67   0.73      0%    0%  0.47
+    central|3kg                   64.3    517.9   0.71   0.78      1%    0%  0.41
+    central|6kg                   51.7   1048.2   0.80   0.86      7%    0%  0.40
+    central|weak_knee             81.2    303.6   0.67   0.73      0%    0%  0.47
+    central_fixed|unloaded        82.4    307.0   0.67   0.74      0%    0%  0.48
+    central_fixed|3kg             72.5    567.4   0.75   0.82      0%    0%  0.47
+    central_fixed|6kg             57.1   1078.0   0.83   0.87      6%    0%  0.47
+    central_fixed|weak_knee       82.2    308.0   0.67   0.74      0%    0%  0.48
+    central_t0.6|unloaded         72.6    282.5   0.62   0.68      0%    0%  0.41
+    central_t0.6|3kg              62.8    511.7   0.70   0.77      1%    0%  0.40
+    central_t0.6|6kg              51.6   1048.4   0.80   0.85      8%    0%  0.40
+    central_t0.6|weak_knee        72.6    282.7   0.62   0.68      0%    0%  0.41
+    central_t0.8|unloaded        103.3    378.1   0.75   0.81      0%    0%  0.61
+    central_t0.8|3kg              73.7    567.9   0.75   0.82      0%    0%  0.48
+    central_t0.8|6kg              52.1   1048.7   0.81   0.85      8%    0%  0.40
+    central_t0.8|weak_knee       102.8    380.4   0.75   0.81      0%    0%  0.61
+    reactive|unloaded            105.0    372.1   0.76   0.79      0%    0%  0.62
+    reactive|3kg                  81.7    610.1   0.79   0.83      0%    0%  0.54
+    reactive|6kg                  56.6   1066.0   0.83   0.87      6%    0%  0.45
+    reactive|weak_knee           104.8    373.0   0.76   0.79      0%    0%  0.62
+    standard|unloaded            156.5    446.7   0.83   0.86      0%    0%  1.00
+    standard|3kg                 114.2    788.6   0.84   0.87      0%    0%  1.00
+    standard|6kg                  65.7   1832.8   0.85   0.87     18%    0%  1.00
+    standard|weak_knee           156.1    448.2   0.83   0.86      0%    0%  1.00
+
+>>> HAB-P7 VERDICT: FAIL
+======================================================================================

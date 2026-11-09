@@ -17,22 +17,45 @@ keep working when something breaks.
 interactive results, and an evolution simulation running in your browser.
 
 > **Status, November 2026.** A testbed for robots that regulate their own bodies (a Unitree Go2
-> whose motors heat up, derate and cut out; a MuJoCo Ant; a reward-free evolutionary world) and four
-> pre-registered experiments. **None of the main hypotheses has passed yet.** The most informative
-> is HAB-P2. It was a valid test (the treatment demonstrably cooled the motors), and it showed that a
-> heat-averse Go2 walks just as far unloaded with cooler motors, but **freezes instead of pacing
-> itself** under load, and that a learned self-model is ignored unless it sits inside the decision.
-> The strongest positive result is from evolution: organisms that sense their **own temperature**
-> out-compete identical ones that can't (p = 4×10⁻¹¹). Every failure has a diagnosed cause and a
-> next design.
+> whose motors heat up, derate and cut out; a MuJoCo Ant; a reward-free evolutionary world) and five
+> pre-registered experiments, **none of whose main hypotheses has passed yet**. What did hold up:
+> a nature-inspired control stack in which **each robot learned its own thermal physics to within
+> 1.5%** from two minutes of walking, then cut **motor wear per metre by 33%** (p = 0.0003). It
+> paid for that with distance, and it was no better than simple reactive throttling. The diagnosis:
+> ~55% of the heat comes from bearing weight, so the real lever is *how* the robot moves, not how
+> fast. The strongest positive result is from evolution: organisms that sense their **own
+> temperature** out-compete identical ones that can't (p = 4×10⁻¹¹).
 
 ---
 
 ## Results
 
-### 1 · Unitree Go2 that manages its own motor heat (HAB-P2, then HAB-P1)
+### 1 · Unitree Go2 that manages its own motor heat (HAB-P7, HAB-P2, HAB-P1)
 
-![HAB-P2](docs/figures/habp2_go2_missions.png)
+![HAB-P7](docs/figures/habp7_tradeoff.png)
+
+**HAB-P7 ("v7"), a nature-inspired control stack. Verdict: FAIL** ([pre-registration](docs/prereg/HABP7_central_governor.md),
+with predicted outcomes written before running). The layers mirror a nervous system: motor drivers
+derate when hot (reflex) → the trained gait policy (pattern generator) → 1 °C-resolution motor
+temperatures and torques (interoception) → a **body schema the robot learns from its own exploratory
+walk** and re-calibrates online (it detects a payload by itself) → a **central governor** that
+simulates its own body to the end of the mission and picks the fastest pace that stays under a pain
+threshold (Noakes' central governor; teleoanticipation).
+
+| | Result |
+|---|---|
+| Did the robots learn their own physics? | yes: heating gain and cooling time constant within 1.5% for all 8 robots |
+| Motor wear per metre vs full speed (primary) | **−33%**, p = 0.0003 ✓ |
+| Distance vs full speed (competence guard ≥ 85%) | 0.78 [0.33, 1.24] ✗ |
+| vs simple reactive governor | same trade-off curve: no better at matched distance |
+| Knowing its *current* body (online self-calibration) | helps under load (p = 0.049) ✓ |
+
+**Why:** at 0.4 m/s the hottest motor still gets 55% of the heat it gets at 1.0 m/s. Most heat
+comes from bearing weight, so slowing down is a weak lever, and in steady missions "planning ahead"
+reduces to "pick a slower pace". The one Pareto gain in the project came from the **learned gait**
+(HAB-P2: 13% less heat at almost the same speed). Report: [`docs/results/HABP7_results.md`](docs/results/HABP7_results.md).
+
+#### Earlier: HAB-P2 (end-to-end RL with a heat cost, 3-minute missions)
 
 **HAB-P2 verdict: FAIL, as a valid test** ([pre-registration](docs/prereg/HABP2_go2_missions.md),
 pushed before any mission ran). 3-minute missions at 1 m/s carrying 0/3/6 kg; 8 robots each of
@@ -140,8 +163,8 @@ aware of itself:
 | Step | Capability | Status |
 |---|---|---|
 | 1 | **Feels its own body**: motor temperatures, energy and damage as inputs | built (simulation) |
-| 2 | **Acts to keep its body working**, and that pays off when something breaks | partly: free cooling unloaded (HAB-P2); no gain under damage yet |
-| 3 | **Knows what it can do right now** ("my left knee is weak") and changes its plan | self-model built and learned; not yet used by the policy (HAB-P2) |
+| 2 | **Acts to keep its body working**, and that pays off when something breaks | partly: −33% motor wear per metre (HAB-P7), at a cost in distance |
+| 3 | **Knows what it can do right now** ("my left knee is weak") and changes its plan | yes, in a limited form: learns its own thermal physics and detects a payload online (HAB-P7) |
 | 4 | **Does all of this on a real robot**: one quadruped that keeps walking with a failing motor | goal |
 
 ## How the work is done
@@ -192,6 +215,9 @@ pip install -e ".[dev]"
 python scripts/fetch_go2.py                     # Unitree Go2 model (MuJoCo Menagerie, pinned)
 python -m pytest tests/ -q                      # ~15 s
 
+# HAB-P7: development walks + 960 missions with the HAB-P2 gait policies (~10 min on 8 cores)
+python scripts/run_go2_v7.py && python scripts/analyze_go2_v7.py
+
 # HAB-P2: 24 Go2 agents × 5M steps + 3-minute missions (~2.5 h on 8 cores)
 python scripts/run_go2_v2.py --workers 8 && python scripts/analyze_go2_v2.py
 
@@ -222,9 +248,11 @@ homeostatic_colony/
   envs/ant_homeostatic.py        MuJoCo Ant-v5 + internal state, reward modes, damage knobs
   envs/go2_homeostatic.py        Unitree Go2 with motor thermals, driver derating, faults, payload, governor
   envs/self_model.py             online-learned model of the robot's own motor temperatures (the loop)
+  control/central_governor.py    body schema learned from own experience + teleoanticipatory pacing
   envs/humanoid_homeostatic.py   Humanoid-v5 wrapper (experiment not yet run)
   alife/emergent_world.py        reward-free evolutionary world (weather, yoked control, probes)
 scripts/
+  run_go2_v7.py, analyze_go2_v7.py   HAB-P7 nature-inspired stack (development walk + missions)
   run_go2_v2.py, analyze_go2_v2.py   HAB-P2 missions, self-model loop, governor; pre-registered analysis
   explore_go2_v2.py              exploratory mission diagnostics (path walked, freezing)
   run_go2.py, analyze_go2.py     HAB-P1 training/evaluation and pre-registered analysis
@@ -239,7 +267,7 @@ docs/
   results/                       full result reports
   THESIS.md, BENCHMARK.md        research program and the benchmark ladder
   site/                          live demo (JS port of the evolutionary world)
-tests/                           137 tests, incl. golden-value tests that pin the original world
+tests/                           142 tests, incl. golden-value tests that pin the original world
 ```
 
 The vectorised E/T/D module updates the internal state of 4,096 parallel bodies in about
@@ -254,12 +282,13 @@ is that the layer adds negligible overhead on top of a GPU simulator such as Isa
 | 2026-03 | First 6-seed damage sweep. Hybrid looked far more robust (e.g. 82% vs 27% full episodes at 40% actuator damage), but the extrinsic foil also survived only **27% of episodes with no damage at all**. The gap was mostly a baseline difference, so the run is superseded. |
 | 2026-07 | HAB-1 v0 (3 seeds): strong directional signal, but temperature never reached the danger band, and under a corrected analysis it is not significant (Holm p = 0.39). The thermal coupling was then calibrated. |
 | 2026-07 | HAB-E2: "selection does not build self-regulation". **Retracted 2026-11** (confounded design). |
-| 2026-11 | Three pre-registered experiments. HAB-1 v1: FAIL (right direction, underpowered, baseline dominated by heat). HAB-E2v: hypothesis failed, but self-sensing is strongly selected. HAB-P1 (Go2): FAIL (treatment too weak, no thermal failures). HAB-P2 (Go2 missions + self-model): FAIL as a valid test (free cooling unloaded, freezing under load, self-model unused). |
+| 2026-11 | Three pre-registered experiments. HAB-1 v1: FAIL (right direction, underpowered, baseline dominated by heat). HAB-E2v: hypothesis failed, but self-sensing is strongly selected. HAB-P1 (Go2): FAIL (treatment too weak, no thermal failures). HAB-P2 (Go2 missions + self-model): FAIL as a valid test (free cooling unloaded, freezing under load, self-model unused). HAB-P7 (nature-inspired stack): FAIL on distance, −33% wear, robots learned their own physics. |
 
 ## Roadmap
 
-1. **HAB-P3 (Go2):** mission-length training (or γ ≈ 0.999), the self-model inside the decision
-   (a cost on *predicted* overheating), path length with a heading command, and a freeze gate.
+1. **Go2 v8:** combine the two levers at their own timescales, a heat-aware learned gait (the only
+   Pareto gain so far) under a pacing governor that prevents freezing, on missions whose demands
+   change over time, with a matched-distance comparison against reactive throttling.
 2. **HAB-1 v2 (Ant):** 16–21 seeds per condition, with physics that leave a healthy undamaged baseline.
 3. **HAB-2: predictive self-maintenance.** Does a learned risk signal rise *before* failure?
 4. **HAB-E2v follow-up:** find the mechanism by which self-temperature helps (efference-copy

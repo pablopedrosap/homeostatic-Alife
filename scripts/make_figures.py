@@ -287,12 +287,55 @@ def fig_go2_v2(csv_path: Path, out: Path) -> Path:
     return p
 
 
+def fig_go2_v7(csv_path: Path, out: Path) -> Path:
+    _style()
+    rows = list(csv.DictReader(open(csv_path)))
+    for r in rows:
+        for k in r:
+            if k not in ("condition", "mission"):
+                r[k] = float(r[k])
+
+    def pt(c, m):
+        sel = [r for r in rows if r["condition"] == c and r["mission"] == m]
+        return float(np.mean([r["path_m"] for r in sel])), float(np.mean([r["wear_per_m"] for r in sel]))
+
+    missions = [("unloaded", "Unloaded"), ("3kg", "Carrying 3 kg"), ("6kg", "Carrying 6 kg")]
+    fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.3))
+    for ax, (m, title) in zip(axes, missions):
+        cx = [pt(c, m) for c in ("central_t0.6", "central", "central_t0.8")]
+        ax.plot([p[0] for p in cx], [p[1] for p in cx], color=AQUA, lw=2, zorder=2)
+        for (x, y), lab in zip(cx, ("0.6", "0.7", "0.8")):
+            ax.plot(x, y, marker="D", ms=7.5, mfc=AQUA if lab == "0.7" else SURFACE, mec=AQUA, mew=1.6, zorder=3)
+            if m == "unloaded":
+                ax.annotate(f"T≤{lab}", (x, y), textcoords="offset points", xytext=(6, -12), fontsize=7.5, color=INK2)
+        for c, col, mk, face, lab in (("standard", ORANGE, "o", ORANGE, "Standard (full speed)"),
+                                      ("reactive", GRAY, "s", GRAY, "Reactive governor"),
+                                      ("central_fixed", AQUA, "^", SURFACE, "Central, no self-calibration")):
+            x, y = pt(c, m)
+            ax.plot(x, y, marker=mk, ms=8, mfc=face, mec=col, mew=1.6, ls="none", label=lab, zorder=4)
+        ax.plot([], [], color=AQUA, marker="D", mfc=AQUA, mec=AQUA, label="Central governor (pain threshold)")
+        ax.set_title(title, loc="left")
+        ax.set_xlabel("path walked in 3 minutes (m)  →  better")
+        ax.set_ylim(0, None)
+    axes[0].set_ylabel("motor wear per metre (Arrhenius dose)  ↓ better")
+    axes[0].legend(loc="lower right", fontsize=8)
+    fig.text(0.01, -0.05, "Unitree Go2, same 8 locomotion policies in every condition; only the speed command differs. "
+             "Mean over 8 robots × 5 missions. Better = right and down. The weak-knee missions matched unloaded (fault did not bind).",
+             color=INK2, fontsize=8.5)
+    fig.tight_layout()
+    p = out / "habp7_tradeoff.png"
+    fig.savefig(p, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+    return p
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--hab1", type=Path)
     ap.add_argument("--regulator", type=Path)
     ap.add_argument("--go2", type=Path)
     ap.add_argument("--go2v2", type=Path)
+    ap.add_argument("--go2v7", type=Path)
     ap.add_argument("--out", type=Path, default=FIG)
     a = ap.parse_args()
     a.out.mkdir(parents=True, exist_ok=True)
@@ -307,6 +350,8 @@ def main():
         print(fig_go2(a.go2, a.out))
     if a.go2v2:
         print(fig_go2_v2(a.go2v2, a.out))
+    if a.go2v7:
+        print(fig_go2_v7(a.go2v7, a.out))
 
 
 if __name__ == "__main__":

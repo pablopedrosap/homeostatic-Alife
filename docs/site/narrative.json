@@ -41,27 +41,28 @@
     "scope": "What this does not show: graceful degradation. Under sensor and metabolic damage the gap is the same as with no damage at all, and moderate leg damage actually helped both agents by slowing them down and cooling them. A conclusive replication needs about 16 to 21 seeds per condition and physics that leave a healthy undamaged baseline. That lesson shaped the Go2 experiment."
   },
   "go2": {
-    "title": "Does a robot that manages its own motor heat get further on a long, loaded mission?",
-    "verdict_label": "Pre-registered test failed, and this time it was a valid test · loaded missions p = 0.64",
-    "summary": "Second version, fixing everything that made the first one uninformative. The missions last 3 minutes with up to 6 kg on the robot's back, long enough for motors to overheat. A gate confirms the self-regulating robot really runs cooler (it did: 0.75 vs 0.83). Against standard robots, a hand-written thermal governor of the kind used in industry, and a version with a learned model of its own body in the loop, the self-regulating robot did not get further on loaded missions. What happened instead is the useful part: unloaded it walks just as far with cooler motors, but under load it sometimes freezes instead of pacing itself, and it ignores its own self-model.",
+    "title": "Can a robot learn its own body and pace itself the way animals do?",
+    "verdict_label": "Pre-registered test failed on distance · motor wear per metre −33% (p = 0.0003)",
+    "summary": "Third version, built like a nervous system. The motor drivers act as reflexes and the trained walking policy as the pattern generator. Each robot first takes a two-minute exploratory walk and learns its own thermal physics from 1 °C sensor readings. During the mission it keeps re-checking how fast it is heating right now, which is how it notices a payload. A central governor then simulates its own body to the end of the mission and picks the fastest pace it can sustain. It worked as a regulator: a third less motor wear per metre walked. But it walked noticeably less far, and a simple rule that just slows down when hot did equally well.",
     "stats": [
       [
-        "0.08 cooler",
-        "unloaded: the same 156 m walked in 3 minutes with the hottest motor running cooler (exploratory)"
+        "±1.5%",
+        "how accurately every robot learned its own heating and cooling constants from a 2-minute walk"
       ],
       [
-        "10 / 40",
-        "loaded missions in which the self-regulating robot froze instead of pacing itself (exploratory)"
+        "−33%",
+        "motor wear per metre walked, against the same robots at full speed (p = 0.0003)"
       ],
       [
-        "no effect",
-        "cutting the self-model out of the loop changed nothing: the robot learned a model of itself but didn't use it"
+        "55%",
+        "share of motor heat that remains even at walking pace: bearing weight, not speed, is what heats the motors"
       ]
     ],
-    "scope": "What this shows: making a robot averse to heat is not the same as making it manage heat well. Pacing a 3-minute mission is a long-horizon skill, and these policies were trained on 20-second episodes. A self-model only matters if decisions go through it. The next version trains on full missions and charges the robot for predicted overheating, not just current temperature.",
-    "figure_caption": "HAB-P2: (a) pre-registered metric, net distance in a 3-minute mission (huge spread, because every controller drifts off heading); (b) hottest-motor temperature, where the treatment gate passed unloaded; (c) the same self-model robots with the loop intact vs cut: no difference.",
-    "v1_heading": "Earlier version (HAB-P1): 20-second damage tests. Failed because the self-regulation reward was too weak (1.5%).",
+    "scope": "Why it didn't win on distance: most heat comes from carrying the body, so slowing down is a weak lever, and in steady missions planning ahead collapses into picking a slower pace, which a simple rule does just as well. The one real efficiency gain in the project came from a learned gait that produces 13% less heat at almost the same speed. The next version combines that gait with the governor, on missions whose demands change over time.",
+    "figure_caption": "Motor wear per metre against distance walked, per mission type. Better is right and down. The governor at three pain thresholds (diamonds) traces the same curve as a simple reactive rule (square); full speed (circle) walks furthest at the highest wear.",
+    "v1_heading": "Earlier versions: HAB-P2 (end-to-end RL with a heat cost; robots froze under load and ignored their self-model) and HAB-P1 (20-second damage tests; self-regulation reward too weak). Below: the HAB-P1 tests and video.",
     "video_caption": "From the earlier version (HAB-P1), scenario fixed before any results: 75% of the front-left knee's torque removed. Here the self-regulating robot walks 14.6 m and the standard one 1.6 m, but both run their motors equally hot, and across all trained robots the difference is not reliable. An illustration of the testbed, not evidence.",
-    "seeds_label": "8 trained robots per controller (HAB-P2), all reported"
+    "seeds_label": "8 robots, 960 three-minute missions (HAB-P7), all reported",
+    "figure_file": "habp7_tradeoff.png"
   }
 }
