@@ -100,8 +100,30 @@ class Go2HomeostaticConfig:
     # - a_effort·Σ effort - a_hot_effort·Σ effort·T + a_progress·forward speed
     valence: tuple | None = None
 
+    # --- HAB-P12: one "universal" brain that can act under any feelings. Defaults: off. ---
+    valence_prior: bool = False        # draw the genome per episode from the HAB-P10 prior (1/8: no feelings)
+    valence_obs: bool = False          # the genome is part of the observation (5 features)
+    strength_min: float = 1.0          # if < 1, every motor's strength is drawn from U(strength_min, 1) per episode
+
     seed: int | None = None
     scene_path: str = field(default_factory=lambda: str(GO2_SCENE))
+
+
+NO_FEELINGS = (0.0, 0.65, 0.0, 0.0, 0.0)     # a genome whose valence is exactly zero
+
+
+def sample_valence(rng: np.random.Generator) -> tuple:
+    """The HAB-P10 prior over feelings (a_heat, setpoint, a_effort, a_hot_effort, a_progress)."""
+    return (float(np.exp(rng.uniform(np.log(0.02), np.log(0.5)))), float(rng.uniform(0.5, 0.8)),
+            float(np.exp(rng.uniform(np.log(0.005), np.log(0.2)))), float(np.exp(rng.uniform(np.log(0.005), np.log(0.3)))),
+            float(rng.uniform(-0.3, 0.3)))
+
+
+def valence_features(g) -> np.ndarray:
+    """How a genome is shown to the brain: log-scaled magnitudes (0 for no feelings), centred setpoint."""
+    g = NO_FEELINGS if g is None else g
+    return np.array([np.log1p(g[0] / 0.01), (g[1] - 0.65) / 0.15, np.log1p(g[2] / 0.01), np.log1p(g[3] / 0.01),
+                     g[4] / 0.3], np.float32)
 
 
 class Go2HomeostaticEnv(gym.Env):
@@ -140,7 +162,8 @@ class Go2HomeostaticEnv(gym.Env):
         self.fault_frac[c.fault_motor] = 1.0 - c.fault_severity
 
         self.action_space = gym.spaces.Box(-1.0, 1.0, (12,), np.float32)
-        dim = OBS_DIM + (12 if self_model is not None else 0) + (12 if c.obs_effort else 0)
+        dim = OBS_DIM + (12 if self_model is not None else 0) + (12 if c.obs_effort else 0) + (5 if c.valence_obs else 0)
+        self.genome = c.valence               # current feelings (HAB-P10/P12); None = no feelings
         self.strength = np.ones(12)           # persistent motor strength (aging), applied with faults
         self._last_sq = np.zeros(12)
         self.observation_space = gym.spaces.Box(-np.inf, np.inf, (dim,), np.float32)
@@ -157,6 +180,10 @@ class Go2HomeostaticEnv(gym.Env):
         lim = np.maximum(self.peak * self._torque_limit_frac() * self.strength, 1e-6)
         self.model.actuator_forcerange[:, 0] = -lim
         self.model.actuator_forcerange[:, 1] = lim
+
+    def set_genome(self, g) -> None:
+        """Set the robot's feelings (a 5-gene valence, or None for none)."""
+        self.genome = None if g is None else tuple(float(x) for x in g)
 
     def set_payload(self, kg: float) -> None:
         """Change the load on the trunk (mid-episode allowed)."""
@@ -180,6 +207,8 @@ class Go2HomeostaticEnv(gym.Env):
                                self.temp]).astype(np.float32)
         if self.cfg.obs_effort:
             base = np.concatenate([base, self._last_sq]).astype(np.float32)
+        if self.cfg.valence_obs:
+            base = np.concatenate([base, valence_features(self.genome)]).astype(np.float32)
         if self.self_model is None:
             return base
         self._last_base_obs = base
@@ -222,6 +251,11 @@ class Go2HomeostaticEnv(gym.Env):
             self._apply_limits()
         if c.payload_max > 0:
             self.set_payload(float(self._rng.uniform(0, c.payload_max)))
+        if c.strength_min < 1.0:
+            self.strength = self._rng.uniform(c.strength_min, 1.0, 12)
+            self._apply_limits()
+        if c.valence_prior:
+            self.genome = NO_FEELINGS if self._rng.random() < 1 / 8 else sample_valence(self._rng)
         if self.self_model is not None:
             self.self_model.reset_stream(self.env_id)
         self.last_action = np.zeros(12)
@@ -275,8 +309,8 @@ class Go2HomeostaticEnv(gym.Env):
                         - c.homeo_step_cost * excess.sum())
         self._prev_excess = excess
         reward = r_task + (c.homeo_weight * r_homeo if c.reward_mode == "hybrid" else 0.0)
-        if c.valence is not None:
-            a_heat, sp, a_eff, a_hot_eff, a_prog = c.valence
+        if self.genome is not None:
+            a_heat, sp, a_eff, a_hot_eff, a_prog = self.genome
             heat = np.maximum(0.0, self.temp - sp) / max(1.0 - sp, 1e-3)
             feel = (-a_heat * heat.sum() - a_eff * sq.sum() - a_hot_eff * float((sq * self.temp).sum())
                     + a_prog * float(v[0]))

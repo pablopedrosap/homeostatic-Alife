@@ -101,3 +101,33 @@ def test_standing_still_does_not_fall():
         _, _, term, _, info = env.step(np.zeros(12))
         assert not term
     assert info["max_temp"] < 0.7
+
+
+def test_universal_brain_options_default_off_and_condition_on_genome():
+    from homeostatic_colony.envs.go2_homeostatic import NO_FEELINGS, valence_features
+    a = make(obs_effort=True)
+    b = make(obs_effort=True, valence_obs=True, valence_prior=True, strength_min=0.5)
+    oa, _ = a.reset(seed=3)
+    ob, _ = b.reset(seed=3)
+    assert ob.shape[0] == oa.shape[0] + 5
+    assert np.allclose(ob[-5:], valence_features(b.genome))
+    assert (b.strength >= 0.5).all() and (b.strength < 1).all() and (a.strength == 1).all()
+    genomes = set()
+    for s in range(40):
+        b.reset(seed=s)
+        genomes.add(b.genome)
+    assert NO_FEELINGS in genomes and len(genomes) > 30          # ~1/8 without feelings, the rest drawn
+    assert np.allclose(valence_features(None), valence_features(NO_FEELINGS))
+    assert np.allclose(valence_features(NO_FEELINGS), 0.0)
+
+
+def test_no_feelings_genome_gives_exactly_the_task_reward():
+    from homeostatic_colony.envs.go2_homeostatic import NO_FEELINGS
+    a, b = make(), make(valence=NO_FEELINGS)
+    a.reset(seed=1)
+    b.reset(seed=1)
+    act = np.full(12, 0.2, np.float32)
+    for _ in range(5):
+        ra = a.step(act)[1]
+        rb = b.step(act)[1]
+        assert ra == rb
