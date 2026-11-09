@@ -1,0 +1,34 @@
+========================================================================================
+HAB-P10 — evolved feelings vs random feelings vs none (lifetime with aging) — pre-registered
+========================================================================================
+evolved   195.2 m   robots [188.6, 194.7, 192.3, 194.7, 202.5, 196.5, 196.9, 195.5]
+random    195.4 m   robots [189.0, 193.2, 204.8, 199.9, 201.0, 197.7, 190.9, 186.5]
+none      203.2 m   robots [206.7, 203.3, 200.7, 201.6, 202.0, 203.7, 203.8, 203.4]
+P1  evolved vs none: 195.2 vs 203.2 m (ratio 0.961), Welch p = 0.00046, Holm p = 0.00091 -> n.s.
+P2  evolved vs random: 195.2 vs 195.4 m (ratio 0.999), Welch p = 0.95, Holm p = 0.95 -> n.s.
+S1  final genes (median [min, max]):
+    a_heat        evolved 0.105 [0.070, 0.234]   random 0.148 [0.098, 0.484]
+    setpoint      evolved 0.590 [0.522, 0.643]   random 0.605 [0.518, 0.674]
+    a_effort      evolved 0.085 [0.047, 0.122]   random 0.023 [0.010, 0.165]
+    a_hot_effort  evolved 0.006 [0.004, 0.010]   random 0.063 [0.005, 0.253]
+    a_progress    evolved 0.047 [-0.121, 0.121]   random 0.006 [-0.163, 0.243]
+    feeling map (mean per-step valence, all motors at T with effort e): T=0.5,effort=0.5: ev -0.53 / rnd -0.50; T=0.7,effort=0.5: ev -0.97 / rnd -1.18; T=0.85,effort=0.5: ev -1.49 / rnd -2.05; T=1.0,effort=0.5: ev -2.02 / rnd -2.93
+S2  random vs none: 195.4 vs 203.2 m (p = 0.011)
+S3  evolved: strength 0.880, wear 52k, falls/lifetime 0.03, frozen 0%; random: strength 0.872, wear 56k, falls/lifetime 0.05, frozen 1%; none: strength 0.819, wear 81k, falls/lifetime 0.00, frozen 0%
+
+Generations (median fitness):
+    round  0: evolved   84.8   random   72.7   none   86.2 m
+    round  1: evolved   92.7   random   83.5   none   96.6 m
+    round  2: evolved  108.5   random  115.6   none  156.0 m
+    round  3: evolved  154.8   random  159.9   none  195.6 m
+    round  4: evolved  169.6   random  175.6   none  188.7 m
+    round  5: evolved  179.8   random  180.2   none  191.1 m
+    round  6: evolved  193.5   random  195.4   none  200.4 m
+    round  7: evolved  180.4   random  183.1   none  194.0 m
+    round  8: evolved  188.8   random  191.1   none  201.7 m
+    round  9: evolved  194.4   random  191.8   none  200.1 m
+    round 10: evolved  195.9   random  191.2   none  204.0 m
+    round 11: evolved  198.2   random  197.4   none  204.7 m
+
+>>> HAB-P10 VERDICT: FAIL
+========================================================================================
