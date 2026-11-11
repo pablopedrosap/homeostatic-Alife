@@ -52,10 +52,15 @@ LIVES = 2
 NONE_LIVES = 8
 LANDSCAPE_SEED = 12_000
 LIFE_SEED0 = 80_000
+BRAIN_SEED, ENV_SEED0 = 12, 1000
 K = 16                           # lives simulated in lockstep per worker job (batched brain calls)
 PROBES = {"no feelings": None,
           "protective": (0.5, 0.5, 0.2, 0.3, 0.0),
           "carefree, loves moving": (0.02, 0.8, 0.005, 0.005, 0.3)}
+
+if os.environ.get("HABP12_REP"):            # HAB-P12R: independent replication (new brain, genomes, lives)
+    OUT = ROOT / "results" / "habp12r_go2"
+    BRAIN_SEED, ENV_SEED0, LANDSCAPE_SEED, LIFE_SEED0 = 13, 2000, 12_001, 180_000
 
 if os.environ.get("HABP12_SMOKE"):          # tiny end-to-end run
     OUT = Path(os.environ["HABP12_SMOKE"])
@@ -86,7 +91,7 @@ def _make_env(rank: int):
     def f():
         from stable_baselines3.common.monitor import Monitor
         from homeostatic_colony.envs.go2_homeostatic import Go2HomeostaticConfig, Go2HomeostaticEnv
-        return Monitor(Go2HomeostaticEnv(Go2HomeostaticConfig(seed=1000 + rank, **TRAIN_CFG)))
+        return Monitor(Go2HomeostaticEnv(Go2HomeostaticConfig(seed=ENV_SEED0 + rank, **TRAIN_CFG)))
     return f
 
 
@@ -118,7 +123,7 @@ def train():
     torch.set_num_threads(2)
     (OUT / "models").mkdir(parents=True, exist_ok=True)
     venv = VecFrameStack(SubprocVecEnv([_make_env(i) for i in range(N_ENVS)]), n_stack=N_STACK)
-    model = PPO("MlpPolicy", venv, seed=12, device="cpu",
+    model = PPO("MlpPolicy", venv, seed=BRAIN_SEED, device="cpu",
                 policy_kwargs=dict(net_arch=dict(pi=[256, 256], vf=[256, 256]), log_std_init=-1.0), **PPO_KW)
     t0, log = time.time(), []
     while model.num_timesteps < TRAIN_STEPS:

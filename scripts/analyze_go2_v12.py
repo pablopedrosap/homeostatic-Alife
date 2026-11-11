@@ -71,7 +71,21 @@ def holm(ps: dict) -> dict:
     return adj
 
 
-def analyze(genomes, lives):
+def gene_matrix(feel):
+    return np.column_stack([np.log([r["genome"][0] for r in feel]), [r["genome"][1] for r in feel],
+                            np.log([r["genome"][2] for r in feel]), np.log([r["genome"][3] for r in feel]),
+                            [r["genome"][4] for r in feel]])
+
+
+def r2_on_genes(feel, y) -> float:
+    """Share of the variance of y explained by the 5 genes (OLS with intercept)."""
+    X = np.column_stack([np.ones(len(feel)), gene_matrix(feel)])
+    y = np.asarray(y, float)
+    resid = y - X @ np.linalg.lstsq(X, y, rcond=None)[0]
+    return float(1 - resid.var() / y.var())
+
+
+def analyze(genomes, lives, gate: str = "pi"):
     rows, Ls = table(genomes, lives)
     feel = [r for r in rows if r["genome"] is not None]
     none = next(r for r in rows if r["genome"] is None)
@@ -81,7 +95,13 @@ def analyze(genomes, lives):
     res = {"preregistration": "docs/prereg/HABP12_ecology_of_feeling.md", "n_genomes": len(feel), "lifespans": Ls}
 
     rho_gate = spearman(pi, [r["wear1"] for r in feel])
-    res["gate"] = {"rho_protectiveness_vs_mission1_wear": rho_gate, "threshold": GATE_RHO, "valid": rho_gate <= GATE_RHO}
+    r2 = r2_on_genes(feel, [r["wear1"] for r in feel])
+    if gate == "pi":         # HAB-P12: rho(protectiveness, mission-1 wear) <= -0.3
+        res["gate"] = {"rule": "rho(pi, mission-1 wear) <= -0.3", "rho_protectiveness_vs_mission1_wear": rho_gate,
+                       "r2_genes_mission1_wear": r2, "valid": rho_gate <= GATE_RHO}
+    else:                    # HAB-P12R: the 5 genes explain >= 30% of the variance of mission-1 wear
+        res["gate"] = {"rule": "R2(mission-1 wear ~ 5 genes) >= 0.3", "rho_protectiveness_vs_mission1_wear": rho_gate,
+                       "r2_genes_mission1_wear": r2, "valid": r2 >= 0.3}
 
     rng = np.random.default_rng(0)
     idx = rng.integers(0, len(feel), (N_BOOT, len(feel)))
@@ -123,22 +143,30 @@ def analyze(genomes, lives):
                  "no_feelings_final_strength": float(none["strength"][-1]),
                  "falls_per_life_mean": float(np.mean([r["falls"] for r in feel])),
                  "no_feelings_falls_per_life": none["falls"]}
-    X = np.column_stack([np.log([r["genome"][0] for r in feel]), [r["genome"][1] for r in feel],
-                         np.log([r["genome"][2] for r in feel]), np.log([r["genome"][3] for r in feel]),
-                         [r["genome"][4] for r in feel]])
+    X = gene_matrix(feel)
     Xz = (X - X.mean(0)) / X.std(0)
     res["exploratory_gene_effects"] = {}
     for L in (Llo, Lhi):
         y = (F[L] - F[L].mean()) / max(F[L].std(), 1e-9)
         beta = np.linalg.lstsq(np.column_stack([np.ones(len(y)), Xz]), y, rcond=None)[0][1:]
         res["exploratory_gene_effects"][str(L)] = dict(zip(GENES, beta.round(3).tolist()))
+    # S5: how the best genes shift from the shortest to the longest life (top decile medians, bootstrap)
+    top = lambda idx, L: sorted(idx, key=lambda j: -feel[j]["F"][L])[:max(1, len(idx) // 10)]
+    shift = {}
+    for gi, g in ((2, "a_effort"), (3, "a_hot_effort"), (4, "a_progress")):
+        def d(idx):
+            return (np.median([feel[j]["genome"][gi] for j in top(idx, Lhi)])
+                    - np.median([feel[j]["genome"][gi] for j in top(idx, Llo)]))
+        bs = [d(rng.integers(0, len(feel), len(feel))) for _ in range(2000)]
+        shift[g] = {"shift": float(d(np.arange(len(feel)))), "ci": np.percentile(bs, [2.5, 97.5]).tolist()}
+    res["S5_gene_shift_longest_minus_shortest"] = shift
     return res, rows
 
 
 def report(res):
     L = ["=" * 88, "HAB-P12 — the ecology of feeling (one universal brain, a landscape of genomes) — pre-registered", "=" * 88,
-         f"Gate: rho(protectiveness, mission-1 wear) = {res['gate']['rho_protectiveness_vs_mission1_wear']:+.2f} "
-         f"(needs <= {GATE_RHO}) -> {'VALID' if res['gate']['valid'] else 'VOID'}",
+         f"Gate [{res['gate']['rule']}]: rho(pi, mission-1 wear) = {res['gate']['rho_protectiveness_vs_mission1_wear']:+.2f}, "
+         f"R2(wear ~ genes) = {res['gate']['r2_genes_mission1_wear']:.2f} -> {'VALID' if res['gate']['valid'] else 'VOID'}",
          "S1  rho(protectiveness, lifetime distance) by lifespan (missions):"]
     for k, v in res["S1_rho_by_lifespan"].items():
         L.append(f"      L = {k:>2}: {v['rho']:+.3f}  [{v['ci'][0]:+.3f}, {v['ci'][1]:+.3f}]")
@@ -157,12 +185,14 @@ def report(res):
     L += [f"S4  rho(protectiveness, strength at end of life) = {s4['rho_pi_vs_final_strength']:+.2f}; no-feelings final "
           f"strength {s4['no_feelings_final_strength']:.2f}; falls per life {s4['falls_per_life_mean']:.2f} "
           f"(no feelings {s4['no_feelings_falls_per_life']:.2f})",
+          "S5  best genes, longest minus shortest life: " + "; ".join(
+              f"{g} {v['shift']:+.3f} [{v['ci'][0]:+.3f}, {v['ci'][1]:+.3f}]" for g, v in res["S5_gene_shift_longest_minus_shortest"].items()),
           "Exploratory standardized gene effects on lifetime distance: " + json.dumps(res["exploratory_gene_effects"]),
           "", f">>> HAB-P12 VERDICT: {res['verdict']}", "=" * 88]
     return "\n".join(L)
 
 
-def figure(res, rows, out: Path):
+def figure(res, rows, out: Path, name: str = "habp12_ecology.png"):
     sys.path.insert(0, str(ROOT / "scripts"))
     from make_figures import _style, BLUE, ORANGE, GRAY, INK2, _ci
     import matplotlib.pyplot as plt
@@ -205,7 +235,7 @@ def figure(res, rows, out: Path):
              "heat damage permanently weakens the motors. 'How much it feels' = discomfort of a hot, straining body (all motors "
              "at T = 0.85, effort 0.5).", color=INK2, fontsize=8, wrap=True)
     fig.tight_layout()
-    p = out / "habp12_ecology.png"
+    p = out / name
     fig.savefig(p, dpi=200, bbox_inches="tight")
     plt.close(fig)
     return p
@@ -215,14 +245,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dir", type=Path, default=ROOT / "results/habp12_go2")
     ap.add_argument("--fig-dir", type=Path, default=ROOT / "docs/figures")
+    ap.add_argument("--gate", choices=["pi", "r2"], default="pi", help="pi: HAB-P12 rule; r2: HAB-P12R rule")
+    ap.add_argument("--fig-name", default="habp12_ecology.png")
     a = ap.parse_args()
     genomes, lives = load(a.dir)
-    res, rows = analyze(genomes, lives)
+    res, rows = analyze(genomes, lives, a.gate)
     (a.dir / "verdict.json").write_text(json.dumps(res, indent=2))
     txt = report(res)
     (a.dir / "verdict.txt").write_text(txt)
     print(txt)
-    print(figure(res, rows, a.fig_dir))
+    print(figure(res, rows, a.fig_dir, a.fig_name))
 
 
 if __name__ == "__main__":
