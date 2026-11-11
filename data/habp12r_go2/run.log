@@ -1,0 +1,37 @@
+2026-11-11 15:05:21,079 [INFO]   1.0M steps [4 min] ep reward 1191.71573029  no feelings: 0.06 m/s wear 1865  protective: 0.02 m/s wear 623  carefree, loves moving: 0.06 m/s wear 2154
+2026-11-11 15:08:57,796 [INFO]   2.0M steps [7 min] ep reward 1196.6998382600002  no feelings: 0.09 m/s wear 1414  protective: 0.05 m/s wear 941  carefree, loves moving: 0.09 m/s wear 1499
+2026-11-11 15:12:15,272 [INFO]   3.0M steps [11 min] ep reward 1346.96385218  no feelings: 0.10 m/s wear 1982  protective: 0.08 m/s wear 1138  carefree, loves moving: 0.10 m/s wear 1756
+2026-11-11 15:17:40,640 [INFO]   4.0M steps [16 min] ep reward 1472.1587611700004  no feelings: 0.49 m/s wear 2478  protective: 0.28 m/s wear 1715  carefree, loves moving: 0.33 m/s wear 2358
+2026-11-11 15:33:01,346 [INFO]   5.0M steps [31 min] ep reward 1584.5934081299995  no feelings: 0.57 m/s wear 2380  protective: 0.04 m/s wear 1936  carefree, loves moving: 0.59 m/s wear 2515
+2026-11-11 15:43:08,951 [INFO]   6.0M steps [41 min] ep reward 1646.0160051199998  no feelings: 0.63 m/s wear 2634  protective: 0.52 m/s wear 2164  carefree, loves moving: 0.69 m/s wear 2810
+2026-11-11 15:47:02,903 [INFO]   7.1M steps [45 min] ep reward 1594.4446957000002  no feelings: 0.70 m/s wear 3159  protective: 0.70 m/s wear 2657  carefree, loves moving: 0.61 m/s wear 2807
+2026-11-11 15:50:39,555 [INFO]   8.1M steps [49 min] ep reward 1752.7272003500004  no feelings: 0.51 m/s wear 3689  protective: 0.60 m/s wear 2759  carefree, loves moving: 0.58 m/s wear 3539
+2026-11-11 15:54:04,590 [INFO]   9.1M steps [52 min] ep reward 1761.64063404  no feelings: 0.78 m/s wear 3469  protective: 0.53 m/s wear 1911  carefree, loves moving: 0.80 m/s wear 3658
+2026-11-11 15:57:21,469 [INFO]  10.1M steps [56 min] ep reward 1723.3231433100002  no feelings: 0.76 m/s wear 3424  protective: 0.42 m/s wear 2431  carefree, loves moving: 0.68 m/s wear 3725
+2026-11-11 16:00:37,853 [INFO]  11.1M steps [59 min] ep reward 1745.1430647299997  no feelings: 0.74 m/s wear 3247  protective: 0.35 m/s wear 2568  carefree, loves moving: 0.76 m/s wear 3504
+2026-11-11 16:03:57,127 [INFO]  12.1M steps [62 min] ep reward 1737.7041940099998  no feelings: 0.78 m/s wear 2930  protective: 0.72 m/s wear 2220  carefree, loves moving: 0.82 m/s wear 3240
+2026-11-11 16:07:18,242 [INFO]  13.1M steps [66 min] ep reward 1811.9893462300001  no feelings: 0.76 m/s wear 2612  protective: 0.64 m/s wear 1841  carefree, loves moving: 0.82 m/s wear 2970
+2026-11-11 16:10:34,150 [INFO]  14.1M steps [69 min] ep reward 1679.42612681  no feelings: 0.87 m/s wear 3149  protective: 0.60 m/s wear 2325  carefree, loves moving: 0.84 m/s wear 3017
+2026-11-11 16:13:48,902 [INFO]  15.1M steps [72 min] ep reward 1721.2214768799997  no feelings: 0.77 m/s wear 3142  protective: 0.56 m/s wear 2599  carefree, loves moving: 0.81 m/s wear 3098
+2026-11-11 16:16:57,617 [INFO]  16.1M steps [75 min] ep reward 1832.1134597299997  no feelings: 0.81 m/s wear 2896  protective: 0.66 m/s wear 2546  carefree, loves moving: 0.59 m/s wear 2896
+2026-11-11 16:20:20,657 [INFO]  17.1M steps [79 min] ep reward 1751.7501977000002  no feelings: 0.76 m/s wear 3290  protective: 0.68 m/s wear 2278  carefree, loves moving: 0.71 m/s wear 3499
+2026-11-11 16:23:53,294 [INFO]  18.1M steps [82 min] ep reward 1818.6778436399995  no feelings: 0.65 m/s wear 3467  protective: 0.66 m/s wear 2564  carefree, loves moving: 0.69 m/s wear 3562
+2026-11-11 16:27:25,144 [INFO]  19.1M steps [86 min] ep reward 1732.3142492699997  no feelings: 0.55 m/s wear 3380  protective: 0.74 m/s wear 2222  carefree, loves moving: 0.62 m/s wear 3377
+2026-11-11 16:31:15,478 [INFO]  20.2M steps [90 min] ep reward 1797.0775858399998  no feelings: 0.56 m/s wear 2903  protective: 0.29 m/s wear 2584  carefree, loves moving: 0.52 m/s wear 2715
+2026-11-11 16:34:22,427 [INFO]  21.2M steps [93 min] ep reward 1803.0770453399998  no feelings: 0.64 m/s wear 3294  protective: 0.69 m/s wear 2339  carefree, loves moving: 0.83 m/s wear 2890
+2026-11-11 16:37:27,007 [INFO]  22.2M steps [96 min] ep reward 1812.5558908199996  no feelings: 0.74 m/s wear 3155  protective: 0.69 m/s wear 2475  carefree, loves moving: 0.74 m/s wear 3337
+2026-11-11 16:40:39,015 [INFO]  23.2M steps [99 min] ep reward 1719.3787932399998  no feelings: 0.51 m/s wear 3121  protective: 0.60 m/s wear 2313  carefree, loves moving: 0.47 m/s wear 2798
+2026-11-11 16:43:54,073 [INFO]  24.2M steps [102 min] ep reward 1839.3180650000002  no feelings: 0.83 m/s wear 2959  protective: 0.38 m/s wear 1983  carefree, loves moving: 0.78 m/s wear 3142
+2026-11-11 16:43:54,238 [INFO] TRAINED in 102.3 min
+2026-11-11 16:58:53,475 [INFO] batch 1/49 [15 min]
+2026-11-11 16:59:23,524 [INFO] batch 6/49 [15 min]
+2026-11-11 17:13:58,275 [INFO] batch 11/49 [30 min]
+2026-11-11 17:14:20,654 [INFO] batch 16/49 [30 min]
+2026-11-11 17:31:55,656 [INFO] batch 21/49 [48 min]
+2026-11-11 17:49:09,752 [INFO] batch 26/49 [65 min]
+2026-11-11 17:50:00,416 [INFO] batch 31/49 [66 min]
+2026-11-11 18:07:34,897 [INFO] batch 36/49 [84 min]
+2026-11-11 18:24:05,620 [INFO] batch 41/49 [100 min]
+2026-11-11 18:24:47,816 [INFO] batch 46/49 [101 min]
+2026-11-11 18:27:39,681 [INFO] batch 49/49 [104 min]
+2026-11-11 18:27:43,192 [INFO] LANDSCAPE DONE in 103.8 min — 776 lives

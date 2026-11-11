@@ -1,0 +1,33 @@
+========================================================================================
+HAB-P12 — the ecology of feeling (one universal brain, a landscape of genomes) — pre-registered
+========================================================================================
+Gate [R2(mission-1 wear ~ 5 genes) >= 0.3]: rho(pi, mission-1 wear) = -0.60, R2(wear ~ genes) = 0.94 -> VALID
+S1  rho(protectiveness, lifetime distance) by lifespan (missions):
+      L =  1: -0.234  [-0.331, -0.132]
+      L =  2: -0.168  [-0.270, -0.063]
+      L =  4: -0.191  [-0.290, -0.088]
+      L =  8: -0.146  [-0.248, -0.041]
+      L = 16: +0.029  [-0.078, +0.135]
+      L = 32: +0.704  [+0.646, +0.754]
+P1  delta rho (longest - shortest life) = +0.938 CI [+0.816, +1.050], p = 0, Holm 0 -> significant
+P2  rho at the longest life = +0.704, p = 9.4e-59, Holm 9.4e-59 -> significant
+S2  best feelings (top decile, held-out life) vs no feelings, lifetime distance (m):
+      L =  1:    52.4 vs    49.7  (ratio 1.056)
+      L =  2:   100.8 vs    99.0  (ratio 1.018)
+      L =  4:   201.8 vs   196.1  (ratio 1.029)
+      L =  8:   397.9 vs   383.9  (ratio 1.037)
+      L = 16:   767.3 vs   713.8  (ratio 1.075)
+      L = 32:  1314.4 vs  1153.7  (ratio 1.139)
+S3  genes of the best decile by lifespan (median):
+      L =  1: a_heat 0.193  setpoint 0.676  a_effort 0.017  a_hot_effort 0.021  a_progress 0.213  pi 1.523
+      L =  2: a_heat 0.187  setpoint 0.658  a_effort 0.016  a_hot_effort 0.021  a_progress 0.224  pi 1.571
+      L =  4: a_heat 0.202  setpoint 0.655  a_effort 0.015  a_hot_effort 0.021  a_progress 0.222  pi 1.603
+      L =  8: a_heat 0.202  setpoint 0.653  a_effort 0.016  a_hot_effort 0.018  a_progress 0.218  pi 1.603
+      L = 16: a_heat 0.217  setpoint 0.630  a_effort 0.018  a_hot_effort 0.020  a_progress 0.218  pi 1.737
+      L = 32: a_heat 0.250  setpoint 0.561  a_effort 0.089  a_hot_effort 0.053  a_progress 0.047  pi 3.163
+S4  rho(protectiveness, strength at end of life) = +0.25; no-feelings final strength 0.47; falls per life 0.14 (no feelings 0.00)
+S5  best genes, longest minus shortest life: a_effort +0.072 [+0.031, +0.114]; a_hot_effort +0.032 [-0.003, +0.063]; a_progress -0.166 [-0.210, -0.109]
+Exploratory standardized gene effects on lifetime distance: {"1": {"a_heat": -0.124, "setpoint": 0.299, "a_effort": -0.306, "a_hot_effort": -0.118, "a_progress": 0.73}, "32": {"a_heat": 0.583, "setpoint": -0.493, "a_effort": 0.331, "a_hot_effort": 0.066, "a_progress": 0.066}}
+
+>>> HAB-P12 VERDICT: PASS
+========================================================================================

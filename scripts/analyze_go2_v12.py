@@ -220,9 +220,9 @@ def figure(res, rows, out: Path, name: str = "habp12_ecology.png"):
     groups = (("feel the most (top third)", BLUE, srt[-third:]), ("feel the least (bottom third)", ORANGE, srt[:third]),
               ("no feelings", GRAY, [none]))
     m = np.arange(1, len(none["cum"]) + 1)
-    for name, col, grp in groups:
-        axes[1].plot(m, np.mean([g["cum"] for g in grp], 0), color=col, label=name)
-        axes[2].plot(np.r_[0, m], np.r_[1.0, np.mean([g["strength"] for g in grp], 0)], color=col, label=name)
+    for label, col, grp in groups:
+        axes[1].plot(m, np.mean([g["cum"] for g in grp], 0), color=col, label=label)
+        axes[2].plot(np.r_[0, m], np.r_[1.0, np.mean([g["strength"] for g in grp], 0)], color=col, label=label)
     axes[1].set_xlabel("mission")
     axes[1].set_ylabel("distance walked so far (m)")
     axes[1].set_title("(b) A lifetime of walking", loc="left")
