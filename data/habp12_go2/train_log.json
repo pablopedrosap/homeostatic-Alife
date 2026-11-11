@@ -1,0 +1,554 @@
+[
+ {
+  "steps": 1007616,
+  "minutes": 2.376789180437724,
+  "ep_reward": 1198.1788830200003,
+  "ep_length": 1477.0,
+  "probes": {
+   "no feelings": {
+    "speed": 0.03760101432242412,
+    "wear": 1435.1655532547195,
+    "fell": false
+   },
+   "protective": {
+    "speed": -0.0013082034565589876,
+    "wear": 577.8371078644319,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.03652494911240727,
+    "wear": 1263.2356968926624,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 2015232,
+  "minutes": 4.452919550736746,
+  "ep_reward": 1198.02314882,
+  "ep_length": 1495.79,
+  "probes": {
+   "no feelings": {
+    "speed": 0.05708606070285319,
+    "wear": 1725.627758007002,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.0007273841374343332,
+    "wear": 668.1716725745446,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.05528138490166955,
+    "wear": 1534.1511800597982,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 3022848,
+  "minutes": 6.5143183668454485,
+  "ep_reward": 1284.46624464,
+  "ep_length": 1468.48,
+  "probes": {
+   "no feelings": {
+    "speed": 0.10273470833112568,
+    "wear": 1937.4167722776765,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.026394415624272992,
+    "wear": 797.8117307895824,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.13793391520201834,
+    "wear": 2195.2752099932572,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 4030464,
+  "minutes": 8.50179518063863,
+  "ep_reward": 1423.7526713200004,
+  "ep_length": 1500.0,
+  "probes": {
+   "no feelings": {
+    "speed": 0.202802805958415,
+    "wear": 1563.3478173796639,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.19671236534292713,
+    "wear": 1263.6128634598153,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.2407178079998205,
+    "wear": 1587.8427417186933,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 5038080,
+  "minutes": 10.492240047454834,
+  "ep_reward": 1500.7050404100003,
+  "ep_length": 1495.83,
+  "probes": {
+   "no feelings": {
+    "speed": 0.22921089215356666,
+    "wear": 1658.2637118801517,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.2821958553425457,
+    "wear": 1068.2655127517635,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.2406109327481006,
+    "wear": 1668.3466435238968,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 6045696,
+  "minutes": 12.525930015246074,
+  "ep_reward": 1664.9100988300002,
+  "ep_length": 1500.0,
+  "probes": {
+   "no feelings": {
+    "speed": 0.455405670614935,
+    "wear": 1749.1291167211023,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.4433241954959929,
+    "wear": 1463.2504606425493,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.5189544327573941,
+    "wear": 1934.7418589492654,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 7053312,
+  "minutes": 14.526241079966228,
+  "ep_reward": 1729.0984999400002,
+  "ep_length": 1485.99,
+  "probes": {
+   "no feelings": {
+    "speed": 0.5956774264472919,
+    "wear": 2030.7399006414275,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.18764528143274267,
+    "wear": 1785.9907167491392,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.6225662458862277,
+    "wear": 2271.946351373939,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 8060928,
+  "minutes": 16.581648818651836,
+  "ep_reward": 1713.86865692,
+  "ep_length": 1496.38,
+  "probes": {
+   "no feelings": {
+    "speed": 0.6261305816131431,
+    "wear": 2318.0493159540983,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.5642311491164728,
+    "wear": 1820.0535333290986,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.6377550019134564,
+    "wear": 2400.9025909013376,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 9068544,
+  "minutes": 18.639341266949973,
+  "ep_reward": 1694.2945987399999,
+  "ep_length": 1475.45,
+  "probes": {
+   "no feelings": {
+    "speed": 0.23559710001319809,
+    "wear": 2774.449392856552,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.6000799480551052,
+    "wear": 2960.6793361522846,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.7149183055109316,
+    "wear": 3189.182842488298,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 10076160,
+  "minutes": 20.673461985588073,
+  "ep_reward": 1790.6488664299998,
+  "ep_length": 1500.0,
+  "probes": {
+   "no feelings": {
+    "speed": 0.34962209620682067,
+    "wear": 2976.21483303594,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.6239412604999302,
+    "wear": 2322.792568090321,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.20962952389871034,
+    "wear": 3078.3411389446815,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 11083776,
+  "minutes": 22.725431752204894,
+  "ep_reward": 1773.45751337,
+  "ep_length": 1489.53,
+  "probes": {
+   "no feelings": {
+    "speed": 0.7664551569250857,
+    "wear": 3368.5727455688375,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.6655798442587089,
+    "wear": 2155.2219981404655,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.7361562023884035,
+    "wear": 2955.907959654487,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 12091392,
+  "minutes": 24.713121314843495,
+  "ep_reward": 1725.72651232,
+  "ep_length": 1484.83,
+  "probes": {
+   "no feelings": {
+    "speed": 0.7321172611679951,
+    "wear": 2908.209631577612,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.725507726079561,
+    "wear": 2181.573921629939,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.5461918104513146,
+    "wear": 3345.8517038511586,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 13099008,
+  "minutes": 26.69471801519394,
+  "ep_reward": 1875.44490085,
+  "ep_length": 1500.0,
+  "probes": {
+   "no feelings": {
+    "speed": 0.552298218211885,
+    "wear": 2969.677810525574,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.5287551612264326,
+    "wear": 1917.1924554932857,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.77522773765618,
+    "wear": 2921.4844365102126,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 14106624,
+  "minutes": 28.701064467430115,
+  "ep_reward": 1779.0750433000003,
+  "ep_length": 1491.64,
+  "probes": {
+   "no feelings": {
+    "speed": 0.8617770928401065,
+    "wear": 3556.0434156194174,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.6990325161850273,
+    "wear": 2443.3469361205916,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.7910493291951786,
+    "wear": 3585.221591165584,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 15114240,
+  "minutes": 30.71174156665802,
+  "ep_reward": 1715.4997266300002,
+  "ep_length": 1473.72,
+  "probes": {
+   "no feelings": {
+    "speed": 0.736505762206135,
+    "wear": 3119.442108029913,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.5900775932811447,
+    "wear": 2205.3425452483557,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.8360797980727126,
+    "wear": 3242.645622179662,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 16121856,
+  "minutes": 32.75049303372701,
+  "ep_reward": 1819.5743296600003,
+  "ep_length": 1491.65,
+  "probes": {
+   "no feelings": {
+    "speed": 0.8353220099064662,
+    "wear": 3275.216767002094,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.4673164048761901,
+    "wear": 2490.7936116364735,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.7915429258739142,
+    "wear": 3441.8195896320144,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 17129472,
+  "minutes": 34.83415259917577,
+  "ep_reward": 1824.3086009199997,
+  "ep_length": 1500.0,
+  "probes": {
+   "no feelings": {
+    "speed": 0.8069327420225012,
+    "wear": 2940.723514304539,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.7374328483273938,
+    "wear": 2199.917284795275,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.8171653433650101,
+    "wear": 2885.798281273073,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 18137088,
+  "minutes": 36.84701413313548,
+  "ep_reward": 1938.39090864,
+  "ep_length": 1500.0,
+  "probes": {
+   "no feelings": {
+    "speed": 0.7875588314128612,
+    "wear": 2884.003907639396,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.7112934080372494,
+    "wear": 2403.3095956153006,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.8316250879236922,
+    "wear": 2772.305767979047,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 19144704,
+  "minutes": 38.82765503327052,
+  "ep_reward": 1788.8587939600004,
+  "ep_length": 1482.62,
+  "probes": {
+   "no feelings": {
+    "speed": 0.7676100774370493,
+    "wear": 3312.8804785651323,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.7268968216287205,
+    "wear": 2749.8625313400175,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.8461354951505685,
+    "wear": 3527.351865572659,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 20152320,
+  "minutes": 40.86104405323665,
+  "ep_reward": 1855.6247825300002,
+  "ep_length": 1481.36,
+  "probes": {
+   "no feelings": {
+    "speed": 0.7745049315210337,
+    "wear": 2718.7381036566926,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.3501466958494476,
+    "wear": 1904.9216315959136,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.6304750332734048,
+    "wear": 2490.9516585679908,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 21159936,
+  "minutes": 42.89174160162608,
+  "ep_reward": 1820.4070503200003,
+  "ep_length": 1500.0,
+  "probes": {
+   "no feelings": {
+    "speed": 0.7072144629944978,
+    "wear": 2819.550898746415,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.599018288174653,
+    "wear": 1995.7465145667172,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.7797206494813607,
+    "wear": 2801.188024678559,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 22167552,
+  "minutes": 44.9290839155515,
+  "ep_reward": 1837.5584832900004,
+  "ep_length": 1486.18,
+  "probes": {
+   "no feelings": {
+    "speed": 0.7101698678826391,
+    "wear": 2861.3426790747108,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.6306467862072469,
+    "wear": 1797.7175048116137,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.7995798629981359,
+    "wear": 2837.6103059756556,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 23175168,
+  "minutes": 46.9701092004776,
+  "ep_reward": 1754.6410581200003,
+  "ep_length": 1461.77,
+  "probes": {
+   "no feelings": {
+    "speed": 0.5911924285149788,
+    "wear": 2888.839746894345,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.7911707141589439,
+    "wear": 2905.4794863410507,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.7986888873503959,
+    "wear": 2743.899064486712,
+    "fell": false
+   }
+  }
+ },
+ {
+  "steps": 24182784,
+  "minutes": 48.98916086355845,
+  "ep_reward": 1896.3211653500005,
+  "ep_length": 1500.0,
+  "probes": {
+   "no feelings": {
+    "speed": 0.8418839357888113,
+    "wear": 3142.858787012097,
+    "fell": false
+   },
+   "protective": {
+    "speed": 0.3629793833274243,
+    "wear": 2259.70862281814,
+    "fell": false
+   },
+   "carefree, loves moving": {
+    "speed": 0.8908465454452384,
+    "wear": 3000.2790586019355,
+    "fell": false
+   }
+  }
+ }
+]

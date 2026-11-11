@@ -17,23 +17,43 @@ keep working when something breaks.
 interactive results, and an evolution simulation running in your browser.
 
 > **Status, November 2026.** A testbed for robots that regulate their own bodies (a Unitree Go2
-> whose motors heat up, derate and cut out; a MuJoCo Ant; a reward-free evolutionary world) and eight
+> whose motors heat up, derate and cut out; a MuJoCo Ant; a reward-free evolutionary world) and ten
 > pre-registered experiments. **First pre-registered PASS (HAB-P9):** when *evolution* chooses how much
 > each robot cares about its own motor heat, the robots are **11% more productive over a lifetime**
 > (p = 0.008; every evolved robot beat every control robot) and never fell. The predicted mechanism,
 > better body preservation, was **not** supported, and why the drive helps is the next question. Also
 > holding up: robots that learn their own thermal physics to within 1.5%, 26–33% less motor wear per
 > metre (at some cost in distance), and, from evolution in silico, a strong selection for sensing
-> one's **own temperature** (p = 4×10⁻¹¹). **Latest (HAB-P10, FAIL):** with a richer evolved "feelings"
-> genome the pattern flipped: bodies were preserved far better (−36% wear) but robots walked 4% less, and
-> evolved feelings did no better than random ones. Over a 4-minute life, maintenance doesn't pay yet;
-> the next test is whether it does over longer lives (Kirkwood's *disposable soma*).
+> one's **own temperature** (p = 4×10⁻¹¹). **Since then:** with a richer evolved "feelings" genome (HAB-P10,
+> FAIL; GPU replication HAB-P10G, FAIL) robots preserve their bodies far better (−28% to −36% wear) but walk no
+> further over a 4-minute life. **HAB-P12** asked when feelings pay, using one universal brain and 384 genomes
+> living up to 32 missions: it was **VOID** (its manipulation check failed narrowly), but descriptively the
+> predicted *disposable soma* shape appeared, with protective feelings costing distance in short lives and
+> paying in the longest ones. An independent pre-registered replication (HAB-P12R) is running.
 
 ---
 
 ## Results
 
-### 1 · Unitree Go2 that manages its own motor heat (HAB-P10, P9, P8, P7, P2, P1)
+### 1 · Unitree Go2 that manages its own motor heat (HAB-P12, P10, P9, P8, P7, P2, P1)
+
+![HAB-P12](docs/figures/habp12_ecology.png)
+
+**HAB-P12 ("v12"): the ecology of feeling, verdict VOID** ([pre-registration](docs/prereg/HABP12_ecology_of_feeling.md)).
+One "universal" brain learns to walk under *any* feelings (it senses its own genome); then 384 genomes,
+and no feelings, each live 32 one-minute missions with permanent heat damage. Same brain for all, so
+only the feelings differ. The manipulation check failed narrowly (ρ = −0.22, needed ≤ −0.3), so the
+run is not scored. Descriptively, the predicted shape appeared:
+- **Short lives:** robots that feel their bodies more walk less (ρ ≈ −0.26).
+- **32-mission lives:** they walk more (ρ = +0.22).
+- **The best feelings shift with lifespan:** from enjoying movement toward minding effort, especially
+  when hot.
+- **The effect is small in metres:** +5.5% for the best decile at 32 missions.
+
+An independent replication (new brain, genomes and lives) is pre-registered and running:
+[HAB-P12R](docs/prereg/HABP12R_replication.md). Report: [`docs/results/HABP12_results.md`](docs/results/HABP12_results.md).
+
+#### HAB-P10 ("v10"): evolved feelings
 
 ![HAB-P10](docs/figures/habp10_feelings.png)
 
@@ -46,9 +66,10 @@ evolved, p = 0.0005**), evolved = random (p = 0.95), but the robots with feeling
 **36% less motor wear** (strength left 0.88 vs 0.82). The no-feelings robots were already faster in the
 first mission, and no group lost distance across its 4 missions, so in a life this short the damage
 never costs anything: biology's *disposable soma* trade-off. Report:
-[`docs/results/HABP10_results.md`](docs/results/HABP10_results.md). A GPU replication with several times more
-training per robot is pre-registered ([HAB-P10G](docs/prereg/HABP10G_gpu_replication.md)) and ready to run
-on Kaggle ([`kaggle/habp10_gpu.ipynb`](kaggle/habp10_gpu.ipynb)).
+[`docs/results/HABP10_results.md`](docs/results/HABP10_results.md). **GPU replication (HAB-P10G), FAIL:** 24
+brains trained simultaneously on Kaggle ([`kaggle/habp10_gpu.ipynb`](kaggle/habp10_gpu.ipynb)) with ~3× more
+training: no distance difference (−2%, n.s.), evolved = random again, −28% wear
+([report](docs/results/HABP10G_results.md)).
 
 #### HAB-P9 ("v9"): evolution chooses the drive
 
@@ -304,6 +325,7 @@ homeostatic_colony/
 scripts/
   run_go2_v9.py, analyze_go2_v9.py   HAB-P9 population-based evolution of drives, lifetime with aging
   run_go2_v10.py, analyze_go2_v10.py HAB-P10 evolved 5-gene feelings vs random vs none (also reads GPU runs)
+  run_go2_v12.py, analyze_go2_v12.py HAB-P12/P12R universal brain + lifespan landscape of feelings
   run_go2_v8.py, analyze_go2_v8.py   HAB-P8 gait × pacing on changing-demand missions
   record_go2_v8.py               v8 courier video (live temperatures, load, wear)
   run_go2_v7.py, analyze_go2_v7.py   HAB-P7 nature-inspired stack (development walk + missions)
@@ -337,7 +359,7 @@ is that the layer adds negligible overhead on top of a GPU simulator such as Isa
 | 2026-03 | First 6-seed damage sweep. Hybrid looked far more robust (e.g. 82% vs 27% full episodes at 40% actuator damage), but the extrinsic foil also survived only **27% of episodes with no damage at all**. The gap was mostly a baseline difference, so the run is superseded. |
 | 2026-07 | HAB-1 v0 (3 seeds): strong directional signal, but temperature never reached the danger band, and under a corrected analysis it is not significant (Holm p = 0.39). The thermal coupling was then calibrated. |
 | 2026-07 | HAB-E2: "selection does not build self-regulation". **Retracted 2026-11** (confounded design). |
-| 2026-11 | Three pre-registered experiments. HAB-1 v1: FAIL (right direction, underpowered, baseline dominated by heat). HAB-E2v: hypothesis failed, but self-sensing is strongly selected. HAB-P1 (Go2): FAIL (treatment too weak, no thermal failures). HAB-P2 (Go2 missions + self-model): FAIL as a valid test (free cooling unloaded, freezing under load, self-model unused). HAB-P7 (nature-inspired stack): FAIL on distance, −33% wear, robots learned their own physics. HAB-P8 (gait + anticipation): FAIL on distance, −26% wear; self-test flagged the one robot that couldn't carry loads. HAB-P9 (evolved drives): run 1 void (seeding bug), run 2 **PASS** (+11% lifetime productivity, p = 0.008). HAB-P10 (evolved 5-gene feelings + random-feelings control): **FAIL**, reversed (−4% distance, p = 0.0005; −36% wear), evolved = random. GPU population trainer (24 brains in one compiled program) and pre-registered GPU replication HAB-P10G. |
+| 2026-11 | Three pre-registered experiments. HAB-1 v1: FAIL (right direction, underpowered, baseline dominated by heat). HAB-E2v: hypothesis failed, but self-sensing is strongly selected. HAB-P1 (Go2): FAIL (treatment too weak, no thermal failures). HAB-P2 (Go2 missions + self-model): FAIL as a valid test (free cooling unloaded, freezing under load, self-model unused). HAB-P7 (nature-inspired stack): FAIL on distance, −33% wear, robots learned their own physics. HAB-P8 (gait + anticipation): FAIL on distance, −26% wear; self-test flagged the one robot that couldn't carry loads. HAB-P9 (evolved drives): run 1 void (seeding bug), run 2 **PASS** (+11% lifetime productivity, p = 0.008). HAB-P10 (evolved 5-gene feelings + random-feelings control): **FAIL**, reversed (−4% distance, p = 0.0005; −36% wear), evolved = random. GPU population trainer (24 brains in one compiled program); HAB-P10G (GPU replication): FAIL, −28% wear. HAB-P12 (lifespan landscape, universal brain): VOID (gate −0.22 vs −0.3), predicted shape seen descriptively; replication HAB-P12R pre-registered. |
 
 ## Roadmap
 
