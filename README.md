@@ -17,13 +17,14 @@ keep working when something breaks.
 interactive results, and an evolution simulation running in your browser.
 
 > **Status, November 2026.** A testbed for robots that regulate their own bodies (a Unitree Go2
-> whose motors heat up, derate and cut out; a MuJoCo Ant; a reward-free evolutionary world) and eleven
+> whose motors heat up, derate and cut out; a MuJoCo Ant; a reward-free evolutionary world) and twelve
 > pre-registered experiments. **Headline (HAB-P12R, pre-registered replication, PASS):** whether a robot should
 > *feel its own body* depends on how long it will live. One brain that can act under any "feelings" was
 > given 384 different ones: over short lives, robots that feel their bodies more walk less; over
 > 32-mission lives they walk more (ρ = +0.70, p = 10⁻⁵⁸), and the best feelings beat none by 14%. The best
 > feelings shift from *enjoying movement* to *minding effort*, the robot analogue of biology's
-> *disposable soma*. **Earlier PASS (HAB-P9):** when *evolution* chooses how much
+> *disposable soma*. A follow-up (HAB-P13) asked when in life to care: robots that stop caring in old age lose in
+> 31 of 32 lives, and caring all life beats switching. **Earlier PASS (HAB-P9):** when *evolution* chooses how much
 > each robot cares about its own motor heat, the robots are **11% more productive over a lifetime**
 > (p = 0.008; every evolved robot beat every control robot) and never fell. The predicted mechanism,
 > better body preservation, was **not** supported, and why the drive helps is the next question. Also
@@ -40,7 +41,7 @@ interactive results, and an evolution simulation running in your browser.
 
 ## Results
 
-### 1 · Unitree Go2 that manages its own motor heat (HAB-P12R, P12, P10, P9, P8, P7, P2, P1)
+### 1 · Unitree Go2 that manages its own motor heat (HAB-P13, P12R, P12, P10, P9, P8, P7, P2, P1)
 
 ![HAB-P12R](docs/figures/habp12r_ecology.png)
 
@@ -53,11 +54,27 @@ genomes and new lives:
   feelings by **14%**.
 - **The best feelings change with lifespan:** less *pleasure of moving*, more *cost of effort*.
 - **Where the gain comes from (exploratory):** it appears in old age, with almost the same motor
-  strength left. Feelings help the robot live with an aged body more than they preserve it.
+  strength left. HAB-P13 later showed that early care matters too: both preserving the body and
+  coping with an aged one count.
 - **Limits:** simulation with time-compressed thermal constants; two brains, which agree on the shape but
   not on the size (+5.5% vs +14%).
 
-**HAB-P12 ("v12"): the ecology of feeling, verdict VOID** ([pre-registration](docs/prereg/HABP12_ecology_of_feeling.md)).
+#### HAB-P13 ("v13"): care more, or less, as the body ages?
+
+![HAB-P13](docs/figures/habp13_feelings_across_life.png)
+
+**Verdict: FRAILTY, but caring all life is best** ([pre-registration](docs/prereg/HABP13_feelings_across_life.md),
+[report](docs/results/HABP13_results.md)). Biology offers two opposite answers: *terminal investment*
+(care less as the end nears) and *frailty* (care more with an aged body). The HAB-P12R brain lived the
+same 32 lives under five ways of rewriting its own feelings:
+- **Stop caring in old age:** loses to "care more with age" in **31 of 32 lives** (−34 m, p = 3×10⁻¹¹),
+  and falls more often.
+- **Caring all life beats switching** (+7.5 m, p = 0.005). Being carefree early buys 26 m and costs 34 m
+  later.
+- **A robot that switches when it *senses* its own motors weakening** does as well as one that knows
+  its age.
+
+#### HAB-P12 ("v12"): the ecology of feeling, verdict VOID ([pre-registration](docs/prereg/HABP12_ecology_of_feeling.md)).
 One "universal" brain learns to walk under *any* feelings (it senses its own genome); then 384 genomes,
 and no feelings, each live 32 one-minute missions with permanent heat damage. Same brain for all, so
 only the feelings differ. The manipulation check failed narrowly (ρ = −0.22, needed ≤ −0.3), so the
@@ -344,6 +361,7 @@ scripts/
   run_go2_v9.py, analyze_go2_v9.py   HAB-P9 population-based evolution of drives, lifetime with aging
   run_go2_v10.py, analyze_go2_v10.py HAB-P10 evolved 5-gene feelings vs random vs none (also reads GPU runs)
   run_go2_v12.py, analyze_go2_v12.py HAB-P12/P12R universal brain + lifespan landscape of feelings
+  run_go2_v13.py, analyze_go2_v13.py HAB-P13 feelings rewritten across a life (paired schedules)
   run_go2_v8.py, analyze_go2_v8.py   HAB-P8 gait × pacing on changing-demand missions
   record_go2_v8.py               v8 courier video (live temperatures, load, wear)
   run_go2_v7.py, analyze_go2_v7.py   HAB-P7 nature-inspired stack (development walk + missions)
@@ -377,7 +395,7 @@ is that the layer adds negligible overhead on top of a GPU simulator such as Isa
 | 2026-03 | First 6-seed damage sweep. Hybrid looked far more robust (e.g. 82% vs 27% full episodes at 40% actuator damage), but the extrinsic foil also survived only **27% of episodes with no damage at all**. The gap was mostly a baseline difference, so the run is superseded. |
 | 2026-07 | HAB-1 v0 (3 seeds): strong directional signal, but temperature never reached the danger band, and under a corrected analysis it is not significant (Holm p = 0.39). The thermal coupling was then calibrated. |
 | 2026-07 | HAB-E2: "selection does not build self-regulation". **Retracted 2026-11** (confounded design). |
-| 2026-11 | Three pre-registered experiments. HAB-1 v1: FAIL (right direction, underpowered, baseline dominated by heat). HAB-E2v: hypothesis failed, but self-sensing is strongly selected. HAB-P1 (Go2): FAIL (treatment too weak, no thermal failures). HAB-P2 (Go2 missions + self-model): FAIL as a valid test (free cooling unloaded, freezing under load, self-model unused). HAB-P7 (nature-inspired stack): FAIL on distance, −33% wear, robots learned their own physics. HAB-P8 (gait + anticipation): FAIL on distance, −26% wear; self-test flagged the one robot that couldn't carry loads. HAB-P9 (evolved drives): run 1 void (seeding bug), run 2 **PASS** (+11% lifetime productivity, p = 0.008). HAB-P10 (evolved 5-gene feelings + random-feelings control): **FAIL**, reversed (−4% distance, p = 0.0005; −36% wear), evolved = random. GPU population trainer (24 brains in one compiled program); HAB-P10G (GPU replication): FAIL, −28% wear. HAB-P12 (lifespan landscape, universal brain): VOID (gate −0.22 vs −0.3), predicted shape seen descriptively; replication HAB-P12R **PASS** (ρ = +0.70 at 32 missions, best feelings +14% vs none; passes both gate definitions). |
+| 2026-11 | Three pre-registered experiments. HAB-1 v1: FAIL (right direction, underpowered, baseline dominated by heat). HAB-E2v: hypothesis failed, but self-sensing is strongly selected. HAB-P1 (Go2): FAIL (treatment too weak, no thermal failures). HAB-P2 (Go2 missions + self-model): FAIL as a valid test (free cooling unloaded, freezing under load, self-model unused). HAB-P7 (nature-inspired stack): FAIL on distance, −33% wear, robots learned their own physics. HAB-P8 (gait + anticipation): FAIL on distance, −26% wear; self-test flagged the one robot that couldn't carry loads. HAB-P9 (evolved drives): run 1 void (seeding bug), run 2 **PASS** (+11% lifetime productivity, p = 0.008). HAB-P10 (evolved 5-gene feelings + random-feelings control): **FAIL**, reversed (−4% distance, p = 0.0005; −36% wear), evolved = random. GPU population trainer (24 brains in one compiled program); HAB-P10G (GPU replication): FAIL, −28% wear. HAB-P12 (lifespan landscape, universal brain): VOID (gate −0.22 vs −0.3), predicted shape seen descriptively; replication HAB-P12R **PASS** (ρ = +0.70 at 32 missions, best feelings +14% vs none; passes both gate definitions). HAB-P13 (rewriting feelings across a life): FRAILTY beats terminal investment in 31/32 lives, but caring all life beats switching; a self-sensing switch equals an age-based one. |
 
 ## Roadmap
 

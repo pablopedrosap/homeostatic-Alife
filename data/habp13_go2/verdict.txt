@@ -1,0 +1,14 @@
+========================================================================================
+HAB-P13 — rewriting feelings across a life (paired over identical lives) — pre-registered
+========================================================================================
+Gate: mission-1 wear, SHORT feelings 16732 vs LONG 14146 (paired p = 9e-21) -> VALID
+Lifetime distance (m): terminal 1316.1  frailty 1349.8  long 1357.3  short 1303.3  self 1348.2
+P1  frailty - terminal = +33.8 m [+26.9, +40.6], p = 3.2e-11, frailty wins 31/32 lives -> significant
+P2  frailty - long = -7.5 m [-12.5, -2.4], p = 0.0048 (tested) -> n.s.
+S1  self - frailty = -1.7 m [-4.3, +1.0], p = 0.21
+S2  'self' switched at mission {'median': 19.0, 'range': [16, 21], 'never': 0}
+S3  terminal: halves 749/568 m, strength 0.481, falls 0.16; frailty: halves 775/575 m, strength 0.473, falls 0.00; long: halves 749/609 m, strength 0.488, falls 0.06; short: halves 775/528 m, strength 0.472, falls 0.00; self: halves 775/573 m, strength 0.472, falls 0.03
+S4  long - short = +54.0 m, p = 3.4e-09
+
+>>> HAB-P13 VERDICT: FRAILTY, but rewriting feelings with age does not beat the best fixed feelings
+========================================================================================

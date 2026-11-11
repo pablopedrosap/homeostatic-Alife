@@ -58,6 +58,8 @@ written after HAB-P12 was scored VOID and before any of this data. Data and the 
   feelings, with nearly the same motor strength left**. So the main benefit is not a better-preserved
   body, but *living better with an aged one*: keeping a pace that weakened motors can sustain.
 - This is a post-hoc reading. A test of it would need its own pre-registration.
+- **Update:** [HAB-P13](HABP13_results.md) tested it. Late care matters most, but early care also pays
+  later, so preservation is part of the story too.
 
 ## Limits
 

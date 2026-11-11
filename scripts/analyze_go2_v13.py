@@ -121,7 +121,7 @@ def figure(res, by, lives, out: Path):
         cum = np.mean([np.cumsum(by[s][r]["dist"]) for r in lives], 0)
         axes[0].plot(m, cum - ref, **st)
         per = np.mean([by[s][r]["dist"] for r in lives], 0)
-        axes[1].plot(m, np.convolve(per, np.ones(3) / 3, mode="same"), **st)
+        axes[1].plot(m[1:-1], np.convolve(per, np.ones(3) / 3, mode="valid"), **st)   # no edge artefacts
     axes[0].axvline(n // 2 + 0.5, color=GRAY, lw=1, ls=":")
     axes[0].set_xlabel("mission")
     axes[0].set_ylabel("distance so far minus 'long' feelings (m)")
