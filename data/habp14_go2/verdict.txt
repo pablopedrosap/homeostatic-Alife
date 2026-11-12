@@ -1,0 +1,12 @@
+========================================================================================
+HAB-P14 — the evolution of feeling: short vs long lives + reciprocal transplant — pre-registered
+========================================================================================
+P1  evolved protectiveness (final population median, per run): long [4.81, 2.32, 4.09, 1.64, 4.13] vs short [0.87, 2.27, 1.61, 1.06, 1.45]; exact p = 0.0159, Holm 0.0238 -> significant
+P2a long world: long-evolved [1354.1, 1346.6, 1348.7, 1350.1, 1345.7] vs short-evolved [1268.9, 1297.3, 1278.9, 1278.2, 1268.4] m; p = 0.00794, Holm 0.0238 -> significant
+P2b short world: short-evolved [204.2, 203.9, 203.7, 203.9, 204.2] vs long-evolved [197.1, 194.3, 192.8, 194.0, 190.6] m; p = 0.00794, Holm 0.0238 -> significant
+S1  final genes (median of run medians): short: a_heat 0.158, setpoint 0.609, a_effort 0.024, a_hot_effort 0.008, a_progress 0.300; long: a_heat 0.352, setpoint 0.534, a_effort 0.089, a_hot_effort 0.057, a_progress 0.102
+S3  transplant means: short-evolved in short world 204.0 m; short-evolved in long world 1278.3 m; long-evolved in short world 193.8 m; long-evolved in long world 1349.1 m
+S2  protectiveness by generation: short: 1.17 0.82 0.85 1.20 1.24 1.22 1.10 1.10 0.95 1.08 1.07 1.45; long: 1.17 2.19 2.19 3.43 3.78 3.85 3.18 3.72 4.03 4.10 3.52 4.09
+
+>>> HAB-P14 VERDICT: PASS
+========================================================================================

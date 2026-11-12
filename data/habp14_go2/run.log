@@ -1,0 +1,13 @@
+2026-11-12 10:34:50,099 [INFO] gen  0: median fitness short 192 m, long 1267 m  [9 min]
+2026-11-12 10:43:26,646 [INFO] gen  1: median fitness short 197 m, long 1345 m  [17 min]
+2026-11-12 10:52:19,560 [INFO] gen  2: median fitness short 201 m, long 1307 m  [26 min]
+2026-11-12 11:01:07,756 [INFO] gen  3: median fitness short 202 m, long 1276 m  [35 min]
+2026-11-12 11:10:05,236 [INFO] gen  4: median fitness short 202 m, long 1292 m  [44 min]
+2026-11-12 11:18:45,063 [INFO] gen  5: median fitness short 203 m, long 1315 m  [53 min]
+2026-11-12 11:28:47,795 [INFO] gen  6: median fitness short 201 m, long 1359 m  [63 min]
+2026-11-12 11:38:11,522 [INFO] gen  7: median fitness short 206 m, long 1367 m  [72 min]
+2026-11-12 11:47:01,615 [INFO] gen  8: median fitness short 204 m, long 1385 m  [81 min]
+2026-11-12 11:56:28,307 [INFO] gen  9: median fitness short 206 m, long 1362 m  [90 min]
+2026-11-12 12:05:04,415 [INFO] gen 10: median fitness short 201 m, long 1386 m  [99 min]
+2026-11-12 13:01:52,365 [INFO] gen 11: median fitness short 205 m, long 1369 m  [156 min]
+2026-11-12 13:25:03,543 [INFO] DONE in 178.8 min
