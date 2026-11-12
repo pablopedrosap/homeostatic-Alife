@@ -46,6 +46,23 @@ la compilación, que añade ~4 min por robot):
 La Parte 2 viene **apagada** (`RUN_PART2 = False`): *Save & Run All* hace la Parte 0 + la Parte 1 (~3 h).
 Para la evolución, pon `RUN_PART2 = True` en una sesión aparte.
 
+## HAB-P15: cerebro y sentimientos co-evolucionan ([`habp15_coevolution.ipynb`](habp15_coevolution.ipynb))
+
+40 robots, cada uno con su propio cerebro que aprende a andar (PPO) bajo sus propios sentimientos. Los
+mejores pasan cerebro y sentimientos (con mutación) a los peores de su grupo. Hay dos mundos que solo se
+diferencian en cuánto viven los robots (4 o 32 misiones), y al final se hace un trasplante recíproco.
+Prerregistro: [`docs/prereg/HABP15_coevolution.md`](../docs/prereg/HABP15_coevolution.md).
+
+1. Kaggle → **Create → New Notebook** → **File → Import Notebook** → GitHub → pega
+   `https://github.com/pablopedrosap/homeostatic-Alife/blob/main/kaggle/habp15_coevolution.ipynb`.
+2. Panel derecho → **Session options**: **GPU T4 x2** e **Internet On**.
+3. **Save Version → Save & Run All (Commit) → Save**. Puedes cerrar la pestaña.
+4. A los ~20 min abre la versión y mira el log: debe aparecer `speed ... steps/s` y líneas `round 0 ...`
+   con la velocidad de cada mundo subiendo.
+5. Tarda **8–11 h**. Si se acerca a las 12 h, deja de evolucionar y hace igualmente el test final.
+6. Al terminar: pestaña **Output** → descarga `results/habp15_gpu/` y descomprímelo en
+   `homeostatic-Alife/data/habp15_gpu/`.
+
 ## HAB-P10 en GPU: 24 cerebros a la vez ([`habp10_gpu.ipynb`](habp10_gpu.ipynb))
 
 El experimento de los "sentimientos evolucionados" (evolucionados / aleatorios / sin sentimientos, 8 robots
