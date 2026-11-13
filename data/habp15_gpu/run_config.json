@@ -1,0 +1,40 @@
+{
+ "per_arm": 8,
+ "envs_per_brain": 160,
+ "unroll": 20,
+ "epochs": 5,
+ "minibatches": 8,
+ "lr": 0.0003,
+ "gamma": 0.99,
+ "lam": 0.95,
+ "clip": 0.2,
+ "ent_coef": 0.0,
+ "vf_coef": 0.5,
+ "max_grad_norm": 0.5,
+ "log_std_init": -1.0,
+ "hidden": [
+  256,
+  256
+ ],
+ "episode_steps": 1500,
+ "rounds": 12,
+ "steps_per_round": 1000000,
+ "hours_budget": null,
+ "chunk": 25,
+ "n_replace": 1,
+ "mission_s": 60.0,
+ "life_missions": 32,
+ "final_lifetimes": 5,
+ "final_seed0": 90000,
+ "seed": 2027,
+ "demes": 5,
+ "deme_size": 4,
+ "lifespans": [
+  4,
+  32
+ ],
+ "max_hours": 11.0,
+ "final_lives": 8,
+ "n_devices": 2,
+ "backend": "gpu"
+}

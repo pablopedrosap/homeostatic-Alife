@@ -1,0 +1,13 @@
+========================================================================================
+HAB-P15 — brain and feelings co-evolve in short vs long lives + reciprocal transplant — pre-registered
+========================================================================================
+Rounds completed: 12.  Gate: median short-life distance 200 m (needs >= 100) -> VALID
+P1  protectiveness per deme: long [2.8, 2.23, 7.85, 0.55, 1.82] vs short [0.56, 0.79, 0.6, 1.16, 1.11]; p = 0.0476, Holm 0.143 -> n.s.
+P2a long world: long-evolved [1103.2, 1018.7, 1175.4, 1360.9, 1174.5] vs short-evolved [987.5, 1109.1, 1113.2, 1244.7, 1170.4] m; p = 0.587, Holm 0.587 -> n.s.
+P2b short world: short-evolved [224.6, 184.6, 190.3, 201.2, 224.4] vs long-evolved [204.9, 195.6, 184.8, 203.4, 170.6] m; p = 0.254, Holm 0.508 -> n.s.
+S1  final genes (median): short: a_heat 0.024, setpoint 0.578, a_effort 0.018, a_hot_effort 0.067, a_progress 0.143; long: a_heat 0.346, setpoint 0.717, a_effort 0.034, a_hot_effort 0.042, a_progress 0.173
+S2  protectiveness by round: short: 1.54 1.12 1.02 0.97 0.86 0.86 0.86 0.80 0.80 0.86 0.79 0.79; long: 1.54 1.62 1.80 1.96 1.87 1.96 1.98 2.07 2.47 2.35 2.40 2.28
+S3  motor strength after a long life: short 0.575, long 0.588
+
+>>> HAB-P15 VERDICT: FAIL
+========================================================================================
